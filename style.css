@@ -1,0 +1,401 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #242430;
+
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.header {
+    display: flex;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.swiper-slide {
+    padding: 0 80px 50px 80 px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-button-prev::after{
+    font-size:25px;
+}
+.swiper-button-next::after{
+    font-size:25px;
+}
+.swiper-button-prev{
+    color: #feffff;
+}
+.swiper-button-next{
+    color: #feffff;
+}
+.swiper-pagination-bullet{
+    background-color: #747474;
+    opacity: 1;
+}
+.swiper-pagination-bullet-active {
+    background-color: #7270ec;
+}
+
+.menu{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+}
+
+.logo{
+    font-size: 25px;
+    color: #7270ec;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.menu .navbar ul li {
+    position: relative;
+    float: left;
+}
+
+.menu .navbar ul li a{
+font-size: 18px;
+padding: 20px;
+color: #feffff;
+display: block;
+}
+
+.menu .navbar ul li a:hover{
+    color: #7270ec;
+}
+
+#menu{
+display: none;
+}
+
+.menu-icono{
+    width: 25px;
+
+}
+
+.menu label{
+    cursor: pointer;
+    display: none;
+
+}
+
+.submenu{
+    position: relative;
+
+}
+.submenu #carrito{
+    display: none;
+}
+.submenu:hover #carrito{
+    display: block;
+    position: absolute;
+    right: 0;
+    backdrop-filter: blur(10px);
+    z-index: 1;
+    background-color: #4e4b5076;
+    padding: 20px;
+    min-width: 400px;
+}
+table{
+    width: 100%;
+}
+th td{
+    color: #feffff;
+}
+.borrar{
+    background-color: #7270ec;
+    border-radius: 50%;
+    padding: 5px 10 px;
+    text-decoration: none;
+    color: #feffff;
+    font-weight: 800;
+}
+.header-content{
+    padding: 120px 0 100px 0;
+}
+.header-info{
+    display: flex;
+}
+.header-txt{
+    width: 50%;
+}
+.header-txt h1{
+    font-size: 50px;
+    color: #feffff;
+    text-transform: capitalize;
+}
+.header-img{
+    width: 50%;
+    text-align: right;
+}
+.header-img img{
+    width: 500px;
+}
+
+.prices {
+    display: flex;
+    margin: 20 px 0;
+}
+.price-1 {
+    font-size: 30px;
+    color: #7478bf;
+    text-decoration-line: line-through;
+    margin-right: 25px;
+}
+.price-2 {
+    font-size: 30px;
+    color: #7270ec !important;
+}
+.btn-1{
+    display: inline-block;
+    background-color: #7270ec;
+    font-size: 16px;
+    padding: 10px 25px;
+    border-radius: 25px;
+    margin-top: 4%;
+}
+.btn-1:hover{
+    background-color: #6c69f9;
+}
+hr{
+    border: 1px solid #7a7bbf16;
+}
+.promos{
+    padding: 50px 0 ;
+    text-align: center;
+}
+.promos h2{
+    font-size: 50px;
+    color: #feffff;
+    margin-bottom: 35px;
+}
+.categories{
+    text-align: left;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+
+}
+.categorie{
+    display: flex;
+    align-items: center;
+    padding: 35px;
+}
+.categorie img{
+    width: 150px;
+
+}
+.categorie-1{
+    width: 50%;
+
+}
+.categorie-1 h3{
+    color: #feffff;
+    font-size: 22px;
+    font-weight: 600;
+}
+.categorie-1 p{
+    color: #7478bf;
+    font-size: 18px;
+}
+.categorie-img{
+    width: 50%;
+}
+
+
+.products{
+    padding: 50px 0;
+}
+.products h2{
+    font-size: 50px;
+    color: #feffff;
+    margin-bottom: 70px;
+}
+.product{
+    text-align: center;
+
+}
+
+.product img{
+    width: 150px;
+    margin-bottom: 15px;
+}
+.product-txt h3{
+    font-size: 18px;
+    color: #feffff;
+    margin-bottom: 15px;
+
+}
+.prodcut-txt p{
+    color: #7478bf;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+.precio{
+    color: #7270ec !important;
+
+}
+.btn-3{
+    display:  inline-block;
+    padding: 10px 25px;
+    font-size: 14px;
+    color: #feffff;
+    border: 1px solid #7270ec;
+    border-radius: 25px;
+    margin-top: 15px;
+}
+.btn-3:hover{
+    background-color: #7270ec;
+}
+
+.footer{
+    display: flex;
+    padding: 30px 0;
+}
+.link{
+    width: 20%;
+}
+.link h3{
+    color: #feffff;
+    margin-bottom: 20px;
+
+}
+.link a{
+    color: #7478bf;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+}
+.link p{
+    color: #7478bf;
+    font-size: 16px;
+}
+@media(max-width:991px ){
+
+    .menu{
+        padding: 20px;
+    }
+    .menu label{
+        display: initial;
+    }
+    .menu .navbar{
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #181818;
+        display: none;
+    }
+    .menu .navbar ul li{
+        width: 100%;
+    }
+    #menu:checked ~ .navbar{
+        display: initial;
+    }
+    .logo{
+        display: none;
+    }
+    .submenu:hover #carrito{
+        min-width: 100%;
+    }
+.mySwiper-1{
+    width: 300px;
+}
+.swiper-slide{
+    padding: 0 30px 50px 30px;
+
+}
+.header-content{
+    padding: 100px 0 50px 0;
+}
+.header-info{
+    padding: 0;
+    flex-direction: column;
+    text-align: center;
+}
+.header.txt{
+    width: 100%;
+}
+.header-txt h1{
+    font-size: 40px;
+}
+.header-img{
+    width: 100%;
+}
+.header-img img{
+    width: 200px;
+}
+.prices{
+    flex-direction: column;
+}
+.prices-1{
+    margin: 0;
+
+}
+.btn-1{
+    margin: 20px 0;
+}
+.promos{
+    padding: 30px;
+}
+.promo ha2{
+    font-size: 40px;
+    margin-bottom: 0;
+
+}
+.categories{
+    grid-template-columns: repeat(1,1fr);
+
+}
+.categorie {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+}
+.categorie-1{
+    width: 100%;
+    margin-bottom: 25px;
+    order: -1;
+}
+.categorie-img{
+    width: 100%;
+}
+.products{
+    padding: 30px;
+
+}
+.products h2{
+    font-size: 40px;
+    margin-bottom: 40px;
+}
+.footer{
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.link{
+    width: 100%;
+}
+
+
+
+
+}
