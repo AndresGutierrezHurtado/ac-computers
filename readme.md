@@ -1,5 +1,5 @@
-# Store Lelouch Technology
-Este proyecto representa la tienda online "Store Lelouch Technology", que ofrece una amplia gama de productos tecnológicos de alta calidad. La tienda está diseñada para proporcionar una experiencia de compra fácil y agradable a los clientes, con una interfaz intuitiva y funcionalidades que facilitan la exploración y la compra de productos.
+# AC Computers
+Este proyecto representa la tienda "AC Computers", que ofrece una amplia gama de productos tecnológicos de alta calidad. La tienda está diseñada para proporcionar una experiencia de compra fácil y agradable a los clientes, con una interfaz intuitiva y funcionalidades que facilitan la exploración y la compra de productos.
 
 ## Guía de uso
 
@@ -9,17 +9,29 @@ Para iniciar el proyecto, sigue estos pasos:
 1. Descargar el proyecto o clonarlo.
 
 2. Navega hasta el directorio del proyecto:
-   cd Aca_Ingenieria_Web
+   ```bash
+   cd ac-computers
+   ```
 
 3. Instala las dependencias del proyecto utilizando npm:
+   ```bash
    npm install 
+   ```
+
+4. Subir la base de datos a phpMyAdmin:
+   - Accede a phpMyAdmin a través de tu navegador web.
+   - Crea una nueva base de datos para el proyecto.
+   - Importa el archivo SQL de la base de datos que se encuentra en la carpeta `src/database` del proyecto.
 
 ### Ejecutar el proyecto en modo de desarrollo
-Para ejecutar el proyecto en modo de desarrollo, utiliza el siguiente comando:
+Para ejecutar el proyecto en modo de desarrollo, utiliza los siguientes comandos:
+```bash
 npm run dev
+npm start
+```
 
-Este comando iniciará el servidor de desarrollo y abrirá la aplicación en tu navegador predeterminado. La aplicación se recargará automáticamente si realizas cambios en los archivos del código fuente.
+Estos comandos iniciarán el servidor de desarrollo y abrirán la aplicación en tu navegador predeterminado. La aplicación se recargará automáticamente si realizas cambios en los archivos del código fuente.
 
 ### Acceder a la aplicación
 Una vez que el servidor esté en funcionamiento, puedes acceder a la aplicación desde tu navegador web visitando la siguiente URL:
-(http://localhost:3000)
+[http://localhost:3000](http://localhost:3000)
