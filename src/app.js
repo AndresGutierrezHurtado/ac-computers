@@ -17,7 +17,7 @@ app.get('/api/products', (req, res) => productController.getProducts(req, res));
 app.get('/api/products/:id', (req, res) => productController.getProduct(req, res));
 
 // Server
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 app.listen(port, () => {
     console.log(`Servidor funcionando en el puerto http://localhost:${port}`);
