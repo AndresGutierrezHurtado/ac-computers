@@ -5,7 +5,8 @@ class Product {
 
     getAll(req, res) {
         this.conn.query('SELECT * FROM products;', (err, result) => {
-            if(err) res.status(500).send('Error en el servidor');
+            if (err) {res.status(500).send('Error en el servidor');}
+            if (result.length == 0) {res.status(404).send('No se encontraron resultados');}
             res.json(result); 
         });
     }

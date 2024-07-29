@@ -5,13 +5,18 @@ const productController = new ProductController(require('./database/database').g
 const PageController = require('./controllers/pageController');
 const app = express();
 
+// Static files
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Routes
 app.get('/', (req, res) => PageController.home(req, res));
+app.get('/product/:id', (req, res) => PageController.product(req, res));
 
-app.get('/api/productos', (req, res) => productController.getProducts(req, res));
-app.get('/api/productos/:id', (req, res) => productController.getProduct(req, res));
+// API Routes
+app.get('/api/products', (req, res) => productController.getProducts(req, res));
+app.get('/api/products/:id', (req, res) => productController.getProduct(req, res));
 
+// Server
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {

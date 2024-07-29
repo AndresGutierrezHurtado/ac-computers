@@ -535,6 +535,9 @@ video {
 .flex {
   display: flex;
 }
+.table {
+  display: table;
+}
 .grid {
   display: grid;
 }
@@ -548,11 +551,14 @@ video {
 .h-\[250px\] {
   height: 250px;
 }
-.max-h-full {
-  max-height: 100%;
+.h-full {
+  height: 100%;
 }
 .w-1\/2 {
   width: 50%;
+}
+.w-1\/4 {
+  width: 25%;
 }
 .w-full {
   width: 100%;
@@ -569,8 +575,8 @@ video {
 .max-w-\[350px\] {
   max-width: 350px;
 }
-.max-w-full {
-  max-width: 100%;
+.table-fixed {
+  table-layout: fixed;
 }
 .border-collapse {
   border-collapse: collapse;
@@ -640,6 +646,9 @@ video {
 .overflow-hidden {
   overflow: hidden;
 }
+.text-wrap {
+  text-wrap: wrap;
+}
 .rounded-full {
   border-radius: 9999px;
 }
@@ -648,6 +657,9 @@ video {
 }
 .border {
   border-width: 1px;
+}
+.border-b {
+  border-bottom-width: 1px;
 }
 .border-\[\#7270ec\] {
   --tw-border-opacity: 1;
@@ -664,14 +676,18 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
+.bg-opacity-15 {
+  --tw-bg-opacity: 0.15;
+}
 .bg-opacity-20 {
   --tw-bg-opacity: 0.2;
 }
 .bg-opacity-40 {
   --tw-bg-opacity: 0.4;
 }
-.bg-opacity-5 {
-  --tw-bg-opacity: 0.05;
+.object-contain {
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .p-3 {
   padding: 0.75rem;
@@ -716,6 +732,12 @@ video {
 .text-center {
   text-align: center;
 }
+.text-start {
+  text-align: start;
+}
+.align-middle {
+  vertical-align: middle;
+}
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -742,6 +764,10 @@ video {
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
 .font-bold {
   font-weight: 700;
 }
@@ -763,6 +789,10 @@ video {
 .text-\[\#7270ec\] {
   --tw-text-opacity: 1;
   color: rgb(114 112 236 / var(--tw-text-opacity));
+}
+.text-\[\#feffff\] {
+  --tw-text-opacity: 1;
+  color: rgb(254 255 255 / var(--tw-text-opacity));
 }
 .text-gray-400 {
   --tw-text-opacity: 1;
@@ -797,6 +827,12 @@ video {
 }
 .duration-300 {
   transition-duration: 300ms;
+}
+.duration-500 {
+  transition-duration: 500ms;
+}
+.\[word-wrap\:break-word\] {
+  word-wrap: break-word;
 }
 .hover\:scale-105:hover {
   --tw-scale-x: 1.05;
