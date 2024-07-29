@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio | AC Computers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link rel="stylesheet" href="/css/output.css"> -->
+    <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
+    <style>
+        td, th {
+            padding: 10px;
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+
+        tr {
+            border-left: 3px solid transparent;
+        }
+        
+        tr:hover {
+            border-left: 3px solid white;
+        }
+    </style>
+</head>
+<body class="bg-[#242430] font-poppins text-white w-full"> 
+
+    <header class="w-full sticky top-0 bg-[#242430] bg-opacity-40 px-3 py-2 z-50">
+        <div id="navbar" class="max-w-[1200px] mx-auto flex justify-between items-center py-2 rounded-full px-7 duration-500">
+            <!-- Logo empresa -->
+            <a href="/" class="text-[27px] text-[#7270ec] uppercase font-extrabold">AC Computers</a>
+
+            <!-- Botón responsivo -->
+            <div class="md:hidden">
+                <i class="fas fa-bars text-2xl"></i>
+            </div>
+
+            <!-- Menú de navegación -->
+            <nav class="hidden md:flex gap-6 text-[19px]">
+                <a href="/" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Inicio</a>
+                <a href="/" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
+                <a href="/" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Contactanos</a>
+            </nav>
+
+            <!-- Carrito -->
+            <a href="/carrito" class="hidden md:flex">
+                <i class="fas fa-shopping-cart text-2xl duration-300 hover:text-[#7270ec]"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="w-full space-y-5 pt-10">
+        
+        <section class="w-full px-3">
+            <!-- Swiper -->
+            <div class="swiper-container max-w-[1200px] mx-auto py-10 relative overflow-hidden">
+                <div class="swiper-wrapper flex transition-transform" id="swiper-wrapper">
+                    <!-- Carrusel -->
+                </div>
+
+                <!-- Botones y paginación -->
+                <div class="swiper-button-next absolute top-1/2 -translate-y-1/2 right-0 bg-black bg-opacity-20 backdrop-blur-md p-3 rounded-full size-[60px] flex items-center justify-center">
+                    <i class="fas fa-chevron-right text-3xl"></i>
+                </div>
+                <div class="swiper-button-prev absolute top-1/2 -translate-y-1/2 left-0 bg-black bg-opacity-20 backdrop-blur-md p-3 rounded-full size-[60px] flex items-center justify-center">
+                    <i class="fas fa-chevron-left text-3xl"></i>
+                </div>
+                <div class="swiper-pagination flex gap-2 justify-center"></div>
+            </div>
+        </section>
+
+        <hr class="border border-collapse border-[#7a7bbf16]">
+
+        <section class="w-full px-3 py-10">
+            <div class="w-full max-w-[1200px] mx-auto space-y-8">
+                <h2 class="font-extrabold text-5xl text-center">Promociones</h2>
+                <div class="grid grid-cols-2 gap-10" id="promotions">
+                    
+                </div>
+            </div>
+        </section>
+
+        <hr class="border border-collapse border-[#7a7bbf16]">
+        
+        <section class="w-full px-3 py-10">
+            <div class="w-full max-w-[1200px] mx-auto space-y-14">
+                <h2 class="font-extrabold text-5xl text-center">Productos Nuevos</h2>
+                <div class="swipper-container relative">
+                    <div class="swiper-wrapper flex gap-36 overflow-hidden transition-transform" id="new-products">
+                        <!-- Elementos -->
+                    </div>
+
+                    <!-- Botones y paginación -->
+                    <div class="swiper-button-next absolute top-1/2 -translate-y-1/2 right-0 bg-black bg-opacity-20 backdrop-blur-md p-3 rounded-full size-[60px] flex items-center justify-center">
+                        <i class="fas fa-chevron-right text-3xl"></i>
+                    </div>
+                    <div class="swiper-button-prev absolute top-1/2 -translate-y-1/2 left-0 bg-black bg-opacity-20 backdrop-blur-md p-3 rounded-full size-[60px] flex items-center justify-center">
+                        <i class="fas fa-chevron-left text-3xl"></i>
+                    </div>
+
+                    <div class="swiper-pagination flex gap-2 justify-center"></div>
+
+                </div>
+            </div>
+        </section>
+
+        <hr class="border border-collapse border-[#7a7bbf16]">
+
+        <section class="w-full px-3 py-10">
+            <div class="w-full max-w-[1200px] mx-auto space-y-5">
+                <h2 class="font-extrabold text-5xl text-center">Lista de Productos</h2>
+
+                <table class="w-full border-collapse table-auto align-middle text-center">
+                    <thead class="bg-white text-black">
+                        <tr>
+                            <th class="text-start">Nombre</th>
+                            <th>Precio</th>
+                            <th>Información</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-precios" class="font-semibold divide-y divide-y-white">
+                        <!-- Lista de productos y precios -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="w-full px-3 py-5">
+        <div class="max-w-[1200px] mx-auto flex justify-between">
+            <div class="space-y-4">
+                <h4 >Lorem</h4>
+                <ul class="text-[#7270ec] space-y-2">
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                </ul>
+            </div>
+            <div class="space-y-4">
+                <h4 >Lorem</h4>
+                <ul class="text-[#7270ec] space-y-2">
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                </ul>
+            </div>
+            <div class="space-y-4">
+                <h4 >Lorem</h4>
+                <ul class="text-[#7270ec] space-y-2">
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                </ul>
+            </div>
+            <div class="space-y-4">
+                <h4 >Lorem</h4>
+                <ul class="text-[#7270ec] space-y-2">
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                    <li>Lorem</li>
+                </ul>
+            </div>
+            <div class="space-y-4 max-w-[350px]">
+                <h4 >Lorem</h4>
+                <p class="text-[#7270ec] space-y-2">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta, blanditiis deleniti praesentium sequi molestias fugit quaerat adipisci ut ab hic recusandae, illum id delectus aliquam optio explicabo ad quas. Voluptatem voluptates commodi repellat obcaecati. Distinctio dolorum obcaecati natus laudantium, veniam ullam ea placeat dolore voluptas ex voluptates, cumque, est cum.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script src="/js/swiper.js"></script>
+    <script>
+        window.onscroll = () => {
+            if (window.scrollY > 50) {
+                document.querySelector('#navbar').classList.add('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
+            } else {
+                document.querySelector('#navbar').classList.remove('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
+            }
+        }
+    </script>
+    <script>
+        fetch('/api/products')
+        .then(response => response.json())
+        .then(data => {
+            // Elementos Swipper
+            const swipperWrapper = document.getElementById('swiper-wrapper');
+            data.forEach(product => {
+                const productSwiper = document.createElement('article');
+                productSwiper.className = 'swiper-slide min-w-full py-10';
+                productSwiper.innerHTML = `
+                    <div class="flex gap-2">
+                        <div class="w-1/2 space-y-8">
+                            <h1 class="text-5xl font-extrabold tracking-tight leading-[1.4]">${product.product_name}</h1>
+                            <div class="flex gap-3 text-2xl text-[#7270ec] font-bold">
+                                <p class="line-through ">${(product.product_price * 1.2).toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) }</p>
+                                <p>${product.product_price.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</p>
+                            </div>
+                            <div>  
+                                <a href="/product/${product.product_id}">
+                                    <button class="px-8 py-2 border border-[#7270ec] rounded-full text-lg">Información</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="w-1/2">
+                            <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}">
+                        </div>
+                    </div>
+                `;
+                swipperWrapper.appendChild(productSwiper);
+            });
+
+            // Elementos promociones
+            const promotions = document.getElementById('promotions');
+            data.slice(0,4).forEach(product => {
+                const promotion = document.createElement('article');
+                promotion.className = 'flex items-center justify-center gap-4 p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
+                promotion.innerHTML = `
+                    <div class="w-1/2 space-y-2">
+                        <h3 class="font-extrabold text-2xl">${product.product_name}</h3>
+                        <div class="flex gap-2 font-semibold text-[#7270ec] pb-4">
+                            <p class="line-through">${(product.product_price * 1.2).toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) }</p>
+                            <p>${(product.product_price).toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) }</p>
+                        </div>
+                        <button class="px-7 py-1 border border-[#7270ec] rounded-full ">
+                            Comprar
+                        </button>
+                    </div>
+                    <div class="w-1/2">
+                        <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}">
+                    </div>
+                `;
+                promotions.appendChild(promotion);
+            });
+
+            // Productos nuevos
+            const newProducts = document.getElementById('new-products');
+            data.slice(0,5).forEach(product => {
+                const newProduct = document.createElement('article');
+                newProduct.className = 'w-1/4 flex flex-col items-center justify-center gap-4 p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
+                newProduct.innerHTML = `
+                    <div class="swiper-slide min-w-[250px] p-5 flex flex-col space-y-2">
+                        <div class="w-full h-[250px]">
+                            <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}" class="object-contain w-full h-full">
+                        </div>
+                        <div class="text-center flex flex-col justify-center items-center gap-2">
+                            <h3 class="font-extrabold text-xl text-white">${product.product_name}</h3>
+                            <p class="text-gray-400 font-bold"> <i class="fas fa-star text-sm"></i> Calidad premium</p>
+                            <p class="text-[#7270ec] font-semibold">${(product.product_price).toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) }</p>
+                            <button class="px-7 py-1 border border-[#7270ec] rounded-full">
+                                Comprar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                newProducts.appendChild(newProduct);
+            });
+
+            // Lista de precios
+            const listPrices = document.getElementById('lista-precios');
+            data.forEach(product => {
+                const listPrice = document.createElement('tr');
+                listPrice.className = ' border-l-[3px] border-l-transparent hover:border-l-white hover:bg-[#7270ec] even:bg-zinc-700 odd:bg-zinc-700/80 ';
+                listPrice.innerHTML = `
+                    <td class="text-start">${product.product_name}</td>
+                    <td>${(product.product_price).toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) }</td>
+                    <td>
+                        <a href="/product/${product.product_id}">
+                            <button class="px-7 py-1 border border-[#7270ec] rounded-full">
+                                Ver
+                            </button>
+                        </a>
+                    </td>
+                `;
+                listPrices.appendChild(listPrice);
+            });
+        });
+    </script>
+</body>
+</html>
