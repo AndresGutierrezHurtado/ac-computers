@@ -2,6 +2,10 @@ DROP DATABASE IF EXISTS `ac-computers`;
 CREATE DATABASE `ac-computers`;
 USE `ac-computers`;
 
+
+DROP TABLE IF EXISTS `products`;
+
+
 CREATE TABLE `products` (
     `product_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `product_name` VARCHAR(255) NOT NULL,
@@ -9,7 +13,7 @@ CREATE TABLE `products` (
     `product_price` DECIMAL(10, 0) NOT NULL,
     `product_discount` INT,
     `product_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `product_image_url` VARCHAR(255) NOT NULL DEFAULT '/images/product/bg1.png'
+    `product_image_url` VARCHAR(255) NOT NULL DEFAULT '/images/products/bg1.png'
 );
 
 INSERT INTO `products` (`product_name`, `product_description`, `product_price`, `product_discount`, `product_date`) VALUES
