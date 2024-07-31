@@ -19,10 +19,16 @@ class PageController {
                     fetch('/api/products/${id}')
                     .then(response => response.json())
                     .then(data => {
-                        product = data;
-                        console.log(product);
+                        product = data[0];
+                        document.getElementById("product-image");
+                        document.getElementById("product-title").innerHTML = product.product_name;
+                        document.getElementById("product-description").innerHTML = product.description;
+                        document.getElementById("product-price").innerHTML = Number(product.product_price - (product.product_price * (product.product_discount / 100)) ).toLocaleString("es-CO") ;
+                        document.getElementById("product-discount").innerHTML = (product.product_discount > 0) ? product.product_discount + "%" : "Sin descuento";
+                        document.getElementById("product-total-price").innerHTML = (product.product_discount > 0) ? Number(product.product_price).toLocaleString("es-CO") : " " ;
                     })
                 </script>
+
             `);
 
             res.send(updatedHtml);
