@@ -13,7 +13,6 @@ class Product {
                 console.warn('No se encontraron resultados');
                 return res.status(404).send('No se encontraron resultados');
             }
-            console.log('Resultados de la consulta:', result);
             return res.json(result);
         });
     }
