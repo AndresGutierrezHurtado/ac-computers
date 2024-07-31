@@ -1,20 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const swiper = new Swiper('.swiper-container', {
+    // Inicializar el Swiper para la sección de inicio
+    var homeSwiper = new Swiper('.home-swiper', {
         slidesPerView: 1,
-        spaceBetween: 30,
-        loop: true,
+        loop: false,
+        navigation: {
+            nextEl: ".swiper-button-next-home",
+            prevEl: ".swiper-button-prev-home",
+        },
         pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
+            el: ".swiper-pagination-home",
+            clickable: true
         },
         autoplay: {
             delay: 9000,
             disableOnInteraction: false,
         },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
     });
-    
+    // Inicializar el Swiper para la sección de inicio
+    var newSwiper = new Swiper('.new-swiper', {
+        slidesPerView: 3,
+        spaceBetween: 120,
+        loop: false,
+        navigation: {
+            nextEl: ".swiper-button-next-new",
+            prevEl: ".swiper-button-prev-new",
+        }
+    });
 });
