@@ -207,7 +207,7 @@
                             <h1 class="text-2xl md:text-5xl font-bold md:font-extrabold tracking-tight leading-[1.4]">${product.product_name}</h1>
                             <div class="flex justify-center md:justify-start gap-4 text-lg md:text-2xl text-[#7270ec] font-bold">
                                 <p class="line-through">COP ${Number(product.product_price).toLocaleString("es-CO")}</p>
-                                <p>COP ${Number(product.product_price ).toLocaleString("es-CO")}</p>
+                                <p>COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString("es-CO")}</p>
                             </div>
                             <div>  
                                 <a href="/product/${product.product_id}">
@@ -223,67 +223,17 @@
                 homeSection.appendChild(productSwiper);
             });
 
-            // Elementos promociones
-            const promotions = document.getElementById('promotions');
-            data.slice(0,4).forEach(product => {
-                const promotion = document.createElement('article');
-                promotion.className = 'flex items-center justify-center gap-4 p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
-                promotion.innerHTML = `
-                    <div class="w-1/2 space-y-2">
-                        <h3 class="font-extrabold text-2xl">${product.product_name}</h3>
-                        <div class="flex gap-2 font-semibold text-[#7270ec] pb-4">
-                            <p class="line-through">COP ${Number(product.product_price).toLocaleString("es-CO")}</p>
-                            <p>COP ${Number(product.product_price).toLocaleString("es-CO")}</p>
-                        </div>
-                        <a href="/product/${product.product_id}"> 
-                            <button class="px-7 py-1 border border-[#7270ec] rounded-full ">
-                                ver
-                            </button>
-                        </a>
-                    </div>
-                    <div class="w-1/2">
-                        <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}">
-                    </div>
-                `;
-                promotions.appendChild(promotion);
-            });
-
-            // Productos nuevos
-            const newProducts = document.getElementById('new-products-section');
-            data.slice(0,5).forEach(product => {
-                const newProduct = document.createElement('article');
-                newProduct.className = 'swiper-slide p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
-                newProduct.innerHTML = `
-                    <div class="swiper-slide min-w-[250px] p-5 flex flex-col space-y-2">
-                        <div class="w-full h-[250px] flex-none">
-                            <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}" class="object-contain w-full h-full">
-                        </div>
-                        <div class="text-center flex flex-col justify-center items-center gap-2">
-                            <h3 class="font-extrabold text-xl text-white">${product.product_name}</h3>
-                            <p class="text-gray-400 font-bold"> <i class="fas fa-star text-sm"></i> Calidad premium</p>
-                            <p class="text-[#7270ec] font-semibold">COP ${Number(product.product_price).toLocaleString('es-CO') }</p>
-                            <a href="/product/${product.product_id}"> 
-                                <button class="px-7 py-1 border border-[#7270ec] rounded-full">
-                                    ver
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                `;
-                newProducts.appendChild(newProduct);
-            });
-
             // Lista de precios
             const listPrices = document.getElementById('prices-list');
             data.forEach(product => {
                 const listPrice = document.createElement('tr');
                 listPrice.className = 'border-b bg-zinc-800 border-zinc-700 hover:bg-zinc-600 duration-300';
                 listPrice.innerHTML = `
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white">
                         ${product.product_name}
                     </th>
                     <td class="px-6 py-4">
-                        COP ${Number(product.product_price).toLocaleString("es-CO")}
+                        COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString("es-CO")}
                     </td>
                     <td class="px-6 py-4">
                         ${product.product_discount == 0 || product.product_discount == null ? 'Sin descuento' : product.product_discount + "%"}
@@ -297,6 +247,65 @@
                     </td>
                 `;
                 listPrices.appendChild(listPrice);
+            });
+
+            // Elementos promociones
+            fetch('/api/products?sort=product_discount&order=desc')
+            .then(response => response.json())
+            .then(data => {
+                const promotions = document.getElementById('promotions');
+                data.slice(0,4).forEach(product => {
+                    const promotion = document.createElement('article');
+                    promotion.className = 'flex items-center justify-center gap-4 p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
+                    promotion.innerHTML = `
+                        <div class="w-1/2 space-y-2">
+                            <h3 class="font-extrabold text-2xl">${product.product_name}</h3>
+                            <div class="space-y-0 font-semibold text-[#7270ec] pb-4">
+                                <p class="line-through">COP ${Number(product.product_price).toLocaleString("es-CO")}</p>
+                                <p>COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString("es-CO")}${ " - " + product.product_discount + "%"}</p>
+                            </div>
+                            <a href="/product/${product.product_id}"> 
+                                <button class="px-7 py-1 border border-[#7270ec] rounded-full ">
+                                    ver
+                                </button>
+                            </a>
+                        </div>
+                        <div class="w-1/2">
+                            <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}">
+                        </div>
+                    `;
+                    promotions.appendChild(promotion);
+                });
+            });
+
+            // Productos nuevos
+            fetch('/api/products?sort=product_date&order=desc')
+            .then(response => response.json())
+            .then(data => {
+                const newProducts = document.getElementById('new-products-section');
+                data.slice(0,5).forEach(product => {
+                    const newProduct = document.createElement('article');
+                    newProduct.className = 'swiper-slide p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
+                    newProduct.innerHTML = `
+                        <div class="swiper-slide min-w-[250px] p-5 flex flex-col space-y-2">
+                            <div class="w-full h-[250px] flex-none">
+                                <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}" class="object-contain w-full h-full">
+                            </div>
+                            <div class="text-center flex flex-col justify-center items-center gap-2">
+                                <h3 class="font-extrabold text-xl text-white">${product.product_name}</h3>
+                                <p class="text-gray-300 font-semibold">${product.product_date.split("T")[0]}</p>
+                                <p class="text-gray-400 font-bold"> <i class="fas fa-star text-sm"></i> Calidad premium</p>
+                                <p class="text-[#7270ec] font-semibold">COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString('es-CO') }</p>
+                                <a href="/product/${product.product_id}"> 
+                                    <button class="px-7 py-1 border border-[#7270ec] rounded-full">
+                                        ver
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    newProducts.appendChild(newProduct);
+                });
             });
         });
     </script>

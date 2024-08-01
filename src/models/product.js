@@ -4,7 +4,7 @@ class Product {
     }
 
     getAll(req, res) {
-        this.conn.query('SELECT * FROM products;', (err, result) => {
+        this.conn.query(`SELECT * FROM products ORDER BY ${req.query.sort || 'product_id'} ${req.query.order || 'asc'} `, (err, result) => {
             if (err) {
                 console.error('Error en la consulta:', err);
                 return res.status(500).send('Error en el servidor');

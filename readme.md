@@ -37,9 +37,7 @@ Una vez que el servidor esté en funcionamiento, puedes acceder a la aplicación
 
 
 ### Cosas pendientes por hacer:
-- arreglar precios, que funcione el descuento
 - lista de precios pdf
-- agregar más parametros para las consultas SQL
 - sección administrador
 
 git config --global user.name "w3schools-test"
