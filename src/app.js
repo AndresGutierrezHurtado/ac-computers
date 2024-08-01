@@ -11,6 +11,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Routes
 app.get('/', (req, res) => PageController.home(req, res));
 app.get('/product/:id', (req, res) => PageController.product(req, res));
+app.get('/contact', (req, res) => PageController.contact(req, res));
+app.get('/list', (req, res) => PageController.list(req, res));
 
 // API Routes
 app.get('/api/products', (req, res) => productController.getProducts(req, res));

@@ -20,7 +20,7 @@ class PageController {
                     .then(response => response.json())
                     .then(data => {
                         product = data[0];
-                        document.getElementById("product-image");
+                        document.getElementById("product-image").src = product.product_image_url;
                         document.getElementById("product-title").innerHTML = product.product_name;
                         document.getElementById("product-description").innerHTML = product.product_description;
                         document.getElementById("product-price").innerHTML = Number(product.product_price - (product.product_price * (product.product_discount / 100)) ).toLocaleString("es-CO") ;
@@ -34,6 +34,14 @@ class PageController {
             res.send(updatedHtml);
         });
 
+    }
+
+    contact(req, res) {
+
+    }
+
+    list(req, res) {
+        prod
     }
 }
 
