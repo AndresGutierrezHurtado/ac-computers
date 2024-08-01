@@ -41,7 +41,7 @@ class PageController {
     }
 
     list(req, res) {
-        prod
+
     }
 }
 

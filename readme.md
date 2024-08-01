@@ -26,8 +26,7 @@ Para iniciar el proyecto, sigue estos pasos:
 ### Ejecutar el proyecto en modo de desarrollo
 Para ejecutar el proyecto en modo de desarrollo, utiliza los siguientes comandos:
 ```bash
-npm run dev
-npm start
+npm run serve
 ```
 
 Estos comandos iniciarán el servidor de desarrollo y abrirán la aplicación en tu navegador predeterminado. La aplicación se recargará automáticamente si realizas cambios en los archivos del código fuente.
@@ -35,3 +34,13 @@ Estos comandos iniciarán el servidor de desarrollo y abrirán la aplicación en
 ### Acceder a la aplicación
 Una vez que el servidor esté en funcionamiento, puedes acceder a la aplicación desde tu navegador web visitando la siguiente URL:
 [http://localhost:3000](http://localhost:3000)
+
+
+### Cosas pendientes por hacer:
+- arreglar precios, que funcione el descuento
+- lista de precios pdf
+- agregar más parametros para las consultas SQL
+- sección administrador
+
+git config --global user.name "w3schools-test"
+git config --global user.email "test@w3schools.com"
