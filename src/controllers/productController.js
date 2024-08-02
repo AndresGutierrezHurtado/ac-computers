@@ -1,6 +1,7 @@
 const Product = require('../models/product');
 
 class ProductController {
+
     constructor(conn) {
         this.conn = conn;
         this.productModel = new Product(conn);
@@ -13,6 +14,11 @@ class ProductController {
     getProduct(req, res) {
         this.productModel.getById(req, res);
     }
+
+    list(req, res) {
+        this.productModel.generatePDF(req, res);
+    }
+
 }
 
 module.exports = ProductController;
