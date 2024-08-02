@@ -24,8 +24,8 @@
 
             <!-- Menú de navegación -->
             <nav class="hidden md:flex gap-6 text-[19px]">
-                <a href="/" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Inicio</a>
-                <a href="/#prices-list" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
+                <a href="/" class="duration-300 hover:scale-105 text-[#7270ec]">Inicio</a>
+                <a href="/products" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
                 <a href="/contact" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Contactanos</a>
             </nav>
 
@@ -98,39 +98,6 @@
                 </div>
             </div>
         </section>
-
-        <hr class="border border-collapse border-[#7a7bbf16]">
-
-        <section class="w-full px-3 py-10">
-            <div class="w-full max-w-[1200px] mx-auto space-y-7">
-                <h2 class="font-extrabold text-5xl text-center">Lista de Productos</h2>
-
-                <div class="relative overflow-x-auto">
-                    <table class="w-full text-sm text-left rtl:text-right text-zinc-400">
-                        <thead class="text-xs uppercase bg-zinc-700 text-zinc-400">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Nombre
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Precio
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Descuento
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    Información
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="prices-list">
-                            <!-- Información -->
-                        </tbody>
-                    </table>
-                </div>
-                
-            </div>
-        </section>
     </main>
 
     <footer class="w-full px-3 py-5">
@@ -154,21 +121,12 @@
                 </ul>
             </div>
             <div class="space-y-4">
-                <h4 >Lorem</h4>
+                <h4 >Enlaces</h4>
                 <ul class="text-[#7270ec] space-y-2">
-                    <li>Lorem</li>
-                    <li>Lorem</li>
-                    <li>Lorem</li>
-                    <li>Lorem</li>
-                </ul>
-            </div>
-            <div class="space-y-4">
-                <h4 >Lorem</h4>
-                <ul class="text-[#7270ec] space-y-2">
-                    <li>Lorem</li>
-                    <li>Lorem</li>
-                    <li>Lorem</li>
-                    <li>Lorem</li>
+                    <li>Inicio</li>
+                    <li>Productos</li>
+                    <li>Contacto</li>
+                    <li>Descargar lista productos</li>
                 </ul>
             </div>
             <div class="space-y-4 max-w-[350px]">
@@ -196,7 +154,6 @@
         fetch('/api/products')
         .then(response => response.json())
         .then(data => {
-            // Elementos Inicio
             const homeSection = document.getElementById('home-section');
             data.slice(0, 7).forEach(product => {
                 const productSwiper = document.createElement('article');
@@ -222,90 +179,64 @@
                 `;
                 homeSection.appendChild(productSwiper);
             });
+        });
 
-            // Lista de precios
-            const listPrices = document.getElementById('prices-list');
-            data.forEach(product => {
-                const listPrice = document.createElement('tr');
-                listPrice.className = 'border-b bg-zinc-800 border-zinc-700 hover:bg-zinc-600 duration-300';
-                listPrice.innerHTML = `
-                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white">
-                        ${product.product_name}
-                    </th>
-                    <td class="px-6 py-4">
-                        COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString("es-CO")}
-                    </td>
-                    <td class="px-6 py-4">
-                        ${product.product_discount == 0 || product.product_discount == null ? 'Sin descuento' : product.product_discount + "%"}
-                    </td>
-                    <td class="px-6 py-4">
-                        <a href="/product/${product.product_id}" class="w-full">
-                            <button class="w-full px-7 py-1 border border-[#7270ec] rounded-full mx-auto">
-                                Ver
+        // Elementos promociones
+        fetch('/api/products?sort=product_discount&order=desc')
+        .then(response => response.json())
+        .then(data => {
+            const promotions = document.getElementById('promotions');
+            data.slice(0,4).forEach(product => {
+                const promotion = document.createElement('article');
+                promotion.className = 'flex items-center justify-center gap-4 p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
+                promotion.innerHTML = `
+                    <div class="w-1/2 space-y-2">
+                        <h3 class="font-extrabold text-2xl">${product.product_name}</h3>
+                        <div class="space-y-0 font-semibold text-[#7270ec] pb-4">
+                            <p class="line-through">COP ${Number(product.product_price).toLocaleString("es-CO")}</p>
+                            <p>COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString("es-CO")}${ " - " + product.product_discount + "%"}</p>
+                        </div>
+                        <a href="/product/${product.product_id}"> 
+                            <button class="px-7 py-1 border border-[#7270ec] rounded-full ">
+                                ver
                             </button>
                         </a>
-                    </td>
+                    </div>
+                    <div class="w-1/2">
+                        <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}">
+                    </div>
                 `;
-                listPrices.appendChild(listPrice);
+                promotions.appendChild(promotion);
             });
+        });
 
-            // Elementos promociones
-            fetch('/api/products?sort=product_discount&order=desc')
-            .then(response => response.json())
-            .then(data => {
-                const promotions = document.getElementById('promotions');
-                data.slice(0,4).forEach(product => {
-                    const promotion = document.createElement('article');
-                    promotion.className = 'flex items-center justify-center gap-4 p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
-                    promotion.innerHTML = `
-                        <div class="w-1/2 space-y-2">
-                            <h3 class="font-extrabold text-2xl">${product.product_name}</h3>
-                            <div class="space-y-0 font-semibold text-[#7270ec] pb-4">
-                                <p class="line-through">COP ${Number(product.product_price).toLocaleString("es-CO")}</p>
-                                <p>COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString("es-CO")}${ " - " + product.product_discount + "%"}</p>
-                            </div>
+        // Productos nuevos
+        fetch('/api/products?sort=product_date&order=desc')
+        .then(response => response.json())
+        .then(data => {
+            const newProducts = document.getElementById('new-products-section');
+            data.slice(0,5).forEach(product => {
+                const newProduct = document.createElement('article');
+                newProduct.className = 'swiper-slide p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
+                newProduct.innerHTML = `
+                    <div class="swiper-slide min-w-[250px] p-5 flex flex-col space-y-2">
+                        <div class="w-full h-[250px] flex-none">
+                            <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}" class="object-contain w-full h-full">
+                        </div>
+                        <div class="text-center flex flex-col justify-center items-center gap-2">
+                            <h3 class="font-extrabold text-xl text-white">${product.product_name}</h3>
+                            <p class="text-gray-300 font-semibold">${product.product_date.split("T")[0]}</p>
+                            <p class="text-gray-400 font-bold"> <i class="fas fa-star text-sm"></i> Calidad premium</p>
+                            <p class="text-[#7270ec] font-semibold">COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString('es-CO') }</p>
                             <a href="/product/${product.product_id}"> 
-                                <button class="px-7 py-1 border border-[#7270ec] rounded-full ">
+                                <button class="px-7 py-1 border border-[#7270ec] rounded-full">
                                     ver
                                 </button>
                             </a>
                         </div>
-                        <div class="w-1/2">
-                            <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}">
-                        </div>
-                    `;
-                    promotions.appendChild(promotion);
-                });
-            });
-
-            // Productos nuevos
-            fetch('/api/products?sort=product_date&order=desc')
-            .then(response => response.json())
-            .then(data => {
-                const newProducts = document.getElementById('new-products-section');
-                data.slice(0,5).forEach(product => {
-                    const newProduct = document.createElement('article');
-                    newProduct.className = 'swiper-slide p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
-                    newProduct.innerHTML = `
-                        <div class="swiper-slide min-w-[250px] p-5 flex flex-col space-y-2">
-                            <div class="w-full h-[250px] flex-none">
-                                <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}" class="object-contain w-full h-full">
-                            </div>
-                            <div class="text-center flex flex-col justify-center items-center gap-2">
-                                <h3 class="font-extrabold text-xl text-white">${product.product_name}</h3>
-                                <p class="text-gray-300 font-semibold">${product.product_date.split("T")[0]}</p>
-                                <p class="text-gray-400 font-bold"> <i class="fas fa-star text-sm"></i> Calidad premium</p>
-                                <p class="text-[#7270ec] font-semibold">COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString('es-CO') }</p>
-                                <a href="/product/${product.product_id}"> 
-                                    <button class="px-7 py-1 border border-[#7270ec] rounded-full">
-                                        ver
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                    newProducts.appendChild(newProduct);
-                });
+                    </div>
+                `;
+                newProducts.appendChild(newProduct);
             });
         });
     </script>

@@ -7,6 +7,10 @@ class PageController {
         res.sendFile(path.join(__dirname, '../views', 'index.html'));
     }
 
+    products(req, res) {
+        res.sendFile(path.join(__dirname, '../views', 'products.html'));
+    }
+
     product(req, res) {
         const id = req.params.id;
 
@@ -37,7 +41,7 @@ class PageController {
     }
 
     contact(req, res) {
-
+        res.sendFile(path.join(__dirname, '../views', 'contact.html'));
     }
 
     list(req, res) {

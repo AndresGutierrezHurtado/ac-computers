@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto | AC Computers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link rel="stylesheet" href="/css/output.css"> -->
+    <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+</head>
+<body class="bg-[#242430] font-poppins text-white w-full"> 
+    
+    <header class="w-full sticky top-0 bg-opacity-40 px-3 py-2 z-[999]">
+        <div id="navbar" class="max-w-[1200px] mx-auto flex justify-between items-center py-2 rounded-full px-7 duration-500">
+            <!-- Logo empresa -->
+            <a href="/" class="text-2xl md:text-[27px] text-[#7270ec] uppercase font-extrabold">AC Computers</a>
+
+            <!-- Botón responsivo -->
+            <div class="md:hidden">
+                <i class="fas fa-bars text-2xl"></i>
+            </div>
+
+            <!-- Menú de navegación -->
+            <nav class="hidden md:flex gap-6 text-[19px]">
+                <a href="/" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Inicio</a>
+                <a href="/products" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
+                <a href="/contact" class="duration-300 hover:scale-105 text-[#7270ec]">Contactanos</a>
+            </nav>
+
+            <!-- Botón de descarga -->
+            <div>                
+                <button data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button">
+                    <i class="fas fa-circle-down text-[30px] duration-300 hover:text-[#7270ec]"></i>
+                </button>
+                
+                <div id="tooltip-bottom" role="tooltip" 
+                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip">
+                    Descargar productos
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full space-y-5 pt-10">
+        <section class="w-full px-3">
+            <div class="w-full max-w-[1200px] mx-auto flex py-8 gap-10 lg:py-10">
+                <!-- Imagen empresa -->
+                <div class="w-[500px] h-[500px] max-w-1/2 flex-none">
+                    <img src="/images/logo.jpg" alt="Imagen empresa" class="object-cover h-full w-full">
+                </div>
+                <div class="space-y-3 ">
+                    <h1 class="text-5xl font-extrabold" id="product-title">Contáctanos</h1>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum nostrum, sit exercitationem 
+                        voluptatibus eligendi a placeat, molestiae repellat alias rerum pariatur accusantium ullam 
+                        eum consectetur saepe neque, veniam ratione id aliquid explicabo libero expedita eius natus. 
+                        Beatae ut quia labore pariatur commodi officiis aspernatur eveniet corrupti quod! Quia deserunt 
+                        unde voluptatibus! Rerum labore velit aliquid? Vel a ipsa error! Quisquam esse nam eum cumque 
+                        rerum ab veritatis iusto voluptas perferendis.
+                    </p>
+
+                    <div>
+                        <a href="https://www.instagram.com/accomputersas/">
+                            <button>
+                                <i class="fab fa-instagram"></i>
+                            </button>
+                        </a>
+                        <a href="">
+                            <button>
+                                <i class="fab fa-facebook"></i>
+                            </button>
+                        </a>
+                        <a href="">
+                            <button>
+                                <i class="fab fa-whatsapp"></i>
+                            </button>
+                        </a>
+                        <a href="">
+                            <button>
+                                <i class="fa-regular fa-envelope"></i>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
