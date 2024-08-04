@@ -122,6 +122,41 @@ class Product {
             doc.end();
         });
     }
+
+    updateById(id, data, res) {
+        let query = 'UPDATE products SET ';
+        for (const key in data) {
+            query += `${key} = '${data[key]}', `;
+        }
+        query = query.slice(0, -2);
+        query += ' WHERE product_id = ' + id;
+
+        this.conn.query(query, [], (err, result) => {
+            if (err) {
+                console.error('Error en la consulta:', err);
+                return res.status(500).json({ success: false, message: 'Error en el servidor' });
+            }
+            if (result.affectedRows === 0) {
+                console.warn('No se encontró el producto para actualizar');
+                return res.status(404).json({ success: false, message: 'No se encontró el producto' });
+            }
+            return res.json({ success: true, message: 'Producto actualizado exitosamente' });
+        });
+    }
+
+    deleteById(id, res) {
+        this.conn.query('DELETE FROM products WHERE product_id = ?', [id], (err, result) => {
+            if (err) {
+                console.error('Error en la consulta:', err);
+                return res.status(500).json({ success: false, message: 'Error en el servidor' });
+            }
+            if (result.affectedRows === 0) {
+                console.warn('No se encontró el producto para eliminar');
+                return res.status(404).json({ success: false, message: 'No se encontró el producto' });
+            }
+            return res.json({ success: true, message: 'Producto eliminado exitosamente' });
+        });
+    }
 }
 
 module.exports = Product;
