@@ -141,7 +141,7 @@
                         COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString("es-CO")}
                     </td>
                     <td class="px-6 py-4">
-                        ${product.product_discount == 0 || product.product_discount == null ? 'Sin descuento' : product.product_discount + "%"}
+                        ${product.product_discount == 0 ? 'Sin descuento' : product.product_discount + "%"}
                     </td>
                     <td class="px-6 py-4">
                         <a href="/product/${product.product_id}" class="w-full">

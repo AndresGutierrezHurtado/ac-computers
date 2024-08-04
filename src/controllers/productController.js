@@ -19,6 +19,10 @@ class ProductController {
         this.productModel.generatePDF(req, res);
     }
 
+    paginate(req, res) {
+        this.productModel.paginate(req, res);
+    }
+
 }
 
 module.exports = ProductController;

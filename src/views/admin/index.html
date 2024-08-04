@@ -166,7 +166,7 @@
     </div>
 
     <script>
-        fetch('/api/products')
+        fetch('/api/products?limit=5&page=1')
         .then(response => response.json())
         .then(data => {
             const productList = document.getElementById('product-list');

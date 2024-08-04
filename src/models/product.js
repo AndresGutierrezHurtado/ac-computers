@@ -18,6 +18,25 @@ class Product {
             return res.json(result);
         });
     }
+
+    paginate(req, res) {
+        const { page = 1, limit = 5 } = req.query;
+
+        this.conn.query(`SELECT * FROM products ORDER BY ${req.query.sort || 'product_id'} ${req.query.order || 'asc'} LIMIT ${(page - 1) * limit}, ${limit}`, (err, result) => {
+            if (err) {
+                console.error('Error en la consulta:', err);
+                return res.status(500).send('Error en el servidor');
+            }
+            if (!result || result.length === 0) {
+                console.warn('No se encontraron resultados');
+                return res.status(404).send('No se encontraron resultados');
+            }
+            result.page = page;
+            result.limit = limit;
+            return res.json(result);
+        });
+        
+    }
     
     getById(req, res) {
         this.conn.query('SELECT * FROM products WHERE product_id = ?', [req.params.id], (err, result) => {
