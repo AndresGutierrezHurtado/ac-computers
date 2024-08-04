@@ -3,6 +3,7 @@ const path = require('path');
 const ProductController = require('./controllers/productController');
 const productController = new ProductController(require('./database/database').getConnection());
 const PageController = require('./controllers/pageController');
+const AdminController = require('./controllers/adminController');
 const app = express();
 
 // Static files
@@ -14,6 +15,9 @@ app.get('/product/:id', (req, res) => PageController.product(req, res));
 app.get('/products', (req, res) => PageController.products(req, res));
 app.get('/contact', (req, res) => PageController.contact(req, res));
 app.get('/list', (req, res) => productController.list(req, res));
+
+app.get('/admin', (req, res) => AdminController.index(req, res));
+app.get('/auth', (req, res) => AdminController.auth(req, res));
 
 // API Routes
 app.get('/api/products', (req, res) => productController.getProducts(req, res));

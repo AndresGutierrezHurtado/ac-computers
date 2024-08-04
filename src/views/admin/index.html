@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio | AC Computers</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-[#242430] font-poppins text-white w-full"> 
+
+    <header class="w-full sticky top-0 bg-opacity-40 px-3 py-2 z-[999]">
+        <div id="navbar" class="max-w-[1200px] mx-auto flex justify-between items-center py-2 rounded-full px-7 duration-500">
+            <!-- Logo empresa -->
+            <a href="/" class="text-2xl md:text-[27px] text-[#7270ec] uppercase font-extrabold">AC Computers</a>
+
+            <!-- Botón responsivo -->
+            <div class="md:hidden">
+                <i class="fas fa-bars text-2xl"></i>
+            </div>
+
+            <!-- Menú de navegación -->
+            <nav class="hidden md:flex gap-6 text-[19px]">
+                <a href="/" class="duration-300 hover:scale-105 text-[#7270ec]">Inicio</a>
+                <a href="/products" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
+                <a href="/contact" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Contactanos</a>
+            </nav>
+
+            <!-- Botón de descarga -->
+            <a href="/list">
+                <button data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button">
+                    <i class="fas fa-circle-down text-[30px] duration-300 hover:text-[#7270ec]"></i>
+                </button>
+                
+                <div id="tooltip-bottom" role="tooltip" 
+                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg shadow-sm opacity-0 tooltip">
+                    Descargar productos
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <main class="w-full space-y-5 pt-10">
+        
+        <section class="w-full px-3">
+            <div class="max-w-[1200px] mx-auto py-10">
+                <div class="relative shadow-md sm:rounded-lg overflow-x-auto space-y-5">
+                    <h2 class="font-extrabold text-5xl text-center">Panel de Productos</h2>
+
+                    <!-- Sección superior -->
+                    <div class="flex items-center justify-between flex-col gap-5 md:flex-row py-4">
+
+                        <!-- Selección de qué acción realizar -->
+                        <div>
+                            <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction"  type="button"
+                            class="inline-flex items-center focus:outline-none font-medium rounded-lg text-sm px-3 py-1.5 bg-zinc-800 text-zinc-400 border border-zinc-600 hover:bg-zinc-700 hover:border-zinc-600">
+                                <span class="sr-only">Botón de acción</span>
+                                Acción
+                                <i class="fas fa-chevron-down ml-2"></i>
+                            </button>
+
+                            <!-- Dropdown menu -->
+                            <div id="dropdownAction" class="z-10 hidden divide-y rounded-lg shadow w-44 bg-zinc-700 divide-zinc-600">
+                                <ul class="py-1 text-sm text-zinc-200" aria-labelledby="dropdownActionButton">
+                                    <li>
+                                        <a href="#" class="block px-4 py-2 hover:bg-zinc-600 hover:text-white">Ocultar</a>
+                                    </li>
+                                </ul>
+                                <div class="py-1">
+                                    <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-zinc-600 text-zinc-200 hover:text-red-400">
+                                        <i class="fas fa-trash mr-2"></i>
+                                        Eliminar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Búsqueda -->
+                        <label for="table-search" class="sr-only">Busqueda</label>
+                        <div class="relative flex items-center justify-center">
+                            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <i class="fas fa-search text-zinc-400"></i>
+                            </div>
+                            <input type="text" id="table-search" placeholder="Busca un producto" 
+                            class="block py-2 ps-10 text-sm border border-zinc-600 rounded-lg outline-none  w-80 bg-zinc-700 placeholder-zinc-400 text-white">
+                        </div>
+
+                    </div>
+
+                    <!-- Tabla de productos  -->
+                    <table class="w-full text-sm text-left rtl:text-right text-zinc-400">
+                        <thead class="text-xs uppercase bg-zinc-700 text-zinc-400">
+                            <tr>
+                                <th scope="col" class="p-4">
+                                    <div class="flex items-center">
+                                        <input id="checkbox-all-search" type="checkbox" class="size-4 rounded bg-zinc-700 border-zinc-600">
+                                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                    </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Nombre
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Fecha
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Precio
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Descuento
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-center">
+                                    Accion
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-list">
+                            <!-- Lista de productos -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="w-full px-3 py-5">
+        <div class="max-w-[1200px] mx-auto flex justify-between">
+            <div class="space-y-4">
+                <h4>Enlaces</h4>
+                <ul class="text-[#7270ec] space-y-2">
+                    <a href="/">
+                        <li class="hover:text-indigo-300 hover:underline">Inicio</li>
+                    </a>
+                    <a href="/products">
+                        <li class="hover:text-indigo-300 hover:underline">Productos</li>
+                    </a>
+                    <a href="/contact">
+                        <li class="hover:text-indigo-300 hover:underline">Contacto</li>
+                    </a>
+                    <a href="/list">
+                        <li class="hover:text-indigo-300 hover:underline">Descargar lista productos</li>
+                    </a>
+                </ul>
+            </div>
+            <div class="space-y-4 max-w-[450px]">
+                <h4>Sobre nosotros</h4>
+                <p class="text-[#7270ec] space-y-2">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta, blanditiis deleniti praesentium sequi molestias fugit quaerat adipisci ut ab hic recusandae, illum id delectus aliquam optio explicabo ad quas. Voluptatem voluptates commodi repellat obcaecati. Distinctio dolorum obcaecati natus laudantium, veniam ullam ea placeat dolore voluptas ex voluptates, cumque, est cum.
+                </p>
+            </div>
+            <div class="space-y-4">
+                <h4>AC Computers</h4>
+                <div class="size-[200px]">
+                    <img src="/images/logo.jpg" alt="Logo empresa" class="object-cover h-full w-full">                    
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modales -->
+    <div id="modals-container">
+     
+    </div>
+
+    <script>
+        // Agregar clase al header
+        window.onscroll = () => {
+            if (window.scrollY > 50) {
+                document.querySelector('#navbar').classList.add('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
+            } else {
+                document.querySelector('#navbar').classList.remove('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
+            }
+        }
+
+        fetch('/api/products')
+        .then(response => response.json())
+        .then(data => {
+            const productList = document.getElementById('product-list');
+            const modalsContainer = document.getElementById('modals-container');
+
+            data.forEach(product => {
+                const productItem = document.createElement('tr');
+                productItem.className = 'border-b bg-zinc-800 border-zinc-700 hover:bg-zinc-600 text-center text-zinc-400';
+                productItem.innerHTML = `
+                    <td class="w-4 p-4">
+                        <div class="flex items-center">
+                            <input id="checkbox-table-search-${product.product_id}" type="checkbox" 
+                            class="checkbox-table size-4 rounded bg-zinc-700 border-zinc-600">
+                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 flex items-center gap-4 text-sm font-medium text-start text-white">
+                        <div class="size-10">
+                            <img class="object-contain w-full h-full" src="${product.product_image_url}" alt="Jese image">
+                        </div>
+                        ${product.product_name}
+                    </td>
+                    <td class="px-6 py-4">${product.product_date.split("T")[0]}</td>
+                    <td class="px-6 py-4">COP ${Number(product.product_price).toLocaleString("es-CO")}</td>
+                    <td class="px-6 py-4">${product.product_discount == 0 ? 'Sin descuento' : product.product_discount + "%"}</td>
+                    <td class="px-6 py-4">
+                        <button class="w-full px-7 py-1 border border-[#7270ec] rounded-full mx-auto" type="button" onclick="toggleModal('product-modal-' + ${product.product_id})">
+                            Editar
+                        </button>
+                    </td>
+                `;
+
+                const productModal = document.createElement('div');
+                productModal.id = 'product-modal-' + product.product_id;
+                productModal.className = 'hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-[9999] flex justify-center items-center bg-black/50';
+                productModal.setAttribute('tabindex', '-1');
+                productModal.setAttribute('aria-hidden', 'true');
+                productModal.innerHTML = `
+                    <div class="relative p-4 w-full max-w-[700px] max-h-full">
+                        <!-- Modal content -->
+                        <div class="relative bg-white rounded-lg shadow dark:bg-zinc-700">
+                            <!-- Modal header -->
+                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-zinc-600">
+                                <h3 class="text-lg font-semibold text-zinc-900 dark:text-white">
+                                    Editar producto
+                                </h3>
+                                <button type="button" onclick="toggleModal('product-modal-' + ${product.product_id})" class="text-zinc-400 bg-transparent hover:bg-zinc-200 hover:text-zinc-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-zinc-600 dark:hover:text-white">
+                                    <i class="fas fa-times text-xl"></i>
+                                    <span class="sr-only">Cerrar modal</span>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <form class="p-4 flex flex-col gap-3">
+                                <div class="w-full">
+                                    <label for="product_name" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Nombre</label>
+                                    <input type="text" name="product_name" id="product_name" placeholder="Escribe el nombre del producto" value="${product.product_name}" required
+                                    class="bg-zinc-50 border border-zinc-300 text-zinc-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                </div>
+                                <div class="w-full">
+                                    <label for="product_price" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Precio</label>
+                                    <input type="number" name="product_price" id="product_price" placeholder="60.000" required value="${product.product_price}"
+                                    class="bg-zinc-50 border border-zinc-300 text-zinc-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                </div>
+                                <div class="w-full">
+                                    <label for="product_discount" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Descuento</label>
+                                    <input type="number" name="product_discount" id="product_discount" placeholder="Escribe el descuento" required value="${product.product_discount}"
+                                    class="bg-zinc-50 border border-zinc-300 text-zinc-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                </div>
+                                <div class="w-full">
+                                    <label for="dropzone-file" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Imagen</label>
+                                    <div class="flex items-center justify-center w-full">
+                                        <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-[200px] border-2 border-zinc-300 border-dashed rounded-lg cursor-pointer bg-zinc-50 dark:hover:bg-zinc-800 dark:bg-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:hover:border-zinc-500 dark:hover:bg-zinc-600">
+                                            <div class="flex flex-col items-center justify-center py-5">
+                                                <svg class="size-10 mb-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                                </svg>
+                                                <p class="mb-2 text-sm text-zinc-500 dark:text-zinc-400"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta el archivo</p>
+                                                <p class="text-xs text-zinc-500 dark:text-zinc-400">SVG, PNG o JPG (MAX. 800x400 px)</p>
+                                            </div>
+                                            <input id="dropzone-file" type="file" class="hidden" name="product_image"/>
+                                        </label>
+                                    </div> 
+                                </div>
+                                <div class="w-full">
+                                    <label for="product_description" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Descripcion</label>
+                                    <textarea id="product_description" name="product_description" rows="4" placeholder="Escribe una descripción"
+                                    class="block p-2.5 w-full text-sm text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">${product.product_description} </textarea>
+                                </div>
+                                <button type="submit" class="bg-[#7270ec] py-1.5 px-3 text-center font-medium rounded relative">
+                                    <i class="fas fa-arrow-up-from-bracket"></i>
+                                    Editar producto
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+
+                modalsContainer.appendChild(productModal);
+                productList.appendChild(productItem);
+            });
+        });
+        
+        function toggleModal(id = 'create-product-modal') {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxAllSearch = document.getElementById('checkbox-all-search');
+            if (checkboxAllSearch) {
+                checkboxAllSearch.addEventListener('change', (e) => {
+                    document.querySelectorAll('.checkbox-table').forEach((checkbox) => {
+                        checkbox.checked = e.target.checked;
+                    });
+                });
+            }
+
+            document.querySelectorAll('.checkbox-table').forEach((checkbox) => {
+                checkbox.addEventListener('change', () => {
+                    const checkboxAllSearch = document.getElementById('checkbox-all-search');
+                    if (checkboxAllSearch) {
+                        checkboxAllSearch.checked = false;
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
