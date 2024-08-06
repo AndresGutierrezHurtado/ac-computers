@@ -47,7 +47,7 @@
         
         <section class="w-full px-3">
             <div class="max-w-[1200px] mx-auto py-10">
-                <div class="relative shadow-md sm:rounded-lg overflow-x-auto space-y-5">
+                <div class="relative sm:rounded-lg overflow-x-auto space-y-5">
                     <h2 class="font-extrabold text-5xl text-center">Panel de Productos</h2>
 
                     <!-- Sección superior -->
@@ -121,6 +121,12 @@
                             <!-- Lista de productos -->
                         </tbody>
                     </table>
+                    <div class="flex justify-between items-center py-4 w-full">
+                        <div id="pagination-text"> </div>
+                        <div id="pagination-controls" class="space-x-3">
+                            <!-- Paginación -->
+                        </div>
+                    </div>                    
                 </div>
             </div>
         </section>
@@ -166,13 +172,58 @@
     </div>
 
     <script>
-        fetch('/api/products?limit=5&page=1')
-        .then(response => response.json())
-        .then(data => {
+        document.addEventListener('DOMContentLoaded', () => {
+            // Agregar clase al header
+            window.onscroll = () => {
+                if (window.scrollY > 50) {
+                    document.querySelector('#navbar').classList.add('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
+                } else {
+                    document.querySelector('#navbar').classList.remove('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
+                }
+            }
+
+            const searchInput = document.getElementById('table-search');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                fetchProducts(1, searchTerm);
+            });
+
+            const checkboxAllSearch = document.getElementById('checkbox-all-search');
+            if (checkboxAllSearch) {
+                checkboxAllSearch.addEventListener('change', (e) => {
+                    document.querySelectorAll('.checkbox-table').forEach((checkbox) => {
+                        checkbox.checked = e.target.checked;
+                    });
+                });
+            }
+
+            document.querySelectorAll('.checkbox-table').forEach((checkbox) => {
+                checkbox.addEventListener('change', () => {
+                    const checkboxAllSearch = document.getElementById('checkbox-all-search');
+                    if (checkboxAllSearch) {
+                        checkboxAllSearch.checked = false;
+                    }
+                });
+            });
+        });
+
+        fetchProducts();
+
+        function fetchProducts(page = 1, search = "") {
+            fetch(`/api/products?limit=5&page=${page}&search=${search}`)
+            .then(response => response.json())
+            .then(data => {
+                renderProducts(data.products);
+                renderPagination(data.page, data.limit, data.totalCount, data.totalPages);
+            });
+        }
+
+        function renderProducts(products) {
             const productList = document.getElementById('product-list');
             const modalsContainer = document.getElementById('modals-container');
+            productList.innerHTML = '';
 
-            data.forEach(product => {
+            products.forEach(product => {
                 const productItem = document.createElement('tr');
                 productItem.className = 'border-b bg-zinc-800 border-zinc-700 hover:bg-zinc-600 text-center text-zinc-400';
                 productItem.innerHTML = `
@@ -267,37 +318,30 @@
                 modalsContainer.appendChild(productModal);
                 productList.appendChild(productItem);
             });
-        });
+        }
+
+        function renderPagination(currentPage, limit, totalCount, totalPages) {
+            const paginationControls = document.getElementById('pagination-controls');
+            paginationControls.innerHTML = '';
+            document.getElementById('pagination-text').innerHTML = '<span class="mr-auto">Paginación mostrando ' + currentPage + '-' + limit + ' de ' + totalCount + ' resultados </span> ';
+
+            if (totalPages < 1) return;
+
+            const createButton = (page, text, isCurrent) => {
+                const button = document.createElement('button');
+                button.innerText = text;
+                button.className = `px-3 py-1.5 border rounded bg-zinc-700 ${isCurrent ? 'border-indigo-600 text-indigo-500 bg-zinc-700/50 font-bold cursor-not-allowed' : 'text-zinc-400 hover:bg-zinc-600'}`;
+                button.disabled = isCurrent;
+                button.addEventListener('click', () => fetchProducts(page));
+                return button;
+            };
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = createButton(i, i, i == currentPage);
+                paginationControls.appendChild(button);
+            }
+        }
         
-        document.addEventListener('DOMContentLoaded', () => {
-            // Agregar clase al header
-            window.onscroll = () => {
-                if (window.scrollY > 50) {
-                    document.querySelector('#navbar').classList.add('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
-                } else {
-                    document.querySelector('#navbar').classList.remove('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
-                }
-            }
-
-            const checkboxAllSearch = document.getElementById('checkbox-all-search');
-            if (checkboxAllSearch) {
-                checkboxAllSearch.addEventListener('change', (e) => {
-                    document.querySelectorAll('.checkbox-table').forEach((checkbox) => {
-                        checkbox.checked = e.target.checked;
-                    });
-                });
-            }
-
-            document.querySelectorAll('.checkbox-table').forEach((checkbox) => {
-                checkbox.addEventListener('change', () => {
-                    const checkboxAllSearch = document.getElementById('checkbox-all-search');
-                    if (checkboxAllSearch) {
-                        checkboxAllSearch.checked = false;
-                    }
-                });
-            });
-        });
-
         function toggleModal(id = 'create-product-modal') {
             document.getElementById(id).classList.toggle('hidden');
         }

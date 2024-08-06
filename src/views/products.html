@@ -125,12 +125,12 @@
         }
 
         // Realizar consulta a la API y mostrar la información
-        fetch('/api/products')
+        fetch('/api/products?limit=100')
         .then(response => response.json())
         .then(data => {
             // Lista de precios
             const listPrices = document.getElementById('prices-list');
-            data.forEach(product => {
+            data.products.forEach(product => {
                 const listPrice = document.createElement('tr');
                 listPrice.className = 'border-b bg-zinc-800 border-zinc-700 hover:bg-zinc-600 duration-300';
                 listPrice.innerHTML = `

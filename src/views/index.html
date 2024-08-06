@@ -152,7 +152,7 @@
         .then(response => response.json())
         .then(data => {
             const homeSection = document.getElementById('home-section');
-            data.forEach(product => {
+            data.products.forEach(product => {
                 const productSwiper = document.createElement('article');
                 productSwiper.className = 'swiper-slide min-w-full px-3';
                 productSwiper.innerHTML = `
@@ -183,7 +183,7 @@
         .then(response => response.json())
         .then(data => {
             const promotions = document.getElementById('promotions');
-            data.forEach(product => {
+            data.products.forEach(product => {
                 const promotion = document.createElement('article');
                 promotion.className = 'flex items-center justify-center gap-4 p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
                 promotion.innerHTML = `
@@ -212,7 +212,7 @@
         .then(response => response.json())
         .then(data => {
             const newProducts = document.getElementById('new-products-section');
-            data.forEach(product => {
+            data.products.forEach(product => {
                 const newProduct = document.createElement('article');
                 newProduct.className = 'swiper-slide p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
                 newProduct.innerHTML = `
