@@ -37,7 +37,6 @@ Una vez que el servidor esté en funcionamiento, puedes acceder a la aplicación
 
 
 ### Cosas pendientes por hacer:
-- lista de precios pdf
 - sección administrador
 
 git config --global user.name "w3schools-test"
