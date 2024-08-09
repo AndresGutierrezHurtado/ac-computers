@@ -13,6 +13,7 @@ CREATE TABLE `products` (
     `product_price` DECIMAL(10, 0) NOT NULL,
     `product_discount` INT NOT NULL DEFAULT 0,
     `product_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `product_status` ENUM('private', 'public') NOT NULL DEFAULT 'public',
     `product_image_url` VARCHAR(255) NOT NULL DEFAULT '/images/products/bg1.png'
 );
 

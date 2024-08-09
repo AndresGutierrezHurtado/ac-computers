@@ -27,6 +27,7 @@ app.get('/auth', (req, res) => adminController.auth(req, res));
 // API Routes
 app.get('/api/products', (req, res) => productController.paginate(req, res));
 app.get('/api/products/:id', (req, res) => productController.getProduct(req, res));
+app.post('/api/products', upload.single('product_image'), (req, res) => adminController.createProduct(req, res));
 app.put('/api/products/:id', upload.single('product_image'), (req, res) => adminController.updateProduct(req, res));
 app.delete('/api/products/:id', (req, res) => adminController.deleteProduct(req, res));
 

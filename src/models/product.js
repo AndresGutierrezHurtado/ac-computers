@@ -67,6 +67,34 @@ class Product {
         });
     }
 
+    create(data) {
+        return new Promise((resolve, reject) => {
+            let query = 'INSERT INTO products (';
+    
+            for (const key in data) {
+                query += `${key}, `;
+            }
+    
+            query = query.slice(0, -2);
+            query += ') VALUES (';
+    
+            for (const key in data) {
+                query += `'${data[key]}', `;
+            }
+    
+            query = query.slice(0, -2);
+            query += ');';
+    
+            this.conn.query(query, (err, result) => {
+                if (err) {
+                    console.error('Error en la consulta:', err);
+                    return reject({ success: false, message: 'Error en el servidor' });
+                }
+                resolve({ success: true, message: 'Producto creado exitosamente', product_id: result.insertId });
+            });
+        });
+    }
+
     updateById(id, data, res) {
         // Actualizar un solo producto
         let query = 'UPDATE products SET ';
