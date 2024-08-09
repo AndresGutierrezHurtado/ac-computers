@@ -70,10 +70,10 @@
                                     </li>
                                 </ul>
                                 <div class="py-1">
-                                    <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-zinc-600 text-zinc-200 hover:text-red-400">
-                                        <i class="fas fa-trash mr-2"></i>
+                                    <button id="delete-selected" class="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-zinc-600 hover:text-red-400">
+                                        <i class="fas fa-trash mr-2"></i> 
                                         Eliminar
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -269,14 +269,39 @@
                 });
             }
 
-            document.querySelectorAll('.checkbox-table').forEach((checkbox) => {
-                checkbox.addEventListener('change', () => {
-                    const checkboxAllSearch = document.getElementById('checkbox-all-search');
-                    if (checkboxAllSearch) {
-                        checkboxAllSearch.checked = false;
+            document.getElementById('delete-selected').addEventListener('click', () => {
+                const checkboxes = document.querySelectorAll('.checkbox-table');
+                const selectedProducts = [];
+                checkboxes.forEach((checkbox) => {
+                    if (checkbox.checked) {
+                        selectedProducts.push(checkbox.id.replace('checkbox-table-search-', ''));
                     }
                 });
-            });
+
+                let result = true;
+                
+                selectedProducts.forEach(product => {
+
+                    fetch(`/api/products/${product}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            fetchProducts();
+                        } else {
+                            alert(data.message);
+                            result = false; 
+                        }
+                    });
+                });
+
+                if (result) {
+                    alert('Productos eliminados exitosamente');
+                    fetchProducts();
+                }
+            })
+
         });
 
         fetchProducts();
@@ -308,7 +333,7 @@
                     </td>
                     <td class="px-6 py-4 flex items-center gap-4 text-sm font-medium text-start text-white">
                         <div class="size-10">
-                            <img class="object-contain w-full h-full" src="${product.product_image_url}" alt="Jese image">
+                            <img class="object-contain w-full h-full" src="${product.product_image_url}" alt="Imagen producto ${product.product_name}">
                         </div>
                         ${product.product_name}
                     </td>
@@ -391,6 +416,12 @@
 
                 modalsContainer.appendChild(productModal);
                 productList.appendChild(productItem);
+
+                document.querySelectorAll('.checkbox-table').forEach((checkbox) => {
+                    checkbox.addEventListener('change', () => {
+                        document.getElementById('checkbox-all-search') . checked = document.querySelectorAll('.checkbox-table:checked').length == document.querySelectorAll('.checkbox-table').length;
+                    });
+                });
             });
         }
 

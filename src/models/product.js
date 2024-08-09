@@ -126,7 +126,7 @@ class Product {
             }
             if (result.affectedRows === 0) {
                 console.warn('No se encontró el producto para eliminar');
-                return res.status(404).json({ success: false, message: 'No se encontró el producto' });
+                return res.status(404).json({ success: false, message: 'No se encontró el producto ' + id });
             }
             return res.json({ success: true, message: 'Producto eliminado exitosamente' });
         });
