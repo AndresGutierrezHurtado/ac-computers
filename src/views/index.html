@@ -13,14 +13,15 @@
 </head>
 <body class="bg-[#242430] font-poppins text-white w-full"> 
 
-    <header class="w-full sticky top-0 bg-opacity-40 px-3 py-2 z-[999]">
+    <!-- Encabezado -->
+    <header class="w-full sticky top-0 px-3 py-2 z-[999]">
         <div id="navbar" class="max-w-[1200px] mx-auto flex justify-between items-center py-2 rounded-full px-7 duration-500">
             <!-- Logo empresa -->
             <a href="/" class="text-2xl md:text-[27px] text-[#7270ec] uppercase font-extrabold">AC Computers</a>
 
             <!-- Botón responsivo -->
-            <div class="md:hidden">
-                <i class="fas fa-bars text-2xl"></i>
+            <div class="md:hidden" onclick="toggleMenu()">
+                <i class="fas fa-bars text-2xl" id="toggle-icon"></i>
             </div>
 
             <!-- Menú de navegación -->
@@ -31,7 +32,7 @@
             </nav>
 
             <!-- Botón de descarga -->
-            <a href="/list">
+            <a href="/list" class="hidden md:block">
                 <button data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button">
                     <i class="fas fa-circle-down text-[30px] duration-300 hover:text-[#7270ec]"></i>
                 </button>
@@ -42,9 +43,18 @@
                     <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
             </a>
+
         </div>
     </header>
 
+    <nav id="navbar-responsive" class="fixed inset-0 bg-black z-[90] pt-[90px] flex flex-col align-items-center text-center text-xl gap-10 hidden">
+        <a href="/" class="duration-300 hover:scale-105 text-[#7270ec]">Inicio</a>
+        <a href="/products" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
+        <a href="/contact" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Contactanos</a>
+    </nav>
+
+
+    <!-- Contenido principal -->
     <main class="w-full space-y-5 pt-10">
         
         <!-- Sección inicio -->
@@ -71,7 +81,7 @@
         <section class="w-full px-3 py-10">
             <div class="w-full max-w-[1200px] mx-auto space-y-8">
                 <h2 class="font-extrabold text-5xl text-center">Promociones</h2>
-                <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,_1fr))] gap-10" id="promotions">
+                <div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(400px,_1fr))] gap-10 w-full" id="promotions">
                     <!-- Elementos -->
                 </div>
             </div>
@@ -102,7 +112,7 @@
     </main>
 
     <footer class="w-full px-3 py-5">
-        <div class="max-w-[1200px] mx-auto flex justify-between">
+        <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between">
             <div class="space-y-4">
                 <h4>Enlaces</h4>
                 <ul class="text-[#7270ec] space-y-2">
@@ -147,6 +157,12 @@
             }
         }
 
+        function toggleMenu() {
+            document.getElementById('navbar-responsive').classList.toggle('hidden');
+            document.getElementById('toggle-icon').classList.toggle('fa-bars');
+            document.getElementById('toggle-icon').classList.toggle('fa-x');
+        }
+
         // Realizar consulta a la API y mostrar la información
         fetch('/api/products?limit=7')
         .then(response => response.json())
@@ -185,22 +201,22 @@
             const promotions = document.getElementById('promotions');
             data.products.forEach(product => {
                 const promotion = document.createElement('article');
-                promotion.className = 'flex items-center justify-center gap-4 p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
+                promotion.className = 'flex flex-col-reverse md:flex-row items-center justify-center gap-4 p-5 bg-black bg-opacity-20 rounded-xl shadow-lg border border-[#7a7bbf16]';
                 promotion.innerHTML = `
-                    <div class="w-1/2 space-y-2">
+                    <div class="w-full md:w-1/2 space-y-2">
                         <h3 class="font-extrabold text-2xl">${product.product_name}</h3>
                         <div class="space-y-0 font-semibold text-[#7270ec] pb-4">
                             <p class="line-through">COP ${Number(product.product_price).toLocaleString("es-CO")}</p>
                             <p>COP ${Number(product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString("es-CO")}${ " - " + product.product_discount + "%"}</p>
                         </div>
                         <a href="/product/${product.product_id}"> 
-                            <button class="px-7 py-1 border border-[#7270ec] rounded-full ">
+                            <button class="px-10 py-1 border border-[#7270ec] rounded-full ">
                                 ver
                             </button>
                         </a>
                     </div>
-                    <div class="w-1/2">
-                        <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}">
+                    <div class="w-full md:w-1/2 max-w-[250px]">
+                        <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}" class="object-contain w-full h-full">
                     </div>
                 `;
                 promotions.appendChild(promotion);
