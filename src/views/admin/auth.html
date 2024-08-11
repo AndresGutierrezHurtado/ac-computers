@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto | AC Computers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+</head>
+<body class="bg-[#242430] font-poppins text-white w-full"> 
+    
+    <!-- Encabezado -->
+    <header class="w-full sticky top-0 px-3 py-2 z-[999]">
+        <div id="navbar" class="max-w-[1200px] mx-auto flex justify-between items-center py-2 rounded-full px-7 duration-500">
+            <!-- Logo empresa -->
+            <a href="/" class="text-2xl md:text-[27px] text-[#7270ec] uppercase font-extrabold">AC Computers</a>
+
+            <!-- Botón responsivo -->
+            <div class="md:hidden" onclick="toggleMenu()">
+                <i class="fas fa-bars text-2xl" id="toggle-icon"></i>
+            </div>
+
+            <!-- Menú de navegación -->
+            <nav class="hidden md:flex gap-6 text-[19px]">
+                <a href="/" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Inicio</a>
+                <a href="/products" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
+                <a href="/contact" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Contactanos</a>
+            </nav>
+
+            <!-- Botón de descarga -->
+            <a href="/list" class="hidden md:block">
+                <button data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button">
+                    <i class="fas fa-circle-down text-[30px] duration-300 hover:text-[#7270ec]"></i>
+                </button>
+                
+                <div id="tooltip-bottom" role="tooltip" 
+                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip">
+                    Descargar productos
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+            </a>
+
+        </div>
+    </header>
+
+    <nav id="navbar-responsive" class="fixed inset-0 bg-black bg-opacity-35 backdrop-blur-md z-[90] pt-[90px] flex flex-col align-items-center text-center text-xl gap-10 hidden">
+        <a href="/" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Inicio</a>
+        <a href="/products" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
+        <a href="/contact" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Contactanos</a>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="w-full space-y-5 pt-10 min-h-[80vh] flex items-center">
+        <section class="w-full px-3">
+            <div class="w-full max-w-[800px] mx-auto bg-black bg-opacity-15 p-5 rounded-md shadow-lg space-y-2">
+                <h1 class="text-2xl sm:text-3xl lg:text-5xl tracking-tight font-extrabold"> <i class="fa-solid fa-shield"></i> Ingresar al sistema</h1>
+                <p>Ingresa la dirección de correo electronico y la contraseña para iniciar sesión.</p>
+                <form action="/admin/auth" method="post" class="w-full py-4">
+                    <div>
+                        <label for="input-group-1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
+                        <div class="relative mb-6">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                                    <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
+                                    <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
+                                </svg>
+                            </div>
+                            <input type="text" id="input-group-1" placeholder="ejemplo@gmail.com" 
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg outline-none focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 placeholder-gray-400">
+                        </div>
+                    </div>
+                    <button class="w-full bg-indigo-500 font-semibold text-white py-2 px-3 rounded-md relative group duration-300 hover:bg-indigo-500/80">
+                        <span class="absolute left-5 top-1/2 -translate-y-1/2">
+                            <i class="fa-solid fa-arrow-up-from-bracket text-indigo-300 group-hover:text-indigo-200 text-xl"></i>
+                        </span>
+                        Enviar
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+        
+    <script>
+        // Agregar clase al header
+        window.onscroll = () => {
+            if (window.scrollY > 50) {
+                document.querySelector('#navbar').classList.add('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
+            } else {
+                document.querySelector('#navbar').classList.remove('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
+            }
+        }
+
+        function toggleMenu() {
+            document.getElementById('navbar-responsive').classList.toggle('hidden');
+            document.getElementById('toggle-icon').classList.toggle('fa-bars');
+            document.getElementById('toggle-icon').classList.toggle('fa-x');
+        }
+    </script>
+</body>
+</html>

@@ -47,19 +47,18 @@
         </div>
     </header>
 
-    <nav id="navbar-responsive" class="fixed inset-0 bg-black z-[90] pt-[90px] flex flex-col align-items-center text-center text-xl gap-10 hidden">
+    <nav id="navbar-responsive" class="fixed inset-0 bg-black bg-opacity-35 backdrop-blur-md z-[90] pt-[90px] flex flex-col align-items-center text-center text-xl gap-10 hidden">
         <a href="/" class="duration-300 hover:scale-105 text-[#7270ec]">Inicio</a>
         <a href="/products" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
         <a href="/contact" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Contactanos</a>
     </nav>
 
-
     <!-- Contenido principal -->
-    <main class="w-full space-y-5 pt-10">
-        
+    <main class="w-full space-y-5">
+
         <!-- Sección inicio -->
         <section class="w-full px-3">
-            <div class="home-swiper max-w-[1200px] mx-auto py-10 relative overflow-hidden space-y-10">
+            <div class="home-swiper max-w-[1200px] mx-auto py-5 md:py-10 relative overflow-hidden space-y-10">
                 <div class="swiper-wrapper" id="home-section">
                     <!-- Carrusel -->
                 </div>
@@ -111,11 +110,12 @@
         </section>
     </main>
 
+    
     <footer class="w-full px-3 py-5">
-        <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between space-y-10">
+        <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between gap-10 md:gap-3">
             <div class="space-y-2">
                 <h4 class="font-extrabold text-lg">Enlaces</h4>
-                <ul class="text-[#7270ec] space-y-2">
+                <ul class="text-[#7270ec] space-y-1">
                     <a href="/">
                         <li class="hover:text-indigo-300 hover:underline">Inicio</li>
                     </a>
@@ -132,7 +132,7 @@
             </div>
             <div class="space-y-2 max-w-[450px]">
                 <h4 class="font-extrabold text-lg">Sobre nosotros</h4>
-                <p class="text-[#7270ec] space-y-2">
+                <p class="text-[#7270ec]">
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta, blanditiis deleniti praesentium sequi molestias fugit quaerat adipisci ut ab hic recusandae, illum id delectus aliquam optio explicabo ad quas. Voluptatem voluptates commodi repellat obcaecati. Distinctio dolorum obcaecati natus laudantium, veniam ullam ea placeat dolore voluptas ex voluptates, cumque, est cum.
                 </p>
             </div>
@@ -185,7 +185,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="w-1/2">
+                        <div class="w-full md:w-1/2">
                             <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}">
                         </div>
                     </div>

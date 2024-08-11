@@ -11,14 +11,15 @@
 </head>
 <body class="bg-[#242430] font-poppins text-white w-full"> 
 
-    <header class="w-full sticky top-0 bg-opacity-40 px-3 py-2 z-[999]">
+    <!-- Encabezado -->
+    <header class="w-full sticky top-0 px-3 py-2 z-[999]">
         <div id="navbar" class="max-w-[1200px] mx-auto flex justify-between items-center py-2 rounded-full px-7 duration-500">
             <!-- Logo empresa -->
             <a href="/" class="text-2xl md:text-[27px] text-[#7270ec] uppercase font-extrabold">AC Computers</a>
 
             <!-- Botón responsivo -->
-            <div class="md:hidden">
-                <i class="fas fa-bars text-2xl"></i>
+            <div class="md:hidden" onclick="toggleMenu()">
+                <i class="fas fa-bars text-2xl" id="toggle-icon"></i>
             </div>
 
             <!-- Menú de navegación -->
@@ -29,29 +30,36 @@
             </nav>
 
             <!-- Botón de descarga -->
-            <a href="/list">
+            <a href="/list" class="hidden md:block">
                 <button data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button">
                     <i class="fas fa-circle-down text-[30px] duration-300 hover:text-[#7270ec]"></i>
                 </button>
                 
                 <div id="tooltip-bottom" role="tooltip" 
-                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-zinc-900 bg-white border border-zinc-200 rounded-lg shadow-sm opacity-0 tooltip">
+                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip">
                     Descargar productos
                     <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
             </a>
+
         </div>
     </header>
+
+    <nav id="navbar-responsive" class="fixed inset-0 bg-black bg-opacity-35 backdrop-blur-md z-[90] pt-[90px] flex flex-col align-items-center text-center text-xl gap-10 hidden">
+        <a href="/" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Inicio</a>
+        <a href="/products" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Productos</a>
+        <a href="/contact" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Contactanos</a>
+    </nav>
 
     <main class="w-full space-y-5 pt-10">
         
         <section class="w-full px-3">
-            <div class="max-w-[1200px] mx-auto py-10">
-                <div class="relative sm:rounded-lg overflow-x-auto space-y-5">
-                    <h2 class="font-extrabold text-5xl text-center">Panel de Productos</h2>
+            <div class="w-full max-w-[1200px] mx-auto py-10">
+                <div class="relative sm:rounded-lg space-y-5 w-full">
+                    <h2 class="font-extrabold text-3xl md:text-5xl text-center">Panel de Productos</h2>
 
                     <!-- Sección superior -->
-                    <div class="flex items-center justify-between flex-col gap-5 md:flex-row py-4">
+                    <div class="flex items-center justify-between flex-col gap-5 md:flex-row py-4 w-full">
 
                         <!-- Selección de qué acción realizar -->
                         <div>
@@ -80,47 +88,50 @@
 
                         <!-- Búsqueda -->
                         <label for="table-search" class="sr-only">Busqueda</label>
-                        <div class="relative flex items-center justify-center">
+                        <div class="relative flex items-center justify-center w-full max-w-80">
                             <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                                 <i class="fas fa-search text-zinc-400"></i>
                             </div>
                             <input type="text" id="table-search" placeholder="Busca un producto" 
-                            class="block py-2 ps-10 text-sm border border-zinc-600 rounded-lg outline-none  w-80 bg-zinc-700 placeholder-zinc-400 text-white">
+                            class="block py-2 ps-10 text-sm border border-zinc-600 rounded-lg outline-none w-full bg-zinc-700 placeholder-zinc-400 text-white">
                         </div>
 
                     </div>
 
                     <!-- Tabla de productos  -->
-                    <table class="w-full text-sm text-left rtl:text-right text-zinc-400">
-                        <thead class="text-xs uppercase bg-zinc-700 text-zinc-400">
-                            <tr>
-                                <th scope="col" class="p-4">
-                                    <div class="flex items-center">
-                                        <input id="checkbox-all-search" type="checkbox" class="size-4 rounded bg-zinc-700 border-zinc-600">
-                                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Nombre
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Fecha
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Precio
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Descuento
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    Accion
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="product-list">
-                            <!-- Lista de productos -->
-                        </tbody>
-                    </table>
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full text-sm text-left rtl:text-right text-zinc-400">
+                            <thead class="text-xs uppercase bg-zinc-700 text-zinc-400">
+                                <tr>
+                                    <th scope="col" class="p-4">
+                                        <div class="flex items-center">
+                                            <input id="checkbox-all-search" type="checkbox" class="size-4 rounded bg-zinc-700 border-zinc-600">
+                                            <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nombre
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Fecha
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Precio
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Descuento
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-center">
+                                        Accion
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="product-list">
+                                <!-- Lista de productos -->
+                            </tbody>
+                        </table>
+                    </div>
+
                     <div class="w-full">
                         <button onclick="toggleModal('create-product')" class="w-full py-2 px-3 rounded-lg bg-indigo-500 font-semibold relative duration-300 hover:bg-indigo-600 group">
                             <span class="absolute left-5 top-1/2 -translate-y-1/2 group-hover:text-indigo-300 text-indigo-400 text-xl">
@@ -129,23 +140,23 @@
                             Agregar nuevo producto
                         </button>
                     </div>
-                    <div class="flex justify-between items-center py-4 w-full">
+                    <div class="flex justify-between items-center py-4 w-full flex flex-col md:flex-row gap-3">
                         <div id="pagination-text"> </div>
-                        <div id="pagination-controls" class="space-x-3">
+                        <div id="pagination-controls" class="flex gap-3">
                             <!-- Paginación -->
                         </div>
                     </div>                    
                 </div>
             </div>
         </section>
-
+        
     </main>
 
     <footer class="w-full px-3 py-5">
-        <div class="max-w-[1200px] mx-auto flex justify-between">
-            <div class="space-y-4">
-                <h4>Enlaces</h4>
-                <ul class="text-[#7270ec] space-y-2">
+        <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between gap-10 md:gap-3">
+            <div class="space-y-2">
+                <h4 class="font-extrabold text-lg">Enlaces</h4>
+                <ul class="text-[#7270ec] space-y-1">
                     <a href="/">
                         <li class="hover:text-indigo-300 hover:underline">Inicio</li>
                     </a>
@@ -160,14 +171,14 @@
                     </a>
                 </ul>
             </div>
-            <div class="space-y-4 max-w-[450px]">
-                <h4>Sobre nosotros</h4>
-                <p class="text-[#7270ec] space-y-2">
+            <div class="space-y-2 max-w-[450px]">
+                <h4 class="font-extrabold text-lg">Sobre nosotros</h4>
+                <p class="text-[#7270ec]">
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta, blanditiis deleniti praesentium sequi molestias fugit quaerat adipisci ut ab hic recusandae, illum id delectus aliquam optio explicabo ad quas. Voluptatem voluptates commodi repellat obcaecati. Distinctio dolorum obcaecati natus laudantium, veniam ullam ea placeat dolore voluptas ex voluptates, cumque, est cum.
                 </p>
             </div>
-            <div class="space-y-4">
-                <h4>AC Computers</h4>
+            <div class="space-y-2">
+                <h4 class="font-extrabold text-lg">AC Computers</h4>
                 <div class="size-[200px]">
                     <img src="/images/logo.jpg" alt="Logo empresa" class="object-cover h-full w-full">                    
                 </div>
@@ -304,6 +315,12 @@
 
         });
 
+        function toggleMenu() {
+            document.getElementById('navbar-responsive').classList.toggle('hidden');
+            document.getElementById('toggle-icon').classList.toggle('fa-bars');
+            document.getElementById('toggle-icon').classList.toggle('fa-x');
+        }
+
         fetchProducts();
 
         function fetchProducts(page = 1, search = "") {
@@ -311,7 +328,7 @@
             .then(response => response.json())
             .then(data => {
                 renderProducts(data.products);
-                renderPagination(data.page, data.limit, data.totalCount, data.totalPages);
+                renderPagination(data.page, data.limit, data.totalCount, data.totalPages, data.products.length);
             });
         }
 
@@ -331,8 +348,8 @@
                             <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                         </div>
                     </td>
-                    <td class="px-6 py-4 flex items-center gap-4 text-sm font-medium text-start text-white">
-                        <div class="size-10">
+                    <td class="px-6 py-4 flex items-center gap-4 text-sm font-medium text-start text-white min-w-[300px]">
+                        <div class="size-10 flex-none">
                             <img class="object-contain w-full h-full" src="${product.product_image_url}" alt="Imagen producto ${product.product_name}">
                         </div>
                         ${product.product_name}
@@ -425,10 +442,10 @@
             });
         }
 
-        function renderPagination(currentPage, limit, totalCount, totalPages) {
+        function renderPagination(currentPage, limit, totalCount, totalPages, pageCount) {
             const paginationControls = document.getElementById('pagination-controls');
             paginationControls.innerHTML = '';
-            document.getElementById('pagination-text').innerHTML = '<span class="mr-auto">Paginación mostrando ' + currentPage + '-' + limit + ' de ' + totalCount + ' resultados </span> ';
+            document.getElementById('pagination-text').innerHTML = '<span class="mr-auto">Mostrando ' + ((currentPage * limit) - limit + 1) + '-' + ((currentPage * limit) - limit + pageCount)  + ' de ' + totalCount + ' resultados </span> ';
 
             if (totalPages < 1) return;
 

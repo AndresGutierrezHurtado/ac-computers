@@ -12,14 +12,15 @@
 </head>
 <body class="bg-[#242430] font-poppins text-white w-full"> 
 
-    <header class="w-full sticky top-0 bg-opacity-40 px-3 py-2 z-[999]">
+    <!-- Encabezado -->
+    <header class="w-full sticky top-0 px-3 py-2 z-[999]">
         <div id="navbar" class="max-w-[1200px] mx-auto flex justify-between items-center py-2 rounded-full px-7 duration-500">
             <!-- Logo empresa -->
             <a href="/" class="text-2xl md:text-[27px] text-[#7270ec] uppercase font-extrabold">AC Computers</a>
 
             <!-- Botón responsivo -->
-            <div class="md:hidden">
-                <i class="fas fa-bars text-2xl"></i>
+            <div class="md:hidden" onclick="toggleMenu()">
+                <i class="fas fa-bars text-2xl" id="toggle-icon"></i>
             </div>
 
             <!-- Menú de navegación -->
@@ -30,7 +31,7 @@
             </nav>
 
             <!-- Botón de descarga -->
-            <a href="/list">
+            <a href="/list" class="hidden md:block">
                 <button data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button">
                     <i class="fas fa-circle-down text-[30px] duration-300 hover:text-[#7270ec]"></i>
                 </button>
@@ -41,9 +42,17 @@
                     <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
             </a>
+
         </div>
     </header>
 
+    <nav id="navbar-responsive" class="fixed inset-0 bg-black bg-opacity-35 backdrop-blur-md z-[90] pt-[90px] flex flex-col align-items-center text-center text-xl gap-10 hidden">
+        <a href="/" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Inicio</a>
+        <a href="/products" class="duration-300 hover:scale-105 text-[#7270ec]">Productos</a>
+        <a href="/contact" class="duration-300 hover:scale-105 hover:text-[#7270ec]">Contactanos</a>
+    </nav>
+
+    <!-- Contenido principal -->
     <main class="w-full space-y-5 pt-10">
         <!-- Sección de listado de productos -->
         <section class="w-full px-3 py-10">
@@ -77,12 +86,12 @@
             </div>
         </section>
     </main>
-
+    
     <footer class="w-full px-3 py-5">
-        <div class="max-w-[1200px] mx-auto flex justify-between">
-            <div class="space-y-4">
-                <h4>Enlaces</h4>
-                <ul class="text-[#7270ec] space-y-2">
+        <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between gap-10 md:gap-3">
+            <div class="space-y-2">
+                <h4 class="font-extrabold text-lg">Enlaces</h4>
+                <ul class="text-[#7270ec] space-y-1">
                     <a href="/">
                         <li class="hover:text-indigo-300 hover:underline">Inicio</li>
                     </a>
@@ -97,14 +106,14 @@
                     </a>
                 </ul>
             </div>
-            <div class="space-y-4 max-w-[450px]">
-                <h4>Sobre nosotros</h4>
-                <p class="text-[#7270ec] space-y-2">
+            <div class="space-y-2 max-w-[450px]">
+                <h4 class="font-extrabold text-lg">Sobre nosotros</h4>
+                <p class="text-[#7270ec]">
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta, blanditiis deleniti praesentium sequi molestias fugit quaerat adipisci ut ab hic recusandae, illum id delectus aliquam optio explicabo ad quas. Voluptatem voluptates commodi repellat obcaecati. Distinctio dolorum obcaecati natus laudantium, veniam ullam ea placeat dolore voluptas ex voluptates, cumque, est cum.
                 </p>
             </div>
-            <div class="space-y-4">
-                <h4>AC Computers</h4>
+            <div class="space-y-2">
+                <h4 class="font-extrabold text-lg">AC Computers</h4>
                 <div class="size-[200px]">
                     <img src="/images/logo.jpg" alt="Logo empresa" class="object-cover h-full w-full">                    
                 </div>
@@ -122,6 +131,12 @@
             } else {
                 document.querySelector('#navbar').classList.remove('bg-black', 'bg-opacity-15', 'backdrop-blur-sm');
             }
+        }
+
+        function toggleMenu() {
+            document.getElementById('navbar-responsive').classList.toggle('hidden');
+            document.getElementById('toggle-icon').classList.toggle('fa-bars');
+            document.getElementById('toggle-icon').classList.toggle('fa-x');
         }
 
         // Realizar consulta a la API y mostrar la información
