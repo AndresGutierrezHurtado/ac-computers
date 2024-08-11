@@ -72,17 +72,17 @@
                     </div>
 
                     <!-- Información -->
-                    <p id="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis consequuntur reprehenderit laborum totam commodi cum perspiciatis nam eius maiores necessitatibus voluptate vel libero dicta est cumque, illum enim nihil voluptatum illo iste laudantium ullam? Quidem illum, sunt recusandae cum soluta tenetur harum illo nobis nemo ipsum, voluptatem consectetur, non ex?</p>
+                    <p id="product-description">loading...</p>
                     <div class="space-y-1 text-lg md:text-2xl text-[#7270ec] font-bold">
                         <div class="flex gap-2">
-                            <p  id="product-price">1.000.000 COP</p>
-                            <span class="bg-[#7270ec]/70 font-semibold text-white py-2 px-3 rounded-md text-sm"  id="product-discount">50%</span>
+                            <p  id="product-price">loading...</p>
+                            <span class="bg-[#7270ec]/70 font-semibold text-white py-2 px-3 rounded-md text-sm"  id="product-discount">loading...</span>
                         </div>
-                        <p class="line-through"  id="product-total-price">1.000.000 COP</p>
+                        <p class="line-through"  id="product-total-price">loading...</p>
                     </div>
 
                     <!-- Botón para regresar -->
-                    <a href="javascript:history.back()">
+                    <a  onclick="window.location.href = (document.referrer == 'http://localhost:3000/product/2' || document.referrer == 'https://ac-computers.onrender.com/product/2' ? '/' : document.referrer)">
                         <button class="w-full bg-indigo-500 font-semibold text-white py-3 px-3 rounded-md relative group duration-300 hover:bg-indigo-500/80 my-5">
                             <span class="absolute left-5 top-1/2 -translate-y-1/2">
                                 <i class="fa-solid fa-arrow-left text-indigo-300 group-hover:text-indigo-200 text-xl"></i>
@@ -140,12 +140,25 @@
             }
         }
 
+        fetch('/api/products/' + window.location.pathname.split('/')[2])
+        .then(response => response.json())
+        .then(data => {
+            product = data[0];
+            document.getElementById("product-image").src = product.product_image_url;
+            document.getElementById("product-image").style = "view-transition-name: product-" + product.product_id;
+            document.getElementById("product-title").innerHTML = product.product_name;
+            document.getElementById("product-description").innerHTML = product.product_description;
+            document.getElementById("product-price").innerHTML = Number(product.product_price - (product.product_price * (product.product_discount / 100)) ).toLocaleString("es-CO") ;
+            document.getElementById("product-discount").innerHTML = (product.product_discount > 0) ? product.product_discount + "%" : "Sin descuento";
+            document.getElementById("product-total-price").innerHTML = (product.product_discount > 0) ? Number(product.product_price).toLocaleString("es-CO") : " " ;
+        })
+
         function toggleMenu() {
             document.getElementById('navbar-responsive').classList.toggle('hidden');
             document.getElementById('toggle-icon').classList.toggle('fa-bars');
             document.getElementById('toggle-icon').classList.toggle('fa-x');
         }
     </script>
-    <!-- SCRIPT_PLACEHOLDER -->
+
 </body>
 </html>
