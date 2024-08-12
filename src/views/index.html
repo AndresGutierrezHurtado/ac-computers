@@ -192,10 +192,12 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="w-full md:w-1/2">
-                            <a href="/product/${product.product_id}">
-                                <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}" style="view-transition-name: product-${product.product_id}">
-                            </a>
+                        <div class="w-full md:w-1/2 flex-none">    
+                            <div class="w-full max-w-[300px] md:max-w-[450px] mx-auto">
+                                <a href="/product/${product.product_id}">
+                                    <img src="${product.product_image_url}" alt="Imagen de ${product.product_name}">
+                                </a>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -260,8 +262,22 @@
                 `;
                 newProducts.appendChild(newProduct);
             });
+            
+            // Agregarle el atributo vew-name-transition a cada imagen
+            document.querySelectorAll('a[href^="/product/"]').forEach(link => {
+                link.addEventListener("click", (event) => {
+                    event.preventDefault();  
+
+                    // Encuentra la imagen dentro del artículo clicado
+                    const clickedProduct = event.currentTarget.closest("article");
+                    const productImage = clickedProduct.querySelector("img");
+
+                    productImage.style.viewTransitionName = `product-${link.getAttribute("href").split("/").pop()}`;
+                    
+                    window.navigation.navigate(link.href);
+                });
+            });
         });
-        
 
         window.navigation.addEventListener("navigate", (event) => {
             const toUrl = new URL(event.destination.url);
