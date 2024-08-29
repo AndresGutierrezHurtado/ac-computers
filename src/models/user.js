@@ -22,7 +22,8 @@ class User {
                     console.error("Error al consultar la base de datos:", err);
                     res.status(500).json({
                         success: false,
-                        message: "Error al iniciar sesión"
+                        message: "Error al iniciar sesión",
+                        error: err,
                     });
                 }
 
@@ -59,14 +60,15 @@ class User {
                 } else {
                     res.status(404).json({
                         success: false,
-                        message: "Correo electrónico no encontrado"
+                        message: "Correo electrónico no encontrado",
+                        error: 404,
                     });
                 }
             } catch (error) {
-                console.error(error.message);
                 res.status(500).json({
                     success: false,
-                    message: "Error al iniciar sesión."
+                    message: "Error al iniciar sesión.",
+                    error: error.message,
                 });
             }
         });
