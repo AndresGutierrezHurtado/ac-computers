@@ -6,9 +6,9 @@
     <title>Producto | AC Computers</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 </head>
 <body class="bg-[#242430] font-poppins text-white w-full"> 
     
@@ -32,15 +32,9 @@
 
             <!-- Botón de descarga -->
             <a href="/list" class="hidden md:block">
-                <button data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button">
+                <button class="tooltip tooltip-bottom tooltip-primary bg-transparent text-white" data-theme="luxury" data-tip="Descargar productos">
                     <i class="fas fa-circle-down text-[30px] duration-300 hover:text-[#7270ec]"></i>
                 </button>
-                
-                <div id="tooltip-bottom" role="tooltip" 
-                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip">
-                    Descargar productos
-                    <div class="tooltip-arrow" data-popper-arrow></div>
-                </div>
             </a>
 
         </div>

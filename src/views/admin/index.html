@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de adminstración | AC Computers</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/eb36e646d1.js" crossorigin="anonymous"></script>
 </head>
@@ -31,15 +31,9 @@
 
             <!-- Botón de descarga -->
             <a href="/list" class="hidden md:block">
-                <button data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button">
+                <button class="tooltip tooltip-bottom tooltip-primary bg-transparent text-white" data-theme="luxury" data-tip="Descargar productos">
                     <i class="fas fa-circle-down text-[30px] duration-300 hover:text-[#7270ec]"></i>
                 </button>
-                
-                <div id="tooltip-bottom" role="tooltip" 
-                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip">
-                    Descargar productos
-                    <div class="tooltip-arrow" data-popper-arrow></div>
-                </div>
             </a>
 
         </div>
@@ -358,52 +352,44 @@
                     <td class="px-6 py-4">COP ${Number(product.product_price).toLocaleString("es-CO")}</td>
                     <td class="px-6 py-4">${product.product_discount == 0 ? 'Sin descuento' : product.product_discount + "%"}</td>
                     <td class="px-6 py-4">
-                        <button class="w-full px-7 py-1 border border-[#7270ec] rounded-full mx-auto" type="submit" onclick="toggleModal('product-modal-' + ${product.product_id})">
+                        <button class="w-full px-7 py-1 border border-[#7270ec] rounded-full mx-auto" type="submit" onclick="product_modal_${product.product_id}.showModal()">
                             Editar
                         </button>
                     </td>
                 `;
 
-                const productModal = document.createElement('div');
-                productModal.id = 'product-modal-' + product.product_id;
-                productModal.className = 'hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-[9999] flex justify-center items-center bg-black/50';
+                const productModal = document.createElement('dialog');
+                productModal.id = `product_modal_${product.product_id}`;
+                productModal.className = 'modal';
                 productModal.setAttribute('tabindex', '-1');
                 productModal.setAttribute('aria-hidden', 'true');
+                productModal.setAttribute('data-theme', 'dracula');
                 productModal.innerHTML = `
-                    <div class="relative p-4 w-full max-w-[700px] max-h-full">
-                        <!-- Modal content -->
-                        <div class="relative bg-white rounded-lg shadow dark:bg-zinc-700">
-                            <!-- Modal header -->
-                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-zinc-600">
-                                <h3 class="text-lg font-semibold text-zinc-900 dark:text-white">
-                                    Editar producto
-                                </h3>
-                                <button type="button" onclick="toggleModal('product-modal-' + ${product.product_id})" class="text-zinc-400 bg-transparent hover:bg-zinc-200 hover:text-zinc-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-zinc-600 dark:hover:text-white">
-                                    <i class="fas fa-times text-xl"></i>
-                                    <span class="sr-only">Cerrar modal</span>
-                                </button>
-                            </div>
-                            <!-- Modal body -->
-                            <form class="p-4 flex flex-col gap-3" onsubmit="editProduct(${product.product_id}, event)" enctype="multipart/form-data">
+                    <div class="modal-box w-full max-w-[700px] bg-[#242430]">
+                        <form method="dialog">
+                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        </form>
+                        <h3 class="text-lg font-bold">Editar Producto</h3>
+                        <form class="p-4 flex flex-col gap-3" onsubmit="editProduct(${product.product_id}, event)" enctype="multipart/form-data">
                                 <div class="w-full">
                                     <label for="product_name_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Nombre</label>
                                     <input type="text" name="product_name" id="product_name_${product.product_id}" placeholder="Escribe el nombre del producto" value="${product.product_name}" required
-                                    class="bg-zinc-50 border border-zinc-300 text-zinc-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    class="input input-bordered w-full">
                                 </div>
                                 <div class="w-full">
                                     <label for="product_price_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Precio</label>
                                     <input type="number" name="product_price" id="product_price_${product.product_id}" placeholder="60.000" required value="${product.product_price}"
-                                    class="bg-zinc-50 border border-zinc-300 text-zinc-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    class="input input-bordered w-full">
                                 </div>
                                 <div class="w-full">
                                     <label for="product_discount_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descuento <span class="text-[12px] opacity-60">(mínimo 0, máximo 100)</span></label>
                                     <input type="number" name="product_discount" id="product_discount_${product.product_id}" placeholder="Escribe el descuento" required value="${product.product_discount}" min="0" max="100"
-                                    class="bg-zinc-50 border border-zinc-300 text-zinc-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    class="input input-bordered w-full">
                                 </div>
                                 <div class="w-full">
                                     <label for="dropzone-file" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Imagen</label>
                                     <div class="flex items-center justify-center w-full">
-                                        <label for="dropzone-file_${product.product_id}" class="flex flex-col items-center justify-center w-full h-[200px] border-2 border-zinc-300 border-dashed rounded-lg cursor-pointer bg-zinc-50 dark:hover:bg-zinc-800 dark:bg-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:hover:border-zinc-500 dark:hover:bg-zinc-600">
+                                        <label for="dropzone-file_${product.product_id}" class="border-2 border-dashed border-zinc-600 w-full rounded-lg cursor-pointer">
                                             <div class="flex flex-col items-center justify-center py-5">
                                                 <svg class="size-10 mb-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
@@ -418,7 +404,7 @@
                                 <div class="w-full">
                                     <label for="product_description_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descripcion</label>
                                     <textarea id="product_description_${product.product_id}" name="product_description" rows="4" placeholder="Escribe una descripción"
-                                    class="block p-2.5 w-full text-sm text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">${product.product_description}</textarea>
+                                    class="textarea textarea-bordered w-full resize-none">${product.product_description}</textarea>
                                 </div>
                                 <button type="submit" class="w-full py-2 px-3 rounded-lg bg-indigo-500 font-semibold relative duration-300 hover:bg-indigo-600 group">
                                     <span class="absolute left-5 top-1/2 -translate-y-1/2 group-hover:text-indigo-300 text-indigo-400 text-lg">
@@ -427,8 +413,10 @@
                                     Editar producto
                                 </button>
                             </form>
-                        </div>
                     </div>
+                    <form method="dialog" class="modal-backdrop">
+                        <button>close</button>
+                    </form>
                 `;
 
                 modalsContainer.appendChild(productModal);
