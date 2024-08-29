@@ -27,7 +27,7 @@ app.get('/products', (req, res) => pageController.products(req, res));
 app.get('/contact', (req, res) => pageController.contact(req, res));
 app.get('/list', (req, res) => productController.list(req, res));
 
-app.get('/admin', (req, res) => adminController.index(req, res));
+app.get('/admin/:token?', (req, res) => adminController.index(req, res));
 app.get('/auth', (req, res) => adminController.auth(req, res));
 
 app.post('/login', (req, res) => userController.login(req, res));

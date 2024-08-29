@@ -262,8 +262,7 @@
                     .then((data) => {
                         alert(data.message);
                         if (data.success) {
-                            localStorage.setItem("auth-token", data.token);
-                            window.location.href = "/admin";
+                            window.location.href = `/admin/${data.token}`;
                         }
                     })
             });
