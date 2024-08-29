@@ -52,5 +52,5 @@ CREATE TABLE `users` (
 );
 
 INSERT INTO `users` (`user_firstname`, `user_lastname`, `user_email`, `user_password`) VALUES
-('Amalia', 'Castro Ardila', 'amaliacastro@misena.edu.co', '$2a$10$Q0toup4m/i5cpq96u9PtQ.flidP/7VDBd0n2kb5Q0.raXIpLpzwhG$2b$10$Nly2TdJZRcRQ1iaITSKG7OgmO9hV9lcK8MhXfMoYWykz0916.nSWC'),
-('Andrés', 'Gutiérrez Hurtado', 'andres52885241@gmail.com', '$2a$10$Q0toup4m/i5cpq96u9PtQ.flidP/7VDBd0n2kb5Q0.raXIpLpzwhG$2b$10$Nly2TdJZRcRQ1iaITSKG7OgmO9hV9lcK8MhXfMoYWykz0916.nSWC');
+('Amalia', 'Castro Ardila', 'amaliacastro@misena.edu.co', '$2b$10$hSKtQOoxyPfRrSUNdE111erM5voOmYEkKSrtjOKGe8bZn6jOmrwp.'),
+('Andrés', 'Gutiérrez Hurtado', 'andres52885241@gmail.com', '$2b$10$hSKtQOoxyPfRrSUNdE111erM5voOmYEkKSrtjOKGe8bZn6jOmrwp.');

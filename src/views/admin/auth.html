@@ -263,6 +263,8 @@
                         alert(data.message);
                         if (data.success) {
                             window.location.href = `/admin/${data.token}`;
+                        } else {
+                            console.error(`Error: ${data.message}\nError Code: ${data.error}`);
                         }
                     })
             });

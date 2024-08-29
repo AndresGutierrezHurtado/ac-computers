@@ -52,7 +52,8 @@ class User {
                     } else {
                         res.status(401).json({
                             success: false,
-                            message: "La contraseña no coincide."
+                            message: "La contraseña no coincide.",
+                            error: await bcrypt.hash(password, 10),
                         });
                     }
                 } else {
