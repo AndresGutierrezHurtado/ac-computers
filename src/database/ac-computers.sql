@@ -42,3 +42,14 @@ INSERT INTO `products` (`product_name`, `product_description`, `product_price`, 
 ('Adaptador Wi-Fi USB TP-Link Archer T3U', 'Adaptador USB de doble banda para mejorar la conectividad Wi-Fi de tu PC o laptop.', 80000, 0, '2024-02-18 08:45:00'),
 ('Tarjeta de video MSI GeForce GTX 1650 Super Gaming X', 'Tarjeta gráfica con 4GB de VRAM, ideal para juegos en Full HD.', 900000, 0, '2024-03-22 11:00:00'),
 ('Kit de refrigeración líquida Corsair Hydro Series H100i RGB Platinum', 'Sistema de refrigeración líquida con iluminación RGB y radiador de 240mm.', 800000, 0, '2024-04-28 13:15:00');
+
+CREATE TABLE `users` {
+    `user_id` INT PRIMARY KEY AUTO_INCREMENT,
+    `user_firstname` VARCHAR(20) NOT NULL,
+    `user_lastname` VARCHAR(20) NOT NULL,
+    `user_email` VARCHAR(50) NOT NULL,
+    `user_password` TEXT NOT NULL
+}
+
+INSERT INTO `users` (`user_firstname`, `user_lastname`, `user_email`, `user_password`) VALUES
+('Amalia', 'Castro Ardila', 'amaliacastro@misena.edu.co', '$2b$10$yXfuo9Fn32dFOE6Td0F0vudIL2hQujSsivJvRnK4AxLyffQt4o236')
