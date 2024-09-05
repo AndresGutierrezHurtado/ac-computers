@@ -127,7 +127,7 @@
                     </div>
 
                     <div class="w-full">
-                        <button onclick="toggleModal('create-product')" class="w-full py-2 px-3 rounded-lg bg-indigo-500 font-semibold relative duration-300 hover:bg-indigo-600 group">
+                        <button onclick="new_product.showModal()" class="w-full py-2 px-3 rounded-lg bg-indigo-500 font-semibold relative duration-300 hover:bg-indigo-600 group">
                             <span class="absolute left-5 top-1/2 -translate-y-1/2 group-hover:text-indigo-300 text-indigo-400 text-xl">
                                 <i class="fa-solid fa-plus"></i>
                             </span>
@@ -181,69 +181,61 @@
     </footer>
 
     <div id="modals-container">
-
-        <div id="create-product" class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-[9999] flex justify-center items-center bg-black/50">
-            <div class="relative p-4 w-full max-w-[700px] max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-zinc-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-zinc-600">
-                        <h3 class="text-lg font-semibold text-zinc-900 dark:text-white">
-                            Crear un producto nuevo
-                        </h3>
-                        <button type="button" onclick="toggleModal('create-product')" class="text-zinc-400 bg-transparent hover:bg-zinc-200 hover:text-zinc-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-zinc-600 dark:hover:text-white">
-                            <i class="fas fa-times text-xl"></i>
-                            <span class="sr-only">Cerrar modal</span>
-                        </button>
+        <dialog id="new_product" class="modal" data-theme="dracula">
+            <div class="modal-box w-full max-w-[700px] bg-[#242430]">
+                <h3 class="text-lg font-bold">Crea un producto nuevo:</h3>
+                <form method="dialog">
+                  <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                </form>
+                
+                <form class="p-4 flex flex-col gap-3" enctype="multipart/form-data" method="post" action="/admin/create" onsubmit="createProduct(event)">
+                    <div class="w-full">
+                        <label for="product_name" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Nombre</label>
+                        <input type="text" name="product_name" id="product_name" placeholder="Escribe el nombre del producto" required
+                        class="input input-bordered w-full">
                     </div>
-                    <!-- Modal body -->
-                    <form class="p-4 flex flex-col gap-3" enctype="multipart/form-data" method="post" action="/admin/create" onsubmit="createProduct(event)">
-                        <div class="w-full">
-                            <label for="product_name" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Nombre</label>
-                            <input type="text" name="product_name" id="product_name" placeholder="Escribe el nombre del producto" required
-                            class="bg-zinc-50 border border-zinc-300 text-zinc-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                        </div>
-                        <div class="w-full">
-                            <label for="product_price" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Precio</label>
-                            <input type="number" name="product_price" id="product_price" placeholder="60.000" required
-                            class="bg-zinc-50 border border-zinc-300 text-zinc-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                        </div>
-                        <div class="w-full">
-                            <label for="product_discount" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descuento <span class="text-[12px] opacity-60">(mínimo 0, máximo 100)</span></label>
-                            <input type="number" name="product_discount" id="product_discount" placeholder="Escribe el descuento" min="0" max="100" required
-                            class="bg-zinc-50 border border-zinc-300 text-zinc-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                        </div>
-                        <div class="w-full">
-                            <label for="dropzone-file" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Imagen</label>
-                            <div class="flex items-center justify-center w-full">
-                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-[200px] border-2 border-zinc-300 border-dashed rounded-lg cursor-pointer bg-zinc-50 dark:hover:bg-zinc-800 dark:bg-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:hover:border-zinc-500 dark:hover:bg-zinc-600">
-                                    <div class="flex flex-col items-center justify-center py-5">
-                                        <svg class="size-10 mb-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                        </svg>
-                                        <p class="mb-2 text-sm text-zinc-500 dark:text-zinc-400"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta el archivo</p>
-                                        <p class="text-xs text-zinc-500 dark:text-zinc-400">SVG, PNG o JPG (MAX. 800x400 px)</p>
-                                    </div>
-                                    <input id="dropzone-file" type="file" class="hidden" name="product_image"/>
-                                </label>
-                            </div> 
-                        </div>
-                        <div class="w-full">
-                            <label for="product_description" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descripcion</label>
-                            <textarea id="product_description" name="product_description" rows="4" placeholder="Escribe una descripción"
-                            class="block p-2.5 w-full text-sm text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-600 dark:border-zinc-500 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-                        </div>
-                        <button type="submit" class="w-full py-2 px-3 rounded-lg bg-indigo-500 font-semibold relative duration-300 hover:bg-indigo-600 group">
-                            <span class="absolute left-5 top-1/2 -translate-y-1/2 group-hover:text-indigo-300 text-indigo-400 text-lg">
-                                <i class="fas fa-arrow-up-from-bracket"></i>
-                            </span>
-                            Crear producto
-                        </button>
-                    </form>
-                </div>
+                    <div class="w-full">
+                        <label for="product_price" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Precio</label>
+                        <input type="number" name="product_price" id="product_price" placeholder="60.000" required
+                        class="input input-bordered w-full">
+                    </div>
+                    <div class="w-full">
+                        <label for="product_discount" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descuento <span class="text-[12px] opacity-60">(mínimo 0, máximo 100)</span></label>
+                        <input type="number" name="product_discount" id="product_discount" placeholder="Escribe el descuento" min="0" max="100" required
+                        class="input input-bordered w-full">
+                    </div>
+                    <div class="w-full">
+                        <label for="dropzone-file" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Imagen</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label for="dropzone-file" class="border-2 border-dashed border-zinc-600 w-full rounded-lg cursor-pointer">
+                                <div class="flex flex-col items-center justify-center py-5">
+                                    <svg class="size-10 mb-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-zinc-500 dark:text-zinc-400"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta el archivo</p>
+                                    <p class="text-xs text-zinc-500 dark:text-zinc-400">SVG, PNG o JPG (MAX. 800x400 px)</p>
+                                </div>
+                                <input id="dropzone-file" type="file" class="hidden" name="product_image"/>
+                            </label>
+                        </div> 
+                    </div>
+                    <div class="w-full">
+                        <label for="product_description" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descripcion</label>
+                        <textarea id="product_description" name="product_description" rows="4" placeholder="Escribe una descripción"
+                        class="textarea textarea-bordered w-full resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-3 rounded-lg bg-indigo-500 font-semibold relative duration-300 hover:bg-indigo-600 group">
+                        <span class="absolute left-5 top-1/2 -translate-y-1/2 group-hover:text-indigo-300 text-indigo-400 text-lg">
+                            <i class="fas fa-arrow-up-from-bracket"></i>
+                        </span>
+                        Crear producto
+                    </button>
+                </form>
             </div>
-
-        </div>
+            <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
 
         <!-- Modales -->
     </div>
@@ -371,48 +363,48 @@
                         </form>
                         <h3 class="text-lg font-bold">Editar Producto</h3>
                         <form class="p-4 flex flex-col gap-3" onsubmit="editProduct(${product.product_id}, event)" enctype="multipart/form-data">
-                                <div class="w-full">
-                                    <label for="product_name_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Nombre</label>
-                                    <input type="text" name="product_name" id="product_name_${product.product_id}" placeholder="Escribe el nombre del producto" value="${product.product_name}" required
-                                    class="input input-bordered w-full">
-                                </div>
-                                <div class="w-full">
-                                    <label for="product_price_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Precio</label>
-                                    <input type="number" name="product_price" id="product_price_${product.product_id}" placeholder="60.000" required value="${product.product_price}"
-                                    class="input input-bordered w-full">
-                                </div>
-                                <div class="w-full">
-                                    <label for="product_discount_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descuento <span class="text-[12px] opacity-60">(mínimo 0, máximo 100)</span></label>
-                                    <input type="number" name="product_discount" id="product_discount_${product.product_id}" placeholder="Escribe el descuento" required value="${product.product_discount}" min="0" max="100"
-                                    class="input input-bordered w-full">
-                                </div>
-                                <div class="w-full">
-                                    <label for="dropzone-file" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Imagen</label>
-                                    <div class="flex items-center justify-center w-full">
-                                        <label for="dropzone-file_${product.product_id}" class="border-2 border-dashed border-zinc-600 w-full rounded-lg cursor-pointer">
-                                            <div class="flex flex-col items-center justify-center py-5">
-                                                <svg class="size-10 mb-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                                </svg>
-                                                <p class="mb-2 text-sm text-zinc-500 dark:text-zinc-400"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta el archivo</p>
-                                                <p class="text-xs text-zinc-500 dark:text-zinc-400">SVG, PNG o JPG (MAX. 800x400 px)</p>
-                                            </div>
-                                            <input id="dropzone-file_${product.product_id}" type="file" class="hidden" name="product_image"/>
-                                        </label>
-                                    </div> 
-                                </div>
-                                <div class="w-full">
-                                    <label for="product_description_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descripcion</label>
-                                    <textarea id="product_description_${product.product_id}" name="product_description" rows="4" placeholder="Escribe una descripción"
-                                    class="textarea textarea-bordered w-full resize-none">${product.product_description}</textarea>
-                                </div>
-                                <button type="submit" class="w-full py-2 px-3 rounded-lg bg-indigo-500 font-semibold relative duration-300 hover:bg-indigo-600 group">
-                                    <span class="absolute left-5 top-1/2 -translate-y-1/2 group-hover:text-indigo-300 text-indigo-400 text-lg">
-                                        <i class="fas fa-arrow-up-from-bracket"></i>
-                                    </span>
-                                    Editar producto
-                                </button>
-                            </form>
+                            <div class="w-full">
+                                <label for="product_name_${product.product_id}" class="block mb-2 text-sm font-medium text-white after:content-['*'] after:ml-1 after:text-red-500">Nombre</label>
+                                <input type="text" name="product_name" id="product_name_${product.product_id}" placeholder="Escribe el nombre del producto" value="${product.product_name}" required
+                                class="input input-bordered w-full">
+                            </div>
+                            <div class="w-full">
+                                <label for="product_price_${product.product_id}" class="block mb-2 text-sm font-medium text-white after:content-['*'] after:ml-1 after:text-red-500">Precio</label>
+                                <input type="number" name="product_price" id="product_price_${product.product_id}" placeholder="60.000" required value="${product.product_price}"
+                                class="input input-bordered w-full">
+                            </div>
+                            <div class="w-full">
+                                <label for="product_discount_${product.product_id}" class="block mb-2 text-sm font-medium text-white after:content-['*'] after:ml-1 after:text-red-500">Descuento <span class="text-[12px] opacity-60">(mínimo 0, máximo 100)</span></label>
+                                <input type="number" name="product_discount" id="product_discount_${product.product_id}" placeholder="Escribe el descuento" required value="${product.product_discount}" min="0" max="100"
+                                class="input input-bordered w-full">
+                            </div>
+                            <div class="w-full">
+                                <label for="dropzone-file" class="block mb-2 text-sm font-medium text-white">Imagen</label>
+                                <div class="flex items-center justify-center w-full">
+                                    <label for="dropzone-file_${product.product_id}" class="border-2 border-dashed border-zinc-600 w-full rounded-lg cursor-pointer">
+                                        <div class="flex flex-col items-center justify-center py-5">
+                                            <svg class="size-10 mb-4 text-zinc-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                            </svg>
+                                            <p class="mb-2 text-sm text-zinc-400"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta el archivo</p>
+                                            <p class="text-xs text-zinc-400">SVG, PNG o JPG (MAX. 800x400 px)</p>
+                                        </div>
+                                        <input id="dropzone-file_${product.product_id}" type="file" class="hidden" name="product_image"/>
+                                    </label>
+                                </div> 
+                            </div>
+                            <div class="w-full">
+                                <label for="product_description_${product.product_id}" class="block mb-2 text-sm font-medium text-white after:content-['*'] after:ml-1 after:text-red-500">Descripcion</label>
+                                <textarea id="product_description_${product.product_id}" name="product_description" rows="4" placeholder="Escribe una descripción"
+                                class="textarea textarea-bordered w-full resize-none">${product.product_description}</textarea>
+                            </div>
+                            <button type="submit" class="w-full py-2 px-3 rounded-lg bg-indigo-500 font-semibold relative duration-300 hover:bg-indigo-600 group">
+                                <span class="absolute left-5 top-1/2 -translate-y-1/2 group-hover:text-indigo-300 text-indigo-400 text-lg">
+                                    <i class="fas fa-arrow-up-from-bracket"></i>
+                                </span>
+                                Editar producto
+                            </button>
+                        </form>
                     </div>
                     <form method="dialog" class="modal-backdrop">
                         <button>close</button>
@@ -452,10 +444,6 @@
             }
         }
         
-        function toggleModal(id = 'create-product-modal') {
-            document.getElementById(id).classList.toggle('hidden');
-        }
-
         function editProduct(product_id, event) {
             event.preventDefault();
 
@@ -485,10 +473,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                alert(data.message);
                 if (data.success) {
+                    alert('Producto creado exitosamente');
                     window.location.reload();
                 }
+                alert(data.message);
             });
         }
 
