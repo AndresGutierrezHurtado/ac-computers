@@ -372,37 +372,37 @@
                         <h3 class="text-lg font-bold">Editar Producto</h3>
                         <form class="p-4 flex flex-col gap-3" onsubmit="editProduct(${product.product_id}, event)" enctype="multipart/form-data">
                                 <div class="w-full">
-                                    <label for="product_name_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Nombre</label>
+                                    <label for="product_name_${product.product_id}" class="block mb-2 text-sm font-medium text-white after:content-['*'] after:ml-1 after:text-red-500">Nombre</label>
                                     <input type="text" name="product_name" id="product_name_${product.product_id}" placeholder="Escribe el nombre del producto" value="${product.product_name}" required
                                     class="input input-bordered w-full">
                                 </div>
                                 <div class="w-full">
-                                    <label for="product_price_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Precio</label>
+                                    <label for="product_price_${product.product_id}" class="block mb-2 text-sm font-medium text-white after:content-['*'] after:ml-1 after:text-red-500">Precio</label>
                                     <input type="number" name="product_price" id="product_price_${product.product_id}" placeholder="60.000" required value="${product.product_price}"
                                     class="input input-bordered w-full">
                                 </div>
                                 <div class="w-full">
-                                    <label for="product_discount_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descuento <span class="text-[12px] opacity-60">(mínimo 0, máximo 100)</span></label>
+                                    <label for="product_discount_${product.product_id}" class="block mb-2 text-sm font-medium text-white after:content-['*'] after:ml-1 after:text-red-500">Descuento <span class="text-[12px] opacity-60">(mínimo 0, máximo 100)</span></label>
                                     <input type="number" name="product_discount" id="product_discount_${product.product_id}" placeholder="Escribe el descuento" required value="${product.product_discount}" min="0" max="100"
                                     class="input input-bordered w-full">
                                 </div>
                                 <div class="w-full">
-                                    <label for="dropzone-file" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white">Imagen</label>
+                                    <label for="dropzone-file" class="block mb-2 text-sm font-medium text-white">Imagen</label>
                                     <div class="flex items-center justify-center w-full">
                                         <label for="dropzone-file_${product.product_id}" class="border-2 border-dashed border-zinc-600 w-full rounded-lg cursor-pointer">
                                             <div class="flex flex-col items-center justify-center py-5">
-                                                <svg class="size-10 mb-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                <svg class="size-10 mb-4 text-zinc-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                                                 </svg>
-                                                <p class="mb-2 text-sm text-zinc-500 dark:text-zinc-400"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta el archivo</p>
-                                                <p class="text-xs text-zinc-500 dark:text-zinc-400">SVG, PNG o JPG (MAX. 800x400 px)</p>
+                                                <p class="mb-2 text-sm text-zinc-400"><span class="font-semibold">Haz clic para subir</span> o arrastra y suelta el archivo</p>
+                                                <p class="text-xs text-zinc-400">SVG, PNG o JPG (MAX. 800x400 px)</p>
                                             </div>
                                             <input id="dropzone-file_${product.product_id}" type="file" class="hidden" name="product_image"/>
                                         </label>
                                     </div> 
                                 </div>
                                 <div class="w-full">
-                                    <label for="product_description_${product.product_id}" class="block mb-2 text-sm font-medium text-zinc-900 dark:text-white after:content-['*'] after:ml-1 after:text-red-500">Descripcion</label>
+                                    <label for="product_description_${product.product_id}" class="block mb-2 text-sm font-medium text-white after:content-['*'] after:ml-1 after:text-red-500">Descripcion</label>
                                     <textarea id="product_description_${product.product_id}" name="product_description" rows="4" placeholder="Escribe una descripción"
                                     class="textarea textarea-bordered w-full resize-none">${product.product_description}</textarea>
                                 </div>
