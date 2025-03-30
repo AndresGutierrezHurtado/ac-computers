@@ -8,6 +8,7 @@ export async function middleware(req) {
 
     // not auth needed pages
     if (notAuthNeeded.some((path) => req.nextUrl.pathname.startsWith(path)) && token) {
+        console.log("Acceso denegado para usuario autenticado.");
         return NextResponse.redirect(new URL("/", req.url));
     }
 
@@ -24,5 +25,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-    matcher: "/admin/:path*",
+    matcher: "/:path*",
 };

@@ -107,8 +107,16 @@ const handler = NextAuth({
         },
         async jwt({ token, user }) {
             if (user && user.user_email) {
+                token.id = user.id;
+                token.name = user.user_name + " " + user.user_lastname;
                 token.email = user.user_email;
                 token.role = user.role;
+            }
+
+            if (!token.role) {
+                const dbUser = await models.User.findOne({ where: { user_email: token.email } });
+
+                token.role = dbUser.role_id;
             }
 
             return token;
