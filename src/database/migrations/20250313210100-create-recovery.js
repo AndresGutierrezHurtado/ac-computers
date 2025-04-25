@@ -21,6 +21,17 @@ module.exports = {
                 type: Sequelize.ENUM("active", "used"),
                 defaultValue: "active",
             },
+            createdAt: {
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.NOW,
+                allowNull: false,
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.NOW,
+                onUpdate: Sequelize.NOW,
+            },
         });
     },
     async down(queryInterface, Sequelize) {
