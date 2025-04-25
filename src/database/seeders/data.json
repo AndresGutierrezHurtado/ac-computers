@@ -1,4 +1,24 @@
 {
+    "categories": [
+        {
+            "category_id": 1,
+            "category_name": "computador"
+        },
+        {
+            "category_id": 2,
+            "category_name": "componente"
+        }
+    ],
+    "roles": [
+        {
+            "role_id": 1,
+            "role_name": "usuario"
+        },
+        {
+            "role_id": 2,
+            "role_name": "administrador"
+        }
+    ],
     "users": [
         {
             "user_id": "7a9455df-4c02-4587-8817-624ab56b510b",
@@ -37,24 +57,14 @@
             "user_password": "102993339462483115447"
         }
     ],
-    "roles": [
-        {
-            "role_id": 1,
-            "role_name": "usuario"
-        },
-        {
-            "role_id": 2,
-            "role_name": "administrador"
-        }
-    ],
     "products": [
         {
             "product_id": "0dcc4d23-f815-4417-a224-123344547219",
             "product_name": "Fuente XPG Pylon 750W 80+ Bronze",
             "product_description": "Fuente de poder de 750W con certificación 80 Plus Bronze, ideal para equipos gaming y estaciones de trabajo.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257104/ac-computers/0dcc4d23-f815-4417-a224-123344547219.png",
             "product_price": "306000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257104/ac-computers/0dcc4d23-f815-4417-a224-123344547219.png",
             "product_date": "2024-12-03T14:04:01.000Z",
             "category_id": 2
         },
@@ -62,9 +72,9 @@
             "product_id": "297d6182-8ccb-48d4-9f30-b7a2736c32d2",
             "product_name": "Thermaltake View 200 TG ARGB",
             "product_description": "Chasis para PC ATX con panel lateral de vidrio templado y ventiladores ARGB preinstalados.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733258197/ac-computers/297d6182-8ccb-48d4-9f30-b7a2736c32d2.jpg",
             "product_price": "416000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733258197/ac-computers/297d6182-8ccb-48d4-9f30-b7a2736c32d2.jpg",
             "product_date": "2024-12-03T20:03:56.000Z",
             "category_id": 2
         },
@@ -72,9 +82,9 @@
             "product_id": "2d0d648e-8492-4446-a23b-fc803c11f600",
             "product_name": "MSI GeForce RTX 3050 6GB",
             "product_description": "Tarjeta gráfica con 6GB GDDR6, ideal para juegos en 1080p con soporte para Ray Tracing.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257237/ac-computers/2d0d648e-8492-4446-a23b-fc803c11f600.jpg",
             "product_price": "956000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257237/ac-computers/2d0d648e-8492-4446-a23b-fc803c11f600.jpg",
             "product_date": "2024-12-03T14:03:48.000Z",
             "category_id": 2
         },
@@ -82,9 +92,9 @@
             "product_id": "348f6d78-bf0f-489a-8f61-ef6d80b61058",
             "product_name": "PC Torre Gamer WARZONE X",
             "product_description": "La PC Torre Gamer WARZONE X es la opción ideal para gamers y profesionales que buscan potencia y rendimiento excepcionales en juegos y trabajos demandantes. Con componentes de alta gama, garantiza una experiencia fluida en todo tipo de aplicaciones.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733210739/ac-computers/348f6d78-bf0f-489a-8f61-ef6d80b61058.jpg",
             "product_price": "4449000",
             "product_discount": 11,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733210739/ac-computers/348f6d78-bf0f-489a-8f61-ef6d80b61058.jpg",
             "product_date": "2024-12-03T02:25:32.000Z",
             "category_id": 1
         },
@@ -92,9 +102,9 @@
             "product_id": "4a5ffa91-d4fe-40fe-97e3-a1104737a6a7",
             "product_name": "PC Torre Gamer KRATOS",
             "product_description": "La PC Torre Gamer KRATOS es ideal para quienes buscan un alto rendimiento en gaming y tareas exigentes, ofreciendo un balance perfecto entre velocidad, potencia gráfica y estabilidad, todo a un precio competitivo.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733211245/ac-computers/4a5ffa91-d4fe-40fe-97e3-a1104737a6a7.jpg",
             "product_price": "3149000",
             "product_discount": 13,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733211245/ac-computers/4a5ffa91-d4fe-40fe-97e3-a1104737a6a7.jpg",
             "product_date": "2024-12-03T02:33:58.000Z",
             "category_id": 1
         },
@@ -102,9 +112,9 @@
             "product_id": "65792e1e-1360-41ab-b10e-e0db9a2a7fca",
             "product_name": "PC Torre Gamer FENIX 8",
             "product_description": "La PC Torre Gamer FENIX 8 está diseñada para un alto rendimiento. Con el procesador AMD Ryzen 5 8600 y una potente tarjeta gráfica, ofrece la potencia necesaria para ejecutar juegos y aplicaciones pesadas con facilidad.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733214061/ac-computers/65792e1e-1360-41ab-b10e-e0db9a2a7fca.jpg",
             "product_price": "2924000",
             "product_discount": 9,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733214061/ac-computers/65792e1e-1360-41ab-b10e-e0db9a2a7fca.jpg",
             "product_date": "2024-12-03T03:20:53.000Z",
             "category_id": 1
         },
@@ -112,9 +122,9 @@
             "product_id": "660992b5-8e42-4751-806f-cf05c8fb1d82",
             "product_name": "PC Torre Gamer Warrior R6",
             "product_description": "La PC Torre Gamer Warrior R6 es una excelente opción para quienes buscan un equipo con buen rendimiento y capacidad para soportar juegos y programas exigentes. Ideal para quienes buscan fiabilidad y desempeño sin sacrificar el costo.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733212986/ac-computers/660992b5-8e42-4751-806f-cf05c8fb1d82.jpg",
             "product_price": "1958000",
             "product_discount": 9,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733212986/ac-computers/660992b5-8e42-4751-806f-cf05c8fb1d82.jpg",
             "product_date": "2024-12-03T03:02:59.000Z",
             "category_id": 1
         },
@@ -122,9 +132,9 @@
             "product_id": "79d13a36-cd2f-46b4-8a7d-65f0676f8e3c",
             "product_name": "PC Torre Gamer GEAR R6",
             "product_description": "La PC Torre Gamer GEAR R6 es ideal para quienes buscan un rendimiento sólido a un precio accesible, perfecta para gaming casual y tareas de productividad. Ofrece un rendimiento estable y duradero.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733214347/ac-computers/79d13a36-cd2f-46b4-8a7d-65f0676f8e3c.jpg",
             "product_price": "1958000",
             "product_discount": 17,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733214347/ac-computers/79d13a36-cd2f-46b4-8a7d-65f0676f8e3c.jpg",
             "product_date": "2024-12-03T03:25:40.000Z",
             "category_id": 1
         },
@@ -132,9 +142,9 @@
             "product_id": "8567ce6b-c51e-4c8d-b649-4e5f15d423dc",
             "product_name": "PC Torre Gamer THOR 8",
             "product_description": "La PC Torre Gamer THOR 8 es una opción potente para quienes buscan un equipo con características avanzadas, ideal para usuarios que requieren alto rendimiento en juegos AAA y aplicaciones de alto nivel.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733213151/ac-computers/8567ce6b-c51e-4c8d-b649-4e5f15d423dc.jpg",
             "product_price": "2924000",
             "product_discount": 10,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733213151/ac-computers/8567ce6b-c51e-4c8d-b649-4e5f15d423dc.jpg",
             "product_date": "2024-12-03T03:05:46.000Z",
             "category_id": 1
         },
@@ -142,9 +152,9 @@
             "product_id": "8f30e3e7-05db-49dc-9da3-e77d0504c78c",
             "product_name": "Procesador AMD Ryzen 9 7900",
             "product_description": "CPU de alto rendimiento con 12 núcleos y 24 hilos, ideal para multitarea y juegos exigentes.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257747/ac-computers/8f30e3e7-05db-49dc-9da3-e77d0504c78c.jpg",
             "product_price": "1989000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257747/ac-computers/8f30e3e7-05db-49dc-9da3-e77d0504c78c.jpg",
             "product_date": "2024-12-03T14:03:52.000Z",
             "category_id": 2
         },
@@ -152,9 +162,9 @@
             "product_id": "967cc582-c49e-42bf-9e0e-db4a052f568b",
             "product_name": "Fuente de Poder Aerocool VX650",
             "product_description": "Fuente de poder de 650W con certificación 80 PLUS Bronze.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733258328/ac-computers/967cc582-c49e-42bf-9e0e-db4a052f568b.png",
             "product_price": "250000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733258328/ac-computers/967cc582-c49e-42bf-9e0e-db4a052f568b.png",
             "product_date": "2024-12-03T20:03:14.000Z",
             "category_id": 2
         },
@@ -162,9 +172,9 @@
             "product_id": "9967564a-1ac4-4f48-95a4-ece8ada82e77",
             "product_name": "PC Torre Gamer ARES",
             "product_description": "La PC Torre Gamer ARES es ideal para gamers que buscan un equipo de alto rendimiento. Con un procesador potente y una excelente tarjeta gráfica, es perfecta para ejecutar juegos AAA y multitareas sin problemas.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733214188/ac-computers/9967564a-1ac4-4f48-95a4-ece8ada82e77.jpg",
             "product_price": "3499000",
             "product_discount": 11,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733214188/ac-computers/9967564a-1ac4-4f48-95a4-ece8ada82e77.jpg",
             "product_date": "2024-12-03T03:23:01.000Z",
             "category_id": 1
         },
@@ -172,9 +182,9 @@
             "product_id": "a8b55d93-f902-4b01-aa0d-deaf89e2de86",
             "product_name": "Procesador Intel Core i5-12400",
             "product_description": "Procesador de 6 núcleos y 12 hilos, frecuencia base de 2.5 GHz y turbo hasta 4.4 GHz.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733256108/ac-computers/a8b55d93-f902-4b01-aa0d-deaf89e2de86.jpg",
             "product_price": "930000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733256108/ac-computers/a8b55d93-f902-4b01-aa0d-deaf89e2de86.jpg",
             "product_date": "2024-12-03T14:00:22.000Z",
             "category_id": 2
         },
@@ -182,9 +192,9 @@
             "product_id": "aef6ad01-a22b-4f4b-94e8-8626dfc71888",
             "product_name": "SSD Kingston NV2 512GB",
             "product_description": "Unidad SSD M.2 NVMe de alto rendimiento y capacidad.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257362/ac-computers/aef6ad01-a22b-4f4b-94e8-8626dfc71888.jpg",
             "product_price": "300000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257362/ac-computers/aef6ad01-a22b-4f4b-94e8-8626dfc71888.jpg",
             "product_date": "2024-12-03T14:03:05.000Z",
             "category_id": 2
         },
@@ -192,9 +202,9 @@
             "product_id": "c2ef984b-fc48-44ba-99df-022d034c1240",
             "product_name": "PC Torre Gamer DARK",
             "product_description": "La PC Torre Gamer DARK es una excelente opción para quienes buscan rendimiento y eficiencia. Este equipo ofrece la potencia necesaria para jugar y trabajar en tareas exigentes sin comprometer la calidad.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733213955/ac-computers/c2ef984b-fc48-44ba-99df-022d034c1240.jpg",
             "product_price": "1900000",
             "product_discount": 11,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733213955/ac-computers/c2ef984b-fc48-44ba-99df-022d034c1240.jpg",
             "product_date": "2024-12-03T03:19:08.000Z",
             "category_id": 1
         },
@@ -202,9 +212,9 @@
             "product_id": "c51a5c55-7487-4645-9016-8474174e46a9",
             "product_name": "Tarjeta Madre MSI B760M-P",
             "product_description": "Placa base compatible con procesadores Intel de 12va y 13va generación.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257507/ac-computers/c51a5c55-7487-4645-9016-8474174e46a9.jpg",
             "product_price": "670000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257507/ac-computers/c51a5c55-7487-4645-9016-8474174e46a9.jpg",
             "product_date": "2024-12-03T14:02:04.000Z",
             "category_id": 2
         },
@@ -212,9 +222,9 @@
             "product_id": "ca913a4b-5217-467f-aa60-eeb4a9ebc63b",
             "product_name": "Monitor LG 34WQ75C-B UltraWide",
             "product_description": "Monitor ultrapanorámico de 34 pulgadas con resolución UWFHD y soporte HDR10.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257855/ac-computers/ca913a4b-5217-467f-aa60-eeb4a9ebc63b.jpg",
             "product_price": "3089000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257855/ac-computers/ca913a4b-5217-467f-aa60-eeb4a9ebc63b.jpg",
             "product_date": "2024-12-03T14:04:08.000Z",
             "category_id": 2
         },
@@ -222,9 +232,9 @@
             "product_id": "e783f6af-32c4-4311-bbbc-4f6b6542197c",
             "product_name": "PC Torre Gamer THANOS",
             "product_description": "La PC Torre Gamer THANOS ofrece un rendimiento increíble para gaming y multitareas. Con un procesador de última generación y una tarjeta gráfica potente, está diseñada para quienes necesitan velocidad y poder sin límites.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733213390/ac-computers/e783f6af-32c4-4311-bbbc-4f6b6542197c.jpg",
             "product_price": "4050000",
             "product_discount": 28,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733213390/ac-computers/e783f6af-32c4-4311-bbbc-4f6b6542197c.jpg",
             "product_date": "2024-12-03T03:09:43.000Z",
             "category_id": 1
         },
@@ -232,9 +242,9 @@
             "product_id": "e7b16c67-631f-462f-a0d2-68f03761b2f1",
             "product_name": "PC Torre GHOST PRO",
             "product_description": "La PC Torre GHOST PRO es una opción asequible y potente para quienes buscan un equipo para tareas diarias y gaming de nivel medio. Con una buena relación calidad-precio, es perfecta para quienes desean eficiencia a bajo costo.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733212681/ac-computers/e7b16c67-631f-462f-a0d2-68f03761b2f1.jpg",
             "product_price": "1319000",
             "product_discount": 6,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733212681/ac-computers/e7b16c67-631f-462f-a0d2-68f03761b2f1.jpg",
             "product_date": "2024-12-03T02:57:53.000Z",
             "category_id": 1
         },
@@ -242,9 +252,9 @@
             "product_id": "f00d98e9-d0de-4245-b181-124854362889",
             "product_name": "Memoria RAM Corsair Vengeance LPX 16GB",
             "product_description": "Módulo de memoria DDR4 de 3200 MHz, ideal para gaming y multitarea.",
+            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257603/ac-computers/f00d98e9-d0de-4245-b181-124854362889.jpg",
             "product_price": "380000",
             "product_discount": 0,
-            "product_image_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257603/ac-computers/f00d98e9-d0de-4245-b181-124854362889.jpg",
             "product_date": "2024-12-03T14:02:50.000Z",
             "category_id": 2
         }
@@ -857,7 +867,7 @@
             "product_id": "9967564a-1ac4-4f48-95a4-ece8ada82e77"
         }
     ],
-    "medias": [
+    "multimedias": [
         {
             "media_id": "0ebc4901-788e-41bb-a88c-207c77b2cb07",
             "media_url": "https://res.cloudinary.com/dyuh7jesr/image/upload/v1733257238/ac-computers/medias/0ebc4901-788e-41bb-a88c-207c77b2cb07.jpg",
@@ -1074,14 +1084,5 @@
             "product_id": "9967564a-1ac4-4f48-95a4-ece8ada82e77"
         }
     ],
-    "categories": [
-        {
-            "category_id": 1,
-            "category_name": "computador"
-        },
-        {
-            "category_id": 2,
-            "category_name": "componente"
-        }
-    ]
+    "recoveries": []
 }

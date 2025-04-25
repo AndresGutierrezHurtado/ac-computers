@@ -1,10 +1,7 @@
 "use strict";
 /** @type {import('sequelize-cli').Migration} */
 
-const products = require("./data.json").products;
-const specs = require("./data.json").specs;
-const medias = require("./data.json").medias;
-const categories = require("./data.json").categories;
+const { categories, products, specs, multimedias } = require("./data.json");
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -18,10 +15,10 @@ module.exports = {
          * }], {});
          */
 
-        await queryInterface.bulkInsert("Products", products, {});
-        await queryInterface.bulkInsert("Specs", specs, {});
-        await queryInterface.bulkInsert("Multimedia", medias, {});
-        await queryInterface.bulkInsert("Categories", categories, {});
+        if (categories.length > 0) await queryInterface.bulkInsert("Categories", categories, {});
+        if (products.length > 0) await queryInterface.bulkInsert("Products", products, {});
+        if (specs.length > 0) await queryInterface.bulkInsert("Specs", specs, {});
+        if (multimedias.length > 0) await queryInterface.bulkInsert("Multimedia", multimedias, {});
     },
 
     async down(queryInterface, Sequelize) {
@@ -33,9 +30,9 @@ module.exports = {
          *
          */
 
-        await queryInterface.bulkDelete("Products", null, {});
-        await queryInterface.bulkDelete("Specs", null, {});
-        await queryInterface.bulkDelete("Categories", null, {});
-        await queryInterface.bulkDelete("Multimedia", null, {});
+        if (products.length > 0) await queryInterface.bulkDelete("Products", null, {});
+        if (specs.length > 0) await queryInterface.bulkDelete("Specs", null, {});
+        if (categories.length > 0) await queryInterface.bulkDelete("Categories", null, {});
+        if (multimedias.length > 0) await queryInterface.bulkDelete("Multimedia", null, {});
     },
 };
