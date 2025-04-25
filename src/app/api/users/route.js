@@ -19,6 +19,9 @@ export async function GET(request) {
             offset,
             include: ["role"],
             sort: [sort],
+            attributes: {
+                exclude: ["user_password"],
+            },
             where: {
                 [Op.or]: [
                     { user_name: { [Op.iLike]: `%${search}%` } },
