@@ -9,6 +9,7 @@ import { useDeleteData, useGetData, usePaginateData } from "@/hooks/useClientDat
 // Components
 import { EditIcon, SearchIcon, TrashIcon } from "@/components/icons";
 import EditUser from "@/components/editUser.jsx";
+import Loading from "@/components/loading";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ export default function Page() {
         document.title = "Administrar usuarios | AC Computers";
     }, []);
 
-    if (loadingUsers || status === "loading") return <h1>Loading...</h1>;
+    if (loadingUsers || status === "loading") return <Loading />;
     return (
         <>
             <section className="w-full px-3">

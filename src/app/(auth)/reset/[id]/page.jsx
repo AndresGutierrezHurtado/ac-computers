@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 // Hooks
 import { useGetData, usePutData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
+import Loading from "@/components/loading";
 
 export default function Page() {
     const { id } = useParams();
@@ -32,7 +33,7 @@ export default function Page() {
         document.title = "Cambiar contraseña | AC Computers";
     }, []);
 
-    if (loading) return <p className="text-center">Cargando...</p>;
+    if (loading) return <Loading />;
     if (!recovery) {
         return (
             <p className="text-center py-10 mt-[100px] text-2xl font-bold">

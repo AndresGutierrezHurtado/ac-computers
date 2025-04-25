@@ -11,6 +11,7 @@ import { TrashIcon } from "@/components/icons";
 import { useDeleteData, useGetData, usePutData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
 import { useBase64 } from "@/hooks/uesBase64";
+import Loading from "@/components/loading";
 
 export const dynamic = "force-dynamic";
 
@@ -113,7 +114,7 @@ export default function Product() {
         document.title = "Editar producto | AC Computers";
     }, []);
 
-    if (loadingProduct) return <div>Loading</div>;
+    if (loadingProduct) return <Loading />;
     return (
         <section className="w-full px-3">
             <div className="w-full max-w-[1200px] mx-auto py-10 mt-[100px]">

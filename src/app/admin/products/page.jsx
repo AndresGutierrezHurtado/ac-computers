@@ -10,6 +10,7 @@ import { EditIcon, SearchIcon, TrashIcon } from "@/components/icons";
 
 // Hooks
 import { useDeleteData, usePaginateData } from "@/hooks/useClientData";
+import Loading from "@/components/loading";
 
 export const dynamic = "force-dynamic";
 
@@ -53,7 +54,7 @@ export default function Page() {
         document.title = "Administrar productos | AC Computers";
     }, []);
 
-    if (loadingProducts) return <h1>loading... </h1>;
+    if (loadingProducts) return <Loading />;
     return (
         <>
             <section className="w-full px-3">
