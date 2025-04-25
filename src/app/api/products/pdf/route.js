@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
-import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium";
+// import puppeteer from "puppeteer-core";
+// import chromium from "@sparticuz/chromium";
 
 import { Product } from "@/database/models";
 
 export async function GET(request) {
+    const isDev = process.env.NODE_ENV === "development";
+    const puppeteer = isDev ? await import("puppeteer") : await import("puppeteer-core");
+    const chromium = isDev ? null : (await import("@sparticuz/chromium")).default;
+
     const { searchParams } = new URL(request.url);
     const type = parseInt(searchParams.get("type"));
 
@@ -88,9 +92,9 @@ export async function GET(request) {
                 `;
 
         const browser = await puppeteer.launch({
-            args: chromium.args,
-            executablePath: (await chromium.executablePath()) || "/usr/bin/chromium-browser",
-            headless: chromium.headless,
+            args: isDev ? [] : chromium.args,
+            executablePath: isDev ? undefined : await chromium.executablePath(),
+            headless: isDev ? true : chromium.headless,
         });
 
         const page = await browser.newPage();

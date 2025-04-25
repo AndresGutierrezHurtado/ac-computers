@@ -9,44 +9,52 @@ import { Op } from "sequelize";
 import { uploadFile } from "@/hooks/useUploadImage";
 
 export async function GET(resquest) {
-    const { searchParams } = new URL(resquest.url);
+    try {
+        const { searchParams } = new URL(resquest.url);
 
-    const type = parseInt(searchParams.get("type"));
-    const search = searchParams.get("search") || "";
-    const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 10;
-    const offset = (page - 1) * limit;
+        const type = parseInt(searchParams.get("type"));
+        const search = searchParams.get("search") || "";
+        const page = parseInt(searchParams.get("page")) || 1;
+        const limit = parseInt(searchParams.get("limit")) || 10;
+        const offset = (page - 1) * limit;
 
-    const { rows: products, count } = await Product.findAndCountAll({
-        where: {
-            [Op.and]: [
-                { category_id: type || { [Op.in]: [1, 2] } },
+        const { rows: products, count } = await Product.findAndCountAll({
+            where: {
+                [Op.and]: [
+                    { category_id: type || { [Op.in]: [1, 2] } },
+                    {
+                        [Op.or]: [
+                            { product_name: { [Op.iLike]: `%${search}%` } },
+                            { product_description: { [Op.iLike]: `%${search}%` } },
+                        ],
+                    },
+                ],
+            },
+            limit,
+            offset,
+            include: [
                 {
-                    [Op.or]: [
-                        { product_name: { [Op.iLike]: `%${search}%` } },
-                        { product_description: { [Op.iLike]: `%${search}%` } },
-                    ],
+                    model: Category,
+                    as: "category",
                 },
             ],
-        },
-        limit,
-        offset,
-        include: [
-            {
-                model: Category,
-                as: "category",
-            },
-        ],
-    });
+        });
 
-    return NextResponse.json({
-        success: true,
-        message: "Productos obtenidos correctamente",
-        count,
-        limit,
-        page,
-        data: products,
-    });
+        return NextResponse.json({
+            success: true,
+            message: "Productos obtenidos correctamente",
+            count,
+            limit,
+            page,
+            data: products,
+        });
+    } catch (error) {
+        return NextResponse.json({
+            success: false,
+            message: `Error al obtener productos: ${error.message}`,
+            data: error,
+        });
+    }
 }
 
 export async function POST(request) {
