@@ -10,10 +10,16 @@
         "docker:start": "docker compose up -d",
         "docker:stop": "docker stop ac-computers && docker stop ac-computers-db",
         "docker:rm": "docker rm ac-computers && docker rm ac-computers-db",
-        "db:migrate": "npx sequelize-cli db:migrate",
-        "db:seed": "npx sequelize-cli db:seed:all",
-        "db:seed:rollback": "npx sequelize-cli db:seed:undo:all",
-        "db:migrate:rollback": "npx sequelize-cli db:migrate:undo:all"
+        "db:migrate": "npx sequelize-cli db:migrate --env development",
+        "db:seed": "npx sequelize-cli db:seed:all --env development",
+        "db:seed:undo": "npx sequelize-cli db:seed:undo:all --env development",
+        "db:migrate:undo": "npx sequelize-cli db:migrate:undo:all --env development",
+        "db:reset": "npm run db:migrate:undo && npm run db:migrate && npm run db:seed",
+        "db:seed:reset": "npm run db:seed:undo && npm run db:seed --env development",
+        "prod:db:migrate": "npx sequelize-cli db:migrate --env production",
+        "prod:db:seed": "npx sequelize-cli db:seed:all --env production",
+        "prod:db:seed:undo": "npx sequelize-cli db:seed:undo:all --env production",
+        "prod:db:migrate:undo": "npx sequelize-cli db:migrate:undo:all --env production"
     },
     "dependencies": {
         "@auth/sequelize-adapter": "^2.8.0",
