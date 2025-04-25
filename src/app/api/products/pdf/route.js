@@ -26,36 +26,42 @@ export async function GET(request) {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Reporte de Productos</title>
-                <style>
-                    body { font-family: Arial, sans-serif; padding: 20px; }
-                    h1 { text-align: center; color: #4e99d3; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                    th { background-color: #f4f4f4; }
-                </style>
             </head>
-            <body>
-                <h1>AC COMPUTERS</h1>
-                <p style="text-align: center;">Punto de venta: Centro Comercial Alta Tecnología Cra. 15 No 77-05 Local __ primer piso | Móvil: 311 8835868 | amaliacastro78@gmail.com</p>
+            <body style="background-color: #111827; color: white; font-family: system-ui; padding: 40px;">
+                <div style="text-align: center;">
+                    <h1 style="margin: 0; font-size: 32px; font-weight: 800;">
+                    <span style="color: white;">AC</span>
+                    <span style="font-style: italic; color: #4e99d3;">COMPUTERS</span>
+                    </h1>
+                    <p style="margin: 5px 0;">Punto de venta: Centro Comercial Alta Tecnología</p>
+                    <p style="margin: 3px 0;">Cra. 15 No 77-05 Local __ primer piso</p>
+                    <p style="margin: 3px 0;">Móvil: 311 8835868</p>
+                    <p style="margin: 3px 0;">amaliacastro78@gmail.com</p>
+                </div>
                 ${
                     type === 1 || !type
                         ? `
                             <h2>Computadores</h2>
-                            <table>
-                                <tr><th>Producto</th><th>Precio</th></tr>
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                                <tr style="background-color: #4e99d3; color: #020617; border-radius: 5px;">
+                                    <th style="text-align: left;">Producto</th>
+                                    <th style="text-align: left;">Precio</th>
+                                </tr>
                                 ${computers
                                     .map(
-                                        (p) => `
-                                <tr>
-                                    <td><a href="${process.env.APP_DOMAIN}/product/${
-                                            p.product_id
-                                        }">${p.product_id.split("-")[1]} - ${
-                                            p.product_name
-                                        }</a></td>
-                                    <td>COP ${parseInt(
-                                        p.product_price * (1 - p.product_discount / 100)
-                                    ).toLocaleString("es-CO")}</td>
-                                </tr>`
+                                        (p, idx) => `
+                                    <tr>
+                                        <td style="width: 80%; padding-top: ${
+                                            idx == 0 ? "10px" : "0"
+                                        }"><a style="color: #4e99d3;" href="${
+                                            process.env.APP_DOMAIN
+                                        }/product/${p.product_id}">${
+                                            p.product_id.split("-")[1]
+                                        } - ${p.product_name}</a></td>
+                                        <td style="width: 20%; padding-top: ${idx == 0 ? "10px" : "0"}">COP ${parseInt(
+                                            p.product_price * (1 - p.product_discount / 100)
+                                        ).toLocaleString("es-CO")}</td>
+                                    </tr>`
                                     )
                                     .join("")}
                             </table>
@@ -67,18 +73,23 @@ export async function GET(request) {
                     type === 2 || !type
                         ? `
                             <h2>Componentes</h2>
-                            <table>
-                                <tr><th>Producto</th><th>Precio</th></tr>
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                                <tr style="background-color: #4e99d3; color: #020617; border-radius: 5px;">
+                                    <th style="text-align: left;">Producto</th>
+                                    <th style="text-align: left;">Precio</th>
+                                </tr>
                                 ${components
                                     .map(
-                                        (p) => `
+                                        (p, idx) => `
                                 <tr>
-                                    <td><a href="${process.env.APP_DOMAIN}/product/${
-                                            p.product_id
-                                        }">${p.product_id.split("-")[1]} - ${
-                                            p.product_name
-                                        }</a></td>
-                                    <td>COP ${parseInt(
+                                    <td style="width: 80%; padding-top: ${
+                                        idx == 0 ? "10px" : "0"
+                                    }"><a style="color: #4e99d3;" href="${
+                                            process.env.APP_DOMAIN
+                                        }/product/${p.product_id}">${
+                                            p.product_id.split("-")[1]
+                                        } - ${p.product_name}</a></td>
+                                    <td style="width: 20%; padding-top: ${idx == 0 ? "10px" : "0"}">COP ${parseInt(
                                         p.product_price * (1 - p.product_discount / 100)
                                     ).toLocaleString("es-CO")}</td>
                                 </tr>`
@@ -100,7 +111,7 @@ export async function GET(request) {
         const page = await browser.newPage();
 
         await page.setContent(htmlContent, { waitUntil: "networkidle0" });
-        const pdfBuffer = await page.pdf({ format: "A4", quality: 80 });
+        const pdfBuffer = await page.pdf({ format: "A4", quality: 80, printBackground: true });
 
         await browser.close();
 
