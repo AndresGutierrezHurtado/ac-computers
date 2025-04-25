@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import Swal from "sweetalert2";
 
 // Hooks
-import { useDeleteData, useGetData, usePaginateData } from "@/hooks/useGetClientData";
+import { useDeleteData, useGetData, usePaginateData } from "@/hooks/useClientData";
 
 // Components
 import { EditIcon, SearchIcon, TrashIcon } from "@/components/icons";

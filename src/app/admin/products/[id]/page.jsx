@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import { TrashIcon } from "@/components/icons";
 
 // Hooks
-import { useDeleteData, useGetData, usePutData } from "@/hooks/useGetClientData";
+import { useDeleteData, useGetData, usePutData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
 import { useBase64 } from "@/hooks/uesBase64";
 

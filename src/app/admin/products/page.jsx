@@ -9,7 +9,7 @@ import CreateProduct from "@/components/createProduct";
 import { EditIcon, SearchIcon, TrashIcon } from "@/components/icons";
 
 // Hooks
-import { useDeleteData, usePaginateData } from "@/hooks/useGetClientData";
+import { useDeleteData, usePaginateData } from "@/hooks/useClientData";
 
 export const dynamic = "force-dynamic";
 

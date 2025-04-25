@@ -2,7 +2,7 @@
 import React from "react";
 
 // Hooks
-import { usePutData } from "@/hooks/useGetClientData.js";
+import { usePutData } from "@/hooks/useClientData.js";
 import { useValidateform } from "@/hooks/useValidateForm.js";
 
 // Components

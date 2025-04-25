@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { UploadIcon } from "@/components/icons.jsx";
 
 // Hooks
-import { usePostData } from "@/hooks/useGetClientData";
+import { usePostData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
 import { useBase64 } from "@/hooks/uesBase64";
 
