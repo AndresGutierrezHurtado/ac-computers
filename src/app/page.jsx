@@ -34,7 +34,7 @@ export default function Home() {
             },
         })
             .to(sceneRef.current, {
-                x: "-40%",
+                x: "-43%",
                 opacity: 1,
                 ease: "none",
             })
@@ -43,7 +43,7 @@ export default function Home() {
                 ease: "none",
             })
             .to(sceneRef.current, {
-                x: "-40%",
+                x: "-43%",
                 ease: "none",
             });
 
