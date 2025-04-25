@@ -6,5 +6,9 @@
         Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 
     --color-primary: #4e99d3;
-    --color-primary-content: #000;
+    --color-primary-content: #020617;
+    --color-base-100: #111722;
+    --color-base-200: #1e293b;
+    --color-base-300: #334155;
+    --color-base-content: #f8fafc;
 }

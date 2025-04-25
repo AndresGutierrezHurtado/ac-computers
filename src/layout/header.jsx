@@ -81,7 +81,7 @@ export default function Header() {
                             </div>
                         </Link>
                         <div className="hidden flex-none lg:block navbar-center">
-                            <ul className="menu menu-horizontal text-lg [&>li>a:hover]:text-primary [&>li>a:hover]:scale-105 [&>li>a:hover]:duration-300 [&>li>a:hover]:bg-transparent [&>li>a:focus]:bg-transparent [&>li>a:focus]:text-primary">
+                            <ul className="menu menu-horizontal text-lg [&>li:hover]:text-primary [&>li:hover]:scale-105 [&>li:hover]:duration-300 [&>li>a:hover]:bg-transparent [&>li>a:focus]:bg-transparent [&>li>a:focus]:text-primary">
                                 {/* Navbar menu content here */}
                                 <li>
                                     <Link

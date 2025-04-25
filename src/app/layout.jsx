@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
         <html lang="es">
             <body>
                 {/* Contenedor de las elipses animadas */}
-                <div className="fixed inset-0 z-[-2] bg-slate-950/40">
+                <div className="fixed inset-0 z-[-2]">
                     <div
                         ref={ellipse1}
                         className="absolute top-[0%] right-[0%] w-[90px] aspect-[2/3] bg-slate-100 blur-[200px] rounded-full"
