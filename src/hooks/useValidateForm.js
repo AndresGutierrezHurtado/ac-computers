@@ -165,6 +165,24 @@ export const useValidateform = (data = {}, form = "") => {
                     ),
                 });
                 break;
+            case "forgot-form":
+                schema = object({
+                    user_email: pipe(
+                        nonEmpty("Correo requerido"),
+                        string("Correo requerido"),
+                        email("El correo debe ser válido")
+                    ),
+                });
+                break;
+            case "reset-form":
+                schema = object({
+                    user_password: pipe(
+                        nonEmpty("Contraseña requerida"),
+                        string("Contraseña requerida"),
+                        minLength(4, "La contraseña debe tener al menos 4 caracteres")
+                    ),
+                });
+                break;
             default:
                 return { success: false, message: "Formulario no encontrado", data: null };
                 break;

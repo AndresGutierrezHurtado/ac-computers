@@ -80,9 +80,9 @@ export default function Login() {
                                         />
                                     </div>
                                     <div>
-                                        <a className="link link-hover text-primary font-medium text-base">
-                                            Forgot password?
-                                        </a>
+                                        <Link href="/forgot" className="link link-hover text-primary font-medium text-base">
+                                            Olvidaste tu contraseña?
+                                        </Link>
                                     </div>
                                     <button className="btn btn-primary font-medium mt-4">
                                         Iniciar Sesión
