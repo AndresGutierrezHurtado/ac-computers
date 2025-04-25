@@ -15,10 +15,13 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.UUID,
                 allowNull: false,
             },
-            recovery_date: {
+            recovery_expiration: {
                 type: DataTypes.DATE,
-                defaultValue: DataTypes.NOW,
                 allowNull: false,
+            },
+            recovery_state: {
+                type: DataTypes.ENUM("active", "used"),
+                defaultValue: "active",
             },
         },
         {

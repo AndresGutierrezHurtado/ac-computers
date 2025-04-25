@@ -11,11 +11,16 @@ module.exports = {
             },
             user_id: {
                 type: Sequelize.UUID,
+                allowNull: false,
             },
-            recovery_date: {
+            recovery_expiration: {
                 type: Sequelize.DATE,
-                defaultValue: Sequelize.NOW,
-            }
+                allowNull: false,
+            },
+            recovery_state: {
+                type: Sequelize.ENUM("active", "used"),
+                defaultValue: "active",
+            },
         });
     },
     async down(queryInterface, Sequelize) {
