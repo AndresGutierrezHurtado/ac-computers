@@ -12,6 +12,7 @@ import {
     HomeIcon,
     PhoneIcon,
     TrashIcon,
+    UserIcon,
 } from "@/components/icons";
 import { useEffect } from "react";
 
@@ -151,6 +152,14 @@ export default function Header() {
                                                     </li>
                                                 </>
                                             )}
+                                            <li>
+                                                <Link
+                                                    href="/profile"
+                                                >
+                                                    <UserIcon />
+                                                    Mi perfil
+                                                </Link>
+                                            </li>
                                             <li>
                                                 <a
                                                     onClick={() => signOut()}

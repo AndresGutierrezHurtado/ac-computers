@@ -11,6 +11,7 @@ import {
     FaRegTrashAlt as TrashIcon,
     FaBoxes as ProductsIcon,
     FaUsers as UsersIcon,
+    FaUser as UserIcon,
 } from "react-icons/fa";
 import {
     MdFileUpload as UploadIcon,
@@ -55,4 +56,5 @@ export {
     PriceTagsIcon,
     CloseIcon,
     ComponentIcon,
+    UserIcon,
 };
