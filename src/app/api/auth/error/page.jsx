@@ -1,6 +1,11 @@
 import Link from "next/link";
 import React from "react";
 
+export const metadata = {
+    title: "Error de autenticación",
+    description: "Hubo un error al autenticarte.",
+};
+
 export default async function Page({ searchParams }) {
     const { error } = await searchParams;
 
