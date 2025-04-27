@@ -14,23 +14,22 @@ import {
     TrashIcon,
     UserIcon,
 } from "@/components/icons";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export default function Header() {
     const router = useRouter();
+    const headerRef = useRef(null);
+
     const { data: session, status } = useSession();
     const userSession = session?.user;
 
     useEffect(() => {
+        const classes = ["bg-black/20", "px-5"];
         const handleScroll = () => {
-            if (window.scrollY > 0) {
-                document.querySelector("#header").classList.add("bg-black/20");
-                document.querySelector("#header").classList.add("px-5");
-            } else {
-                document.querySelector("#header").classList.remove("bg-black/20");
-                document.querySelector("#header").classList.remove("px-5");
-            }
+            if (window.scrollY > 0) headerRef.current.classList.add(...classes);
+            else headerRef.current.classList.remove(...classes);
         };
+
         window.addEventListener("scroll", handleScroll);
 
         return () => {
@@ -40,18 +39,19 @@ export default function Header() {
 
     return (
         <div className="fixed w-full top-0 z-50">
-            <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
+            <input id="responsive-drawer" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content flex flex-col">
                 {/* Navbar */}
                 <div className="w-full px-3 py-2">
                     <div
                         id="header"
+                        ref={headerRef}
                         className="navbar max-w-[1200px] mx-auto w-full rounded-full duration-300 py-0 backdrop-blur-sm"
                     >
                         {/* Responsive button */}
                         <div className="flex-none lg:hidden">
                             <label
-                                htmlFor="my-drawer-3"
+                                htmlFor="responsive-drawer"
                                 aria-label="open sidebar"
                                 className="btn btn-square btn-ghost"
                             >
@@ -130,6 +130,12 @@ export default function Header() {
                                 >
                                     {userSession ? (
                                         <>
+                                            <li>
+                                                <Link href="/profile">
+                                                    <UserIcon />
+                                                    Mi perfil
+                                                </Link>
+                                            </li>
                                             {userSession.role_id == 2 && (
                                                 <>
                                                     <li>
@@ -152,14 +158,6 @@ export default function Header() {
                                                     </li>
                                                 </>
                                             )}
-                                            <li>
-                                                <Link
-                                                    href="/profile"
-                                                >
-                                                    <UserIcon />
-                                                    Mi perfil
-                                                </Link>
-                                            </li>
                                             <li>
                                                 <a
                                                     onClick={() => signOut()}
@@ -237,7 +235,7 @@ export default function Header() {
                     </div>
                     <div>
                         <label
-                            htmlFor="my-drawer-3"
+                            htmlFor="responsive-drawer"
                             aria-label="close sidebar"
                             className="drawer-overlay"
                         >
