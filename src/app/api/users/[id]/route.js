@@ -31,15 +31,31 @@ export async function DELETE(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-    const { id } = await params;
-    const { user: userJSON } = await request.json();
+    try {
+        const { id } = await params;
+        const { user: userJSON } = await request.json();
 
-    const user = await User.findByPk(id);
-    await user.update(userJSON);
+        const user = await User.findByPk(id);
+        await user.update(userJSON);
 
-    return NextResponse.json({
-        success: true,
-        message: "Usuario actualizado correctamente",
-        data: user,
-    });
+        return NextResponse.json({
+            success: true,
+            message: "Usuario actualizado correctamente",
+            data: user,
+        });
+    } catch (error) {
+        if (error.name === "SequelizeUniqueConstraintError") {
+            return NextResponse.json({
+                success: false,
+                message: "Ya existe un usuario con ese correo electrónico",
+                error: error.errors.map((err) => err.message),
+            });
+        }
+
+        return NextResponse.json({
+            success: false,
+            message: "Error al actualizar el usuario",
+            error: error.message,
+        });
+    }
 }
