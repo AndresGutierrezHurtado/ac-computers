@@ -54,7 +54,7 @@ export default function Login() {
                                         AC COMPUTERS
                                     </h1>
                                 </Link>
-                                <p className="text-center text-2xl font-medium">Regístrate</p>
+                                <p className="text-center text-2xl font-medium">Iniciar Sesión</p>
                             </div>
                             <form onSubmit={handleSubmit}>
                                 <fieldset className="fieldset gap-4">

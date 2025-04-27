@@ -148,7 +148,7 @@ export default function Page() {
                                         </label>
                                         <input
                                             className="input w-full focus:outline-0 focus:border-primary bg-transparent"
-                                            placeholder="Ingresa tu nombre"
+                                            placeholder="Ingresa el asunto de tu mensaje"
                                             name="email_subject"
                                         />
                                     </fieldset>
