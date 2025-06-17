@@ -2,8 +2,8 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata = {
-    title: "Error de autenticación",
-    description: "Hubo un error al autenticarte.",
+    title: "Error de autenticación | AC Computers",
+    description: "Hubo un error al autenticarte. Por favor, vuelve a iniciar sesión.",
 };
 
 export default async function Page({ searchParams }) {

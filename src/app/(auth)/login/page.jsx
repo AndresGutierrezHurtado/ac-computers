@@ -33,7 +33,7 @@ export default function Login() {
                 <div className="hero-overlay bg-cover bg-black/70 backdrop-blur-sm"></div>
 
                 <div className="hero-content flex-col lg:flex-row-reverse gap-[50px] z-[1]">
-                    <div className="text-center lg:text-left flex flex-col items-center md:items-start gap-4">
+                    <div className="text-center lg:text-left flex flex-col items-center lg:items-start gap-4">
                         <h1 className="text-4xl font-extrabold text-nowrap">
                             ¿No has creado una cuenta?
                         </h1>
@@ -101,14 +101,14 @@ export default function Login() {
                                     <GoogleIcon size={18} />
                                     Continua con Google
                                 </button>
-                                <button
+                                {/* <button
                                     type="button"
                                     onClick={() => signIn("facebook")}
                                     className="btn bg-blue-700 text-blue-200 hover:bg-blue-800 hover:text-blue-100 font-semibold"
                                 >
                                     <FacebookIcon size={18} />
                                     Continua con Facebook
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>
