@@ -8,11 +8,11 @@ export default function AdminLayout({ children }) {
     const user = session?.user;
 
     useEffect(() => {
-        if (user.role_id === 2) return;
         if (status === "loading") return;
         if (status === "unauthenticated") {
             router.push("/");
         }
+        if (user.role_id === 2) return;
     }, [user, status]);
 
     return <>{children}</>;
