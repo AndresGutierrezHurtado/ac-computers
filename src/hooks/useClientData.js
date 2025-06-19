@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
@@ -45,6 +47,8 @@ export const usePaginateData = (endpoint) => {
     const router = useRouter();
 
     useEffect(() => {
+        if (!endpoint) return;
+
         const getData = async () => {
             const response = await FetchData(endpoint);
             setLoading(false);

@@ -28,7 +28,11 @@ export default function Page() {
         limit: usersLimit,
         count: usersCount,
         reload: reloadUsers,
-    } = usePaginateData("/users?search=" + search + "&page=" + page + "&limit=10&sort=" + sort);
+    } = usePaginateData(
+        status === "loading"
+            ? null
+            : "/users?search=" + search + "&page=" + page + "&limit=10&sort=" + sort
+    );
 
     const handleDeleteUser = (id, name) => {
         Swal.fire({
