@@ -1,16 +1,17 @@
 package com.accomputers.api.domain.entities;
 
+import com.accomputers.api.domain.valueobjects.Email;
 import java.time.LocalDateTime;
 
 public class StockNotification {
     private Integer id;
     private Integer productId;
-    private String email;
+    private Email email;
     private Boolean isNotified;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public StockNotification(Integer id, Integer productId, String email, Boolean isNotified, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public StockNotification(Integer id, Integer productId, Email email, Boolean isNotified, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.productId = productId;
         this.email = email;
@@ -28,7 +29,7 @@ public class StockNotification {
         return productId;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
@@ -53,7 +54,7 @@ public class StockNotification {
         this.productId = productId;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Email email) {
         this.email = email;
     }
 

@@ -1,14 +1,15 @@
 package com.accomputers.api.domain.entities;
 
+import com.accomputers.api.domain.valueobjects.Stock;
 import java.time.LocalDateTime;
 
 public class ProductStock {
     private Integer productId;
-    private Integer stock;
+    private Stock stock;
     private Integer reserved;
     private LocalDateTime updatedAt;
 
-    public ProductStock(Integer productId, Integer stock, Integer reserved, LocalDateTime updatedAt) {
+    public ProductStock(Integer productId, Stock stock, Integer reserved, LocalDateTime updatedAt) {
         this.productId = productId;
         this.stock = stock;
         this.reserved = reserved;
@@ -20,7 +21,7 @@ public class ProductStock {
         return productId;
     }
 
-    public Integer getStock() {
+    public Stock getStock() {
         return stock;
     }
 
@@ -37,7 +38,7 @@ public class ProductStock {
         this.productId = productId;
     }
 
-    public void setStock(Integer stock) {
+    public void setStock(Stock stock) {
         this.stock = stock;
     }
 

@@ -1,15 +1,18 @@
 package com.accomputers.api.domain.entities;
 
+import com.accomputers.api.domain.valueobjects.Email;
+import com.accomputers.api.domain.valueobjects.Password;
+
 public class User {
     private Integer id;
     private String firstName;
     private String lastName;
-    private String email;
-    private String password;
+    private Email email;
+    private Password password;
     private Integer roleId;
     private Role role;
 
-    public User(Integer id, String firstName, String lastName, String email, String password, Integer roleId) {
+    public User(Integer id, String firstName, String lastName, Email email, Password password, Integer roleId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,11 +34,11 @@ public class User {
         return lastName;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 
@@ -60,11 +63,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Email email) {
         this.email = email;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(Password password) {
         this.password = password;
     }
 

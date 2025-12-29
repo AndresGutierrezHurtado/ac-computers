@@ -1,5 +1,7 @@
 package com.accomputers.api.domain.entities;
 
+import com.accomputers.api.domain.valueobjects.Discount;
+import com.accomputers.api.domain.valueobjects.Price;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -7,9 +9,9 @@ public class Product {
     private Integer id;
     private String name;
     private String description;
-    private Float price;
+    private Price price;
     private String condition;
-    private Float discount;
+    private Discount discount;
     private Integer brandId;
     private Integer subCategoryId;
     private LocalDateTime deletedAt;
@@ -18,7 +20,7 @@ public class Product {
     private Brand brand;
     private List<Image> images;
 
-    public Product(Integer id, String name, String description, Float price, String condition, Float discount,
+    public Product(Integer id, String name, String description, Price price, String condition, Discount discount,
             Integer brandId, Integer subCategoryId, LocalDateTime deletedAt, LocalDateTime createdAt,
             LocalDateTime updatedAt) {
         this.id = id;
@@ -47,7 +49,7 @@ public class Product {
         return description;
     }
 
-    public Float getPrice() {
+    public Price getPrice() {
         return price;
     }
 
@@ -55,7 +57,7 @@ public class Product {
         return condition;
     }
 
-    public Float getDiscount() {
+    public Discount getDiscount() {
         return discount;
     }
 
@@ -100,7 +102,7 @@ public class Product {
         this.description = description;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Price price) {
         this.price = price;
     }
 
@@ -108,7 +110,7 @@ public class Product {
         this.condition = condition;
     }
 
-    public void setDiscount(Float discount) {
+    public void setDiscount(Discount discount) {
         this.discount = discount;
     }
 

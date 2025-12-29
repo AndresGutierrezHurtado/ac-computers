@@ -1,12 +1,14 @@
 package com.accomputers.api.domain.entities;
 
+import com.accomputers.api.domain.valueobjects.Slug;
+
 public class Category {
     private Integer id;
     private String name;
-    private String slug;
+    private Slug slug;
     private String description;
 
-    Category(Integer id, String name, String slug, String description) {
+    Category(Integer id, String name, Slug slug, String description) {
         this.id = id;
         this.name = name;
         this.slug = slug;
@@ -22,7 +24,7 @@ public class Category {
         return name;
     }
 
-    public String getSlug() {
+    public Slug getSlug() {
         return slug;
     }
 
@@ -39,7 +41,7 @@ public class Category {
         this.name = name;
     }
 
-    public void setSlug(String slug) {
+    public void setSlug(Slug slug) {
         this.slug = slug;
     }
 

@@ -1,16 +1,18 @@
 package com.accomputers.api.domain.entities;
 
+import com.accomputers.api.domain.valueobjects.Slug;
+
 public class Specification {
     private Integer id;
     private String name;
-    private String slug;
+    private Slug slug;
     private String type;
     private String unit;
     private Boolean isFilterable;
     private Boolean isMandatory;
     private Integer subCategoryId;
 
-    Specification(Integer id, String name, String slug, String type, String unit, Boolean isFilterable, Boolean isMandatory, Integer subCategoryId) {
+    Specification(Integer id, String name, Slug slug, String type, String unit, Boolean isFilterable, Boolean isMandatory, Integer subCategoryId) {
         this.id = id;
         this.name = name;
         this.slug = slug;
@@ -30,7 +32,7 @@ public class Specification {
         return name;
     }
 
-    public String getSlug() {
+    public Slug getSlug() {
         return slug;
     }
 
@@ -63,7 +65,7 @@ public class Specification {
         this.name = name;
     }
 
-    public void setSlug(String slug) {
+    public void setSlug(Slug slug) {
         this.slug = slug;
     }
 

@@ -1,13 +1,15 @@
 package com.accomputers.api.domain.entities;
 
+import com.accomputers.api.domain.valueobjects.Url;
+
 public class Image {
     private Integer id;
-    private String url;
+    private Url url;
     private Boolean isMain;
     private Integer productId;
     private Product product;
 
-    public Image(Integer id, String url, Boolean isMain, Integer productId) {
+    public Image(Integer id, Url url, Boolean isMain, Integer productId) {
         this.id = id;
         this.url = url;
         this.isMain = isMain;
@@ -19,7 +21,7 @@ public class Image {
         return id;
     }
 
-    public String getUrl() {
+    public Url getUrl() {
         return url;
     }
 
@@ -40,7 +42,7 @@ public class Image {
         this.id = id;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(Url url) {
         this.url = url;
     }
 
