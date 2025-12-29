@@ -1,6 +1,7 @@
 package com.accomputers.api.domain.entities;
 
-    import java.util.List;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class Product {
     private Integer id;
@@ -11,16 +12,26 @@ public class Product {
     private Float discount;
     private Integer brandId;
     private Integer subCategoryId;
+    private LocalDateTime deletedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private Brand brand;
     private List<Image> images;
 
-    public Product(Integer id, String name, String description, Float price,  Integer brandId, Integer subCategoryId) {
+    public Product(Integer id, String name, String description, Float price, String condition, Float discount,
+            Integer brandId, Integer subCategoryId, LocalDateTime deletedAt, LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.condition = condition;
+        this.discount = discount;
         this.brandId = brandId;
         this.subCategoryId = subCategoryId;
+        this.deletedAt = deletedAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     // Getters
@@ -31,7 +42,7 @@ public class Product {
     public String getName() {
         return name;
     }
-    
+
     public String getDescription() {
         return description;
     }
@@ -54,6 +65,18 @@ public class Product {
 
     public Integer getSubCategoryId() {
         return subCategoryId;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public Brand getBrand() {

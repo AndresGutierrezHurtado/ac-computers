@@ -8,7 +8,7 @@ public class SubCategory {
     private Integer categoryId;
     private Category category;
 
-    SubCategory(Integer id, String name, String slug, String description, Integer categoryId) {
+    public SubCategory(Integer id, String name, String slug, String description, Integer categoryId) {
         this.id = id;
         this.name = name;
         this.slug = slug;
