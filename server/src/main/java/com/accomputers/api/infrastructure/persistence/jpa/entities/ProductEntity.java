@@ -23,7 +23,7 @@ public class ProductEntity {
     private Float price;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "condition", nullable = false)
+    @Column(name = "product_condition", nullable = false)
     private ConditionType condition;
 
     @Column(name = "discount", nullable = false)

@@ -17,7 +17,7 @@ public class SpecificationValueEntity {
     @Column(name = "value", nullable = false, columnDefinition = "TEXT")
     private String value;
 
-    @Column(name = "order", nullable = false)
+    @Column(name = "specification_order", nullable = false)
     private Integer order;
 
     public SpecificationValueEntity() {
