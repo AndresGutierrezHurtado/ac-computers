@@ -11,17 +11,21 @@ import com.accomputers.api.domain.valueobjects.Password;
 
 // Ports
 import com.accomputers.api.application.ports.input.AuthUseCase;
-import com.accomputers.api.application.ports.output.PasswordHasher;
+import com.accomputers.api.application.ports.output.PasswordHasherInterface;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 
 // DTOs
 import com.accomputers.api.application.dtos.auth.LoginDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthService implements AuthUseCase {
     private final UserRepositoryInterface userRepository;
-    private final PasswordHasher passwordHasher;
+    private final PasswordHasherInterface passwordHasher;
 
-    public AuthService(UserRepositoryInterface userRepository, PasswordHasher passwordHasher) {
+    @Autowired
+    public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
     }
