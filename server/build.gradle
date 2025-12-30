@@ -24,6 +24,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
+	// Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+
 	// Testing
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
