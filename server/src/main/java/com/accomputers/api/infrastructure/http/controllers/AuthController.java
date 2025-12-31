@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 // Application
 import com.accomputers.api.application.dtos.auth.LoginDTO;
+import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.ports.input.AuthUseCase;
 
 // Domain
@@ -33,6 +34,21 @@ public class AuthController {
         User user = authUseCase.login(loginDTO);
 
         ResponseDTO<User> responseDTO = new ResponseDTO<User>("Login successful", true, user);
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<ResponseDTO<User>> register(@RequestBody RegisterDTO registerDTO) {
+        User user = authUseCase.registerUser(
+            registerDTO.firstName(),
+            registerDTO.lastName(),
+            registerDTO.email(),
+            registerDTO.password(),
+            registerDTO.roleId()
+        );
+
+        ResponseDTO<User> responseDTO = new ResponseDTO<User>("User registered successfully", true, user);
 
         return ResponseEntity.ok(responseDTO);
     }
