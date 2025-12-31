@@ -1,14 +1,16 @@
 package com.accomputers.api.domain.valueobjects;
 
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
+
 public class Discount {
     private final Float value;
 
     public Discount(Float value) {
         if (value == null) {
-            throw new IllegalArgumentException("Discount cannot be null");
+            throw new InvalidValueObjectException("Discount", value, "cannot be null");
         }
         if (value < 0 || value > 100) {
-            throw new IllegalArgumentException("Discount must be between 0 and 100");
+            throw new InvalidValueObjectException("Discount", value, "must be between 0 and 100");
         }
         this.value = value;
     }

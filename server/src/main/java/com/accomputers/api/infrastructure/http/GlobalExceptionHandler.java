@@ -1,5 +1,7 @@
 package com.accomputers.api.infrastructure.http;
 
+import java.sql.SQLException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +28,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ResponseDTO<Void>> handleDomainException(DomainException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO<Void>(e.getMessage(), false));
+    }
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<ResponseDTO<Void>> handleSQLException(SQLException e) {
+        System.out.println("SQLException: " + e.getMessage() + " File: " + e.getSQLState() + " Line: " + e.getErrorCode() + " Stack Trace: " + e.getStackTrace());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO<Void>("There was an error with the database, check the server logs for more information", false));
     }
 
     @ExceptionHandler(Exception.class)

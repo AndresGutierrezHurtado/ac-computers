@@ -3,16 +3,18 @@ package com.accomputers.api.domain.valueobjects;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
+
 public class Url {
     private final String value;
 
     public Url(String value) {
         if (value == null || value.trim().isEmpty()) {
-            throw new IllegalArgumentException("URL cannot be null or empty");
+            throw new InvalidValueObjectException("URL", value, "cannot be null or empty");
         }
         String trimmed = value.trim();
         if (!isValidUrl(trimmed)) {
-            throw new IllegalArgumentException("Invalid URL format");
+            throw new InvalidValueObjectException("URL", value, "must be a valid URL");
         }
         this.value = trimmed;
     }

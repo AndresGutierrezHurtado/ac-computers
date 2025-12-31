@@ -1,14 +1,16 @@
 package com.accomputers.api.domain.valueobjects;
 
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
+
 public class Stock {
     private final Integer value;
 
     public Stock(Integer value) {
         if (value == null) {
-            throw new IllegalArgumentException("Stock cannot be null");
+            throw new InvalidValueObjectException("Stock", value, "cannot be null");
         }
         if (value < 0) {
-            throw new IllegalArgumentException("Stock cannot be negative");
+            throw new InvalidValueObjectException("Stock", value, "cannot be negative");
         }
         this.value = value;
     }

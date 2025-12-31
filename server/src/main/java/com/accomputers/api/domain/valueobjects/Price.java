@@ -1,14 +1,16 @@
 package com.accomputers.api.domain.valueobjects;
 
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
+
 public class Price {
     private final Float value;
 
     public Price(Float value) {
         if (value == null) {
-            throw new IllegalArgumentException("Price cannot be null");
+            throw new InvalidValueObjectException("Price", value, "cannot be null");
         }
         if (value < 0) {
-            throw new IllegalArgumentException("Price cannot be negative");
+            throw new InvalidValueObjectException("Price", value, "cannot be negative");
         }
         this.value = value;
     }

@@ -1,14 +1,16 @@
 package com.accomputers.api.domain.valueobjects;
 
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
+
 public class Email {
     private final String value;
 
     public Email(String value) {
         if (value == null || value.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be null or empty");
+            throw new InvalidValueObjectException("Email", value, "cannot be null or empty");
         }
         if (!isValidEmail(value)) {
-            throw new IllegalArgumentException("Invalid email format");
+            throw new InvalidValueObjectException("Email", value, "must be a valid email address");
         }
         this.value = value.trim().toLowerCase();
     }

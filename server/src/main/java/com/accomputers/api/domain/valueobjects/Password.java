@@ -1,14 +1,16 @@
 package com.accomputers.api.domain.valueobjects;
 
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
+
 public class Password {
     private final String value;
 
     public Password(String value) {
         if (value == null || value.trim().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be null or empty");
+            throw new InvalidValueObjectException("Password", value, "cannot be null or empty");
         }
         if (value.length() < 4) {
-            throw new IllegalArgumentException("Password must be at least 4 characters long");
+            throw new InvalidValueObjectException("Password", value, "must be at least 4 characters long");
         }
         this.value = value;
     }

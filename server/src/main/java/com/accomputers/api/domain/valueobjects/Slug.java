@@ -1,15 +1,17 @@
 package com.accomputers.api.domain.valueobjects;
 
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
+
 public class Slug {
     private final String value;
 
     public Slug(String value) {
         if (value == null || value.trim().isEmpty()) {
-            throw new IllegalArgumentException("Slug cannot be null or empty");
+            throw new InvalidValueObjectException("Slug", value, "cannot be null or empty");
         }
         String trimmed = value.trim().toLowerCase();
         if (!isValidSlug(trimmed)) {
-            throw new IllegalArgumentException("Slug must contain only lowercase letters, numbers, and hyphens");
+            throw new InvalidValueObjectException("Slug", value, "must contain only lowercase letters, numbers, and hyphens");
         }
         this.value = trimmed;
     }
