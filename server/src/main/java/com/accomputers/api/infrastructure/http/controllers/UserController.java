@@ -38,7 +38,8 @@ public class UserController {
         ResponseDTO<List<UserResponseDTO>> responseDTO = new ResponseDTO<>(
                 "Users retrieved successfully",
                 true,
-                users);
+                users, 
+                (long) users.size());
 
         return ResponseEntity.ok(responseDTO);
     }
