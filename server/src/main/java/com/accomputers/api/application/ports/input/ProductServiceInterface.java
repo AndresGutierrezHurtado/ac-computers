@@ -14,6 +14,6 @@ public interface ProductServiceInterface {
     List<Product> getAllProducts();
     Product updateProduct(Integer id, createProductDTO productDTO);
     void deleteProduct(Integer id);
-    List<Product> getProductRecommendations(String request);
+    String getProductRecommendations(String request);
 }
 
