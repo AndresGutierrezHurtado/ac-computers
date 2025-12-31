@@ -35,6 +35,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// LangChain4j
+    implementation 'dev.langchain4j:langchain4j-open-ai-spring-boot-starter:1.10.0-beta18'
+    implementation 'dev.langchain4j:langchain4j-spring-boot-starter:1.10.0-beta18'
 }
 
 tasks.named('test') {
