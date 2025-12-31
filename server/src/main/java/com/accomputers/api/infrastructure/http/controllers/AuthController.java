@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 // Application
 import com.accomputers.api.application.dtos.auth.LoginDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
-import com.accomputers.api.application.ports.input.AuthUseCase;
-
-// Domain
-import com.accomputers.api.domain.entities.User;
+import com.accomputers.api.application.dtos.response.UserResponseDTO;
+import com.accomputers.api.application.ports.input.AuthServiceInterface;
 
 // Infrastructure
 import com.accomputers.api.infrastructure.http.ResponseDTO;
@@ -22,33 +20,28 @@ import com.accomputers.api.infrastructure.http.ResponseDTO;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private final AuthUseCase authUseCase;
+    private final AuthServiceInterface authServiceInterface;
 
     @Autowired
-    public AuthController(AuthUseCase authUseCase) {
-        this.authUseCase = authUseCase;
+    public AuthController(AuthServiceInterface authServiceInterface) {
+        this.authServiceInterface = authServiceInterface;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO<User>> login(@RequestBody LoginDTO loginDTO) {
-        User user = authUseCase.login(loginDTO);
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> login(@RequestBody LoginDTO loginDTO) {
+        UserResponseDTO user = authServiceInterface.login(loginDTO);
 
-        ResponseDTO<User> responseDTO = new ResponseDTO<User>("Login successful", true, user);
+        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("Login successful", true, user);
 
         return ResponseEntity.ok(responseDTO);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO<User>> register(@RequestBody RegisterDTO registerDTO) {
-        User user = authUseCase.registerUser(
-            registerDTO.firstName(),
-            registerDTO.lastName(),
-            registerDTO.email(),
-            registerDTO.password(),
-            registerDTO.roleId()
-        );
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> register(@RequestBody RegisterDTO registerDTO) {
+        UserResponseDTO user = authServiceInterface.register(registerDTO);
 
-        ResponseDTO<User> responseDTO = new ResponseDTO<User>("User registered successfully", true, user);
+        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("User registered successfully",
+                true, user);
 
         return ResponseEntity.ok(responseDTO);
     }
