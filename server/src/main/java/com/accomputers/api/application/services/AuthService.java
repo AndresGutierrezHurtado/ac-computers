@@ -1,7 +1,5 @@
 package com.accomputers.api.application.services;
 
-import java.util.List;
-
 // Domain
 import com.accomputers.api.domain.entities.User;
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
@@ -10,17 +8,20 @@ import com.accomputers.api.domain.valueobjects.Email;
 import com.accomputers.api.domain.valueobjects.Password;
 
 // Ports
-import com.accomputers.api.application.ports.input.AuthUseCase;
+import com.accomputers.api.application.ports.input.AuthServiceInterface;
 import com.accomputers.api.application.ports.output.PasswordHasherInterface;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 
 // DTOs
 import com.accomputers.api.application.dtos.auth.LoginDTO;
+import com.accomputers.api.application.dtos.auth.RegisterDTO;
+import com.accomputers.api.application.dtos.response.UserResponseDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthService implements AuthUseCase {
+public class AuthService implements AuthServiceInterface {
     private final UserRepositoryInterface userRepository;
     private final PasswordHasherInterface passwordHasher;
 
@@ -30,7 +31,7 @@ public class AuthService implements AuthUseCase {
         this.passwordHasher = passwordHasher;
     }
 
-    public User login(LoginDTO loginDTO) {
+    public UserResponseDTO login(LoginDTO loginDTO) {
         User user = userRepository.findByEmail(new Email(loginDTO.email()));
 
         if (user == null) {
@@ -43,44 +44,22 @@ public class AuthService implements AuthUseCase {
 
         // todo: authenticate user
 
-        return user;
+        return UserResponseDTO.fromUser(user);
     }
 
-    public User registerUser(String firstName, String lastName, String email, String password, Integer roleId) {
-        String hashedPassword = passwordHasher.hashPassword(password);
-        User user = new User(null, firstName, lastName, new Email(email), new Password(hashedPassword), roleId);
-        return userRepository.save(user);
-    }
+    public UserResponseDTO register(RegisterDTO registerDTO) {
+        String hashedPassword = passwordHasher.hashPassword(registerDTO.password());
 
-    public User getUserById(Integer id) {
-        User user = userRepository.findById(id);
-        if (user == null) {
-            throw new EntityNotFoundException("User", id);
-        }
-        return user;
-    }
+        User savedUser = userRepository
+                .save(
+                        new User(
+                                null,
+                                registerDTO.firstName(),
+                                registerDTO.lastName(),
+                                new Email(registerDTO.email()),
+                                new Password(hashedPassword),
+                                registerDTO.roleId()));
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public User updateUser(Integer id, String firstName, String lastName, String email, Integer roleId) {
-        User user = userRepository.findById(id);
-        if (user == null) {
-            throw new EntityNotFoundException("User", id);
-        }
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(new Email(email));
-        user.setRoleId(roleId);
-        return userRepository.save(user);
-    }
-
-    public void deleteUser(Integer id) {
-        User user = userRepository.findById(id);
-        if (user == null) {
-            throw new EntityNotFoundException("User", id);
-        }
-        userRepository.delete(id);
+        return UserResponseDTO.fromUser(savedUser);
     }
 }
