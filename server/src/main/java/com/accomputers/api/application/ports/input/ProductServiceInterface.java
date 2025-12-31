@@ -1,10 +1,14 @@
 package com.accomputers.api.application.ports.input;
 
-import com.accomputers.api.application.dtos.createProductDTO;
-import com.accomputers.api.domain.entities.Product;
 import java.util.List;
 
-public interface ProductUseCase {
+// Domain
+import com.accomputers.api.domain.entities.Product;
+
+// DTOs
+import com.accomputers.api.application.dtos.createProductDTO;
+
+public interface ProductServiceInterface {
     Product createProduct(createProductDTO productDTO);
     Product getProductById(Integer id);
     List<Product> getAllProducts();
