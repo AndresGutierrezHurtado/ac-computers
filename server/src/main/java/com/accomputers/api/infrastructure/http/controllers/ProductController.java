@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 // Application
 import com.accomputers.api.application.dtos.createProductDTO;
+import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
-
-// Domain
-import com.accomputers.api.domain.entities.Product;
 
 // Infrastructure
 import com.accomputers.api.infrastructure.http.ResponseDTO;
@@ -35,10 +33,10 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<Product>> createProduct(@RequestBody createProductDTO productDTO) {
-        Product product = productServiceInterface.createProduct(productDTO);
+    public ResponseEntity<ResponseDTO<ProductResponseDTO>> createProduct(@RequestBody createProductDTO productDTO) {
+        ProductResponseDTO product = productServiceInterface.createProduct(productDTO);
 
-        ResponseDTO<Product> responseDTO = new ResponseDTO<>(
+        ResponseDTO<ProductResponseDTO> responseDTO = new ResponseDTO<>(
                 "Product created successfully",
                 true,
                 product);
@@ -47,10 +45,10 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO<Product>> getProductById(@PathVariable Integer id) {
-        Product product = productServiceInterface.getProductById(id);
+    public ResponseEntity<ResponseDTO<ProductResponseDTO>> getProductById(@PathVariable Integer id) {
+        ProductResponseDTO product = productServiceInterface.getProductById(id);
 
-        ResponseDTO<Product> responseDTO = new ResponseDTO<>(
+        ResponseDTO<ProductResponseDTO> responseDTO = new ResponseDTO<>(
                 "Product retrieved successfully",
                 true,
                 product);
@@ -59,10 +57,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<Product>>> getAllProducts() {
-        List<Product> products = productServiceInterface.getAllProducts();
+    public ResponseEntity<ResponseDTO<List<ProductResponseDTO>>> getAllProducts() {
+        List<ProductResponseDTO> products = productServiceInterface.getAllProducts();
 
-        ResponseDTO<List<Product>> responseDTO = new ResponseDTO<>(
+        ResponseDTO<List<ProductResponseDTO>> responseDTO = new ResponseDTO<>(
                 "Products retrieved successfully",
                 true,
                 products,
@@ -72,13 +70,13 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseDTO<Product>> updateProduct(
+    public ResponseEntity<ResponseDTO<ProductResponseDTO>> updateProduct(
             @PathVariable Integer id,
             @RequestBody createProductDTO productDTO) {
 
-        Product product = productServiceInterface.updateProduct(id, productDTO);
+        ProductResponseDTO product = productServiceInterface.updateProduct(id, productDTO);
 
-        ResponseDTO<Product> responseDTO = new ResponseDTO<>(
+        ResponseDTO<ProductResponseDTO> responseDTO = new ResponseDTO<>(
                 "Product updated successfully",
                 true,
                 product);

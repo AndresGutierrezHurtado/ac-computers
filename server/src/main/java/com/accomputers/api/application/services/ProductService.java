@@ -14,12 +14,14 @@ import com.accomputers.api.application.ports.output.repositories.ProductReposito
 
 // DTOs
 import com.accomputers.api.application.dtos.createProductDTO;
+import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements ProductServiceInterface {
@@ -35,7 +37,7 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
-    public Product createProduct(createProductDTO productDTO) {
+    public ProductResponseDTO createProduct(createProductDTO productDTO) {
         LocalDateTime now = LocalDateTime.now();
 
         Product product = new Product(
@@ -52,27 +54,30 @@ public class ProductService implements ProductServiceInterface {
                 now
         );
 
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        return ProductResponseDTO.fromProduct(savedProduct);
     }
 
     @Override
-    public Product getProductById(Integer id) {
+    public ProductResponseDTO getProductById(Integer id) {
         Product product = productRepository.findById(id);
 
         if (product == null) {
             throw new EntityNotFoundException("Product", id);
         }
 
-        return product;
+        return ProductResponseDTO.fromProduct(product);
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductResponseDTO> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(ProductResponseDTO::fromProduct)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Product updateProduct(Integer id, createProductDTO productDTO) {
+    public ProductResponseDTO updateProduct(Integer id, createProductDTO productDTO) {
         Product product = productRepository.findById(id);
 
         if (product == null) {
@@ -114,7 +119,8 @@ public class ProductService implements ProductServiceInterface {
         updatedProduct.setBrand(product.getBrand());
         updatedProduct.setImages(product.getImages());
 
-        return productRepository.save(updatedProduct);
+        Product savedProduct = productRepository.save(updatedProduct);
+        return ProductResponseDTO.fromProduct(savedProduct);
     }
 
     @Override

@@ -2,17 +2,15 @@ package com.accomputers.api.application.ports.input;
 
 import java.util.List;
 
-// Domain
-import com.accomputers.api.domain.entities.Product;
-
 // DTOs
 import com.accomputers.api.application.dtos.createProductDTO;
+import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 
 public interface ProductServiceInterface {
-    Product createProduct(createProductDTO productDTO);
-    Product getProductById(Integer id);
-    List<Product> getAllProducts();
-    Product updateProduct(Integer id, createProductDTO productDTO);
+    ProductResponseDTO createProduct(createProductDTO productDTO);
+    ProductResponseDTO getProductById(Integer id);
+    List<ProductResponseDTO> getAllProducts();
+    ProductResponseDTO updateProduct(Integer id, createProductDTO productDTO);
     void deleteProduct(Integer id);
     String getProductRecommendations(String request);
 }
