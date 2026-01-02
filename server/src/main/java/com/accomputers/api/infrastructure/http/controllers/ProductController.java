@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.accomputers.api.application.dtos.PageDTO;
 // Application
+import com.accomputers.api.application.dtos.ProductQueryParamsDTO;
 import com.accomputers.api.application.dtos.createProductDTO;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
@@ -58,8 +60,33 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<ProductResponseDTO>>> getAllProducts() {
-        PageDTO<ProductResponseDTO> products = productServiceInterface.getAllProducts();
+    public ResponseEntity<ResponseDTO<List<ProductResponseDTO>>> getAllProducts(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer perPage,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Integer categoryId,
+            @RequestParam(required = false) Integer subCategoryId,
+            @RequestParam(required = false) String condition,
+            @RequestParam(required = false) Integer brandId,
+            @RequestParam(required = false) Float minPrice,
+            @RequestParam(required = false) Float maxPrice,
+            @RequestParam(required = false) Float minDiscount,
+            @RequestParam(required = false) Float maxDiscount) {
+        
+        ProductQueryParamsDTO queryParams = new ProductQueryParamsDTO();
+        queryParams.setPage(page);
+        queryParams.setPerPage(perPage);
+        queryParams.setSearch(search);
+        queryParams.setCategoryId(categoryId);
+        queryParams.setSubCategoryId(subCategoryId);
+        queryParams.setCondition(condition);
+        queryParams.setBrandId(brandId);
+        queryParams.setMinPrice(minPrice);
+        queryParams.setMaxPrice(maxPrice);
+        queryParams.setMinDiscount(minDiscount);
+        queryParams.setMaxDiscount(maxDiscount);
+
+        PageDTO<ProductResponseDTO> products = productServiceInterface.getAllProducts(queryParams);
 
         ResponseDTO<List<ProductResponseDTO>> responseDTO = new ResponseDTO<>(
                 "Products retrieved successfully",

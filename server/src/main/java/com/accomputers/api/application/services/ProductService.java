@@ -13,6 +13,7 @@ import com.accomputers.api.application.ports.output.ProductRecommendationInterfa
 import com.accomputers.api.application.ports.output.repositories.ProductRepositoryInterface;
 import com.accomputers.api.application.dtos.PageDTO;
 import com.accomputers.api.application.dtos.ProductCriteria;
+import com.accomputers.api.application.dtos.ProductQueryParamsDTO;
 // DTOs
 import com.accomputers.api.application.dtos.createProductDTO;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
@@ -71,8 +72,8 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
-    public PageDTO<ProductResponseDTO> getAllProducts() {
-        ProductCriteria productCriteria = new ProductCriteria(1, 5, null, null, null, null, null, null, null, null, null);
+    public PageDTO<ProductResponseDTO> getAllProducts(ProductQueryParamsDTO queryParams) {
+        ProductCriteria productCriteria = queryParams.toProductCriteria();
         PageDTO<Product> pageDTO = productRepository.findAll(productCriteria);
         List<ProductResponseDTO> productResponseDTOs = pageDTO.data().stream()
                 .map(ProductResponseDTO::fromProduct)
