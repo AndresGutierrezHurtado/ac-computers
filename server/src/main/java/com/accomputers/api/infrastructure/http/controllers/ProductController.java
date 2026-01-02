@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.accomputers.api.application.dtos.PageDTO;
 // Application
 import com.accomputers.api.application.dtos.createProductDTO;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
@@ -58,13 +59,13 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<ResponseDTO<List<ProductResponseDTO>>> getAllProducts() {
-        List<ProductResponseDTO> products = productServiceInterface.getAllProducts();
+        PageDTO<ProductResponseDTO> products = productServiceInterface.getAllProducts();
 
         ResponseDTO<List<ProductResponseDTO>> responseDTO = new ResponseDTO<>(
                 "Products retrieved successfully",
                 true,
-                products,
-                (long) products.size());
+                products.data(),
+                products.total());
 
         return ResponseEntity.ok(responseDTO);
     }

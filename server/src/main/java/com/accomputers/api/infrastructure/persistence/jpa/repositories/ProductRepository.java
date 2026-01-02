@@ -1,15 +1,26 @@
 package com.accomputers.api.infrastructure.persistence.jpa.repositories;
 
-import com.accomputers.api.application.ports.output.repositories.ProductRepositoryInterface;
-import com.accomputers.api.domain.entities.Product;
-import com.accomputers.api.infrastructure.persistence.jpa.entities.ProductEntity;
-import com.accomputers.api.infrastructure.persistence.jpa.jpaRepositories.ProductJpaRepository;
-import com.accomputers.api.infrastructure.persistence.jpa.mappers.ProductMapper;
-import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
+
+// Domain
+import com.accomputers.api.domain.entities.Product;
+
+// Application
+import com.accomputers.api.application.dtos.PageDTO;
+import com.accomputers.api.application.dtos.ProductCriteria;
+import com.accomputers.api.application.ports.output.repositories.ProductRepositoryInterface;
+
+// Infrastructure
+import com.accomputers.api.infrastructure.persistence.jpa.entities.ProductEntity;
+import com.accomputers.api.infrastructure.persistence.jpa.jpaRepositories.ProductJpaRepository;
+import com.accomputers.api.infrastructure.persistence.jpa.mappers.ProductMapper;
 
 @Repository
 public class ProductRepository implements ProductRepositoryInterface {
@@ -23,10 +34,13 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public List<Product> findAll() {
-        return jpaRepository.findAllNotDeleted().stream()
+    public PageDTO<Product> findAll(ProductCriteria productCriteria) {
+        Pageable pageable = PageRequest.of(productCriteria.getPage() - 1, productCriteria.getPerPage());
+        Page<ProductEntity> page = jpaRepository.findAllNotDeleted(pageable);
+        List<Product> products = page.getContent().stream()
             .map(mapper::toDomain)
             .collect(Collectors.toList());
+        return new PageDTO<>(products, page.getTotalElements());
     }
 
     @Override
