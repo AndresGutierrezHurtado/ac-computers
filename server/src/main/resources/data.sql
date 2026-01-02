@@ -140,18 +140,18 @@ INSERT INTO `specification_values` (`id`, `specification_id`, `value`, `specific
 
 -- PRODUCTS
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `product_condition`, `discount`, `brand_id`, `sub_category_id`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, "HP Pavilion 15", "Laptop HP Pavilion 15 con procesador Intel Core i5, ideal para trabajo y entretenimiento", 899.99, "NEW", 0.0, 22, 1, NULL, NOW(), NOW()),
-(2, "Dell XPS 13", "Laptop ultrabook Dell XPS 13 con pantalla InfinityEdge, perfecta para profesionales", 1299.99, "NEW", 5.0, 3, 1, NULL, NOW(), NOW()),
-(3, "Lenovo ThinkPad E14", "Laptop empresarial Lenovo ThinkPad E14, robusta y confiable", 799.99, "NEW", 0.0, 3, 1, NULL, NOW(), NOW()),
-(4, "ASUS ROG Strix G15", "Laptop gaming ASUS ROG Strix G15 con tarjeta gráfica dedicada", 1499.99, "NEW", 10.0, 4, 1, NULL, NOW(), NOW()),
-(5, "HP Pavilion Desktop", "Computadora de escritorio HP Pavilion con excelente rendimiento", 699.99, "NEW", 0.0, 22, 2, NULL, NOW(), NOW()),
-(6, "Dell OptiPlex 7090", "Desktop empresarial Dell OptiPlex 7090, compacta y potente", 899.99, "REFURBISHED", 15.0, 2, 2, NULL, NOW(), NOW()),
-(7, "Samsung Odyssey G7", "Monitor gaming Samsung Odyssey G7 de 32 pulgadas con 240Hz", 599.99, "NEW", 0.0, 8, 3, NULL, NOW(), NOW()),
-(8, "LG UltraWide 34", "Monitor ultrawide LG de 34 pulgadas, ideal para productividad", 499.99, "NEW", 5.0, 9, 3, NULL, NOW(), NOW()),
-(9, "Logitech MX Keys", "Teclado inalámbrico Logitech MX Keys con retroiluminación", 99.99, "NEW", 0.0, 10, 4, NULL, NOW(), NOW()),
-(10, "Razer BlackWidow V3", "Teclado mecánico gaming Razer BlackWidow V3 con switches Razer", 129.99, "NEW", 10.0, 11, 4, NULL, NOW(), NOW()),
-(11, "Logitech MX Master 3", "Mouse inalámbrico Logitech MX Master 3 con sensor de alta precisión", 99.99, "NEW", 0.0, 10, 5, NULL, NOW(), NOW()),
-(12, "Razer DeathAdder V2", "Mouse gaming Razer DeathAdder V2 con sensor óptico de 20,000 DPI", 69.99, "NEW", 0.0, 11, 5, NULL, NOW(), NOW());
+(1, "HP Pavilion 15", "Laptop HP Pavilion 15 con procesador Intel Core i5, ideal para trabajo y entretenimiento", 3899000, "NEW", 0.0, 22, 1, NULL, NOW(), NOW()),
+(2, "Dell XPS 13", "Laptop ultrabook Dell XPS 13 con pantalla InfinityEdge, perfecta para profesionales", 5899000, "NEW", 5.0, 3, 1, NULL, NOW(), NOW()),
+(3, "Lenovo ThinkPad E14", "Laptop empresarial Lenovo ThinkPad E14, robusta y confiable", 3499000, "NEW", 0.0, 3, 1, NULL, NOW(), NOW()),
+(4, "ASUS ROG Strix G15", "Laptop gaming ASUS ROG Strix G15 con tarjeta gráfica dedicada", 6899000, "NEW", 10.0, 4, 1, NULL, NOW(), NOW()),
+(5, "HP Pavilion Desktop", "Computadora de escritorio HP Pavilion con excelente rendimiento", 2999000, "NEW", 0.0, 22, 2, NULL, NOW(), NOW()),
+(6, "Dell OptiPlex 7090", "Desktop empresarial Dell OptiPlex 7090, compacta y potente", 3599000, "REFURBISHED", 15.0, 2, 2, NULL, NOW(), NOW()),
+(7, "Samsung Odyssey G7", "Monitor gaming Samsung Odyssey G7 de 32 pulgadas con 240Hz", 2599000, "NEW", 0.0, 8, 3, NULL, NOW(), NOW()),
+(8, "LG UltraWide 34", "Monitor ultrawide LG de 34 pulgadas, ideal para productividad", 2199000, "NEW", 5.0, 9, 3, NULL, NOW(), NOW()),
+(9, "Logitech MX Keys", "Teclado inalámbrico Logitech MX Keys con retroiluminación", 499000, "NEW", 0.0, 10, 4, NULL, NOW(), NOW()),
+(10, "Razer BlackWidow V3", "Teclado mecánico gaming Razer BlackWidow V3 con switches Razer", 649000, "NEW", 10.0, 11, 4, NULL, NOW(), NOW()),
+(11, "Logitech MX Master 3", "Mouse inalámbrico Logitech MX Master 3 con sensor de alta precisión", 489000, "NEW", 0.0, 10, 5, NULL, NOW(), NOW()),
+(12, "Razer DeathAdder V2", "Mouse gaming Razer DeathAdder V2 con sensor óptico de 20,000 DPI", 329000, "NEW", 0.0, 11, 5, NULL, NOW(), NOW());
 
 -- IMAGES
 INSERT INTO `images` (`id`, `url`, `is_main`, `product_id`) VALUES
