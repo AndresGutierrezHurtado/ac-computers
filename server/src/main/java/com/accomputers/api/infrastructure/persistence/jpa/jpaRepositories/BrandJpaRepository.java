@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface BrandJpaRepository extends JpaRepository<BrandEntity, String> {
+public interface BrandJpaRepository extends JpaRepository<BrandEntity, Integer> {
     Optional<BrandEntity> findByName(String name);
     boolean existsByName(String name);
 }

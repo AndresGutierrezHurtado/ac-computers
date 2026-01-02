@@ -25,8 +25,6 @@ public class ProductMapper {
             return null;
         }
 
-        // Note: brandId in Product is Integer, but BrandEntity.id is String
-        // We'll set it to null and use the Brand object instead
         Product product = new Product(
             entity.getId(),
             entity.getName(),
@@ -42,7 +40,6 @@ public class ProductMapper {
         );
 
         if (entity.getBrand() != null) {
-            // Brand constructor is package-private, use reflection to access it
             try {
                 Constructor<Brand> constructor = Brand.class.getDeclaredConstructor(String.class, String.class);
                 constructor.setAccessible(true);
@@ -53,7 +50,6 @@ public class ProductMapper {
                 product.setBrand(brand);
             } catch (Exception e) {
                 // If reflection fails, skip setting Brand
-                // The Brand object will remain null
             }
         }
 
@@ -96,11 +92,8 @@ public class ProductMapper {
             brandEntity.setName(domain.getBrand().getName());
             entity.setBrand(brandEntity);
         } else if (domain.getBrandId() != null) {
-            // If brandId is provided but Brand object is not, create a minimal BrandEntity
-            // Note: This assumes brandId can be converted to String, which may not be correct
-            // This is a design inconsistency: Product.brandId is Integer but BrandEntity.id is String
             BrandEntity brandEntity = new BrandEntity();
-            brandEntity.setId(String.valueOf(domain.getBrandId()));
+            brandEntity.setId(domain.getBrandId());
             entity.setBrand(brandEntity);
         }
 

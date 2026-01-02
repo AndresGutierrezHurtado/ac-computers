@@ -1,16 +1,16 @@
 package com.accomputers.api.domain.entities;
 
 public class Brand {
-    private String id;
+    private Integer id;
     private String name;
 
-    Brand(String id, String name) {
+    Brand(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
     // Getters
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -19,7 +19,7 @@ public class Brand {
     }
 
     // Setters
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

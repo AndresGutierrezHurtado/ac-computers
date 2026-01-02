@@ -16,7 +16,7 @@ public class SpecificationEntity {
     @Column(name = "slug", nullable = false, unique = true)
     private String slug;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "specification_type", nullable = false)
     private String type;
 
     @Column(name = "unit")

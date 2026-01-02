@@ -7,8 +7,8 @@ import java.util.Objects;
 @Table(name = "brands")
 public class BrandEntity {
     @Id
-    @Column(name = "id", length = 50)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -16,16 +16,16 @@ public class BrandEntity {
     public BrandEntity() {
     }
 
-    public BrandEntity(String id, String name) {
+    public BrandEntity(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
