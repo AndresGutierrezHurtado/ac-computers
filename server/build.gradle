@@ -37,7 +37,7 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// Spring AI
-    implementation 'org.springframework.ai:spring-ai-ollama:2.0.0-M1'
+    implementation 'org.springframework.ai:spring-ai-starter-model-ollama:2.0.0-M1'
 }
 
 tasks.named('test') {
