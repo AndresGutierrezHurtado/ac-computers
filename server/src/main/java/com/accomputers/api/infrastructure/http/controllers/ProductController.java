@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.accomputers.api.application.dtos.PageDTO;
 // Application
-import com.accomputers.api.application.dtos.ProductQueryParamsDTO;
+import com.accomputers.api.application.dtos.ProductFiltersDTO;
 import com.accomputers.api.application.dtos.createProductDTO;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
@@ -73,7 +73,7 @@ public class ProductController {
             @RequestParam(required = false) Float minDiscount,
             @RequestParam(required = false) Float maxDiscount) {
         
-        ProductQueryParamsDTO queryParams = new ProductQueryParamsDTO();
+        ProductFiltersDTO queryParams = new ProductFiltersDTO();
         queryParams.setPage(page);
         queryParams.setPerPage(perPage);
         queryParams.setSearch(search);

@@ -1,6 +1,8 @@
 package com.accomputers.api.infrastructure.http.controllers;
 
 // Spring
+import com.accomputers.api.application.dtos.PageDTO;
+import com.accomputers.api.application.dtos.UserFiltersDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 // Application
@@ -32,14 +35,25 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAllUsers() {
-        List<UserResponseDTO> users = userServiceInterface.getAllUsers();
+    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAllUsers(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer perPage,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Integer roleId) {
+        
+        UserFiltersDTO queryParams = new UserFiltersDTO();
+        queryParams.setPage(page);
+        queryParams.setPerPage(perPage);
+        queryParams.setSearch(search);
+        queryParams.setRoleId(roleId);
+
+        PageDTO<UserResponseDTO> users = userServiceInterface.getAllUsers(queryParams);
 
         ResponseDTO<List<UserResponseDTO>> responseDTO = new ResponseDTO<>(
                 "Users retrieved successfully",
                 true,
-                users, 
-                (long) users.size());
+                users.data(),
+                users.total());
 
         return ResponseEntity.ok(responseDTO);
     }

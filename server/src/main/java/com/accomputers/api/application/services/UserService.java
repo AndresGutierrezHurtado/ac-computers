@@ -11,6 +11,9 @@ import com.accomputers.api.application.ports.input.UserServiceInterface;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 
 // DTOs
+import com.accomputers.api.application.dtos.PageDTO;
+import com.accomputers.api.application.dtos.UserCriteria;
+import com.accomputers.api.application.dtos.UserFiltersDTO;
 import com.accomputers.api.application.dtos.auth.UpdateUserDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 
@@ -30,11 +33,13 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public List<UserResponseDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
+    public PageDTO<UserResponseDTO> getAllUsers(UserFiltersDTO queryParams) {
+        UserCriteria userCriteria = queryParams.toUserCriteria();
+        PageDTO<User> pageDTO = userRepository.findAll(userCriteria);
+        List<UserResponseDTO> userResponseDTOs = pageDTO.data().stream()
                 .map(UserResponseDTO::fromUser)
                 .collect(Collectors.toList());
+        return new PageDTO<>(userResponseDTOs, pageDTO.total());
     }
 
     @Override

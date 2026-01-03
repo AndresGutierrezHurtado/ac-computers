@@ -5,7 +5,7 @@ package com.accomputers.api.application.dtos;
  * This DTO is used in the infrastructure layer (controllers) and then
  * transformed to ProductCriteria in the application layer.
  */
-public class ProductQueryParamsDTO {
+public class ProductFiltersDTO {
     private Integer page;
     private Integer perPage;
     private String search;
@@ -18,7 +18,7 @@ public class ProductQueryParamsDTO {
     private Float minDiscount;
     private Float maxDiscount;
 
-    public ProductQueryParamsDTO() {
+    public ProductFiltersDTO() {
     }
 
     public Integer getPage() {
