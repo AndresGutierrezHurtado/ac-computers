@@ -1,125 +1,126 @@
 package com.accomputers.api.infrastructure.security;
 
-import com.accomputers.api.application.ports.output.UserAuthServiceInterface;
-import com.accomputers.api.domain.entities.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import com.accomputers.api.application.ports.output.UserAuthServiceInterface;
+import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
+import com.accomputers.api.domain.entities.User;
 
 @Service
 public class JwtUserAuthService implements UserAuthServiceInterface {
 
-    private final SecretKey secretKey;
-    private final long expirationTimeInMinutes;
-    private final Set<String> revokedTokens = ConcurrentHashMap.newKeySet();
-    private final Set<Integer> invalidatedUsers = ConcurrentHashMap.newKeySet();
+    private final UserRepositoryInterface userRepository;
 
-    public JwtUserAuthService(
-            @Value("${jwt.secret:your-256-bit-secret-key-must-be-at-least-32-characters-long}")
-            String jwtSecret,
-            @Value("${jwt.expiration:1440}")
-            long expirationTimeInMinutes) {
-        this.secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-        this.expirationTimeInMinutes = expirationTimeInMinutes;
+    @Autowired
+    public JwtUserAuthService(UserRepositoryInterface userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public void authenticateUser(User user) {
-        // Token generation is handled by generateToken method
-        // This method can be used to track authentication events
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                user.getEmail().getValue(),
+                null,
+                UserAuthoritiesMapper.map(user));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = JwtUtil.generateToken(user.getId());
+
+        HttpServletResponse response = getHttpServletResponse();
+
+        if (response != null) {
+            response.setHeader("Authorization", token);
+        }
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        HttpServletRequest request = getHttpServletRequest();
+        if (request == null) {
+            return null;
+        }
+
+        String token = JwtUtil.extractTokenFromRequest(request);
+        if (token == null || !JwtUtil.validateToken(token)) {
+            return null;
+        }
+
+        try {
+            String userIdStr = JwtUtil.getUserIdFromToken(token);
+            Integer userId = Integer.parseInt(userIdStr);
+            return userRepository.findById(userId);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
     public void refreshSession(User user) {
-        // Remove user from invalidated list if present
-        invalidatedUsers.remove(user.getId());
+        if (user == null || user.getId() == null) {
+            return;
+        }
+
+        String newToken = JwtUtil.generateToken(user.getId());
+        HttpServletResponse response = getHttpServletResponse();
+        if (response != null) {
+            response.setHeader("Authorization", newToken);
+        }
+
+        // Update authentication context
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                user.getEmail().getValue(),
+                null,
+                UserAuthoritiesMapper.map(user));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Override
     public void revokeSession(User user) {
-        // This would typically revoke a specific token
-        // For now, we'll invalidate all sessions for the user
-        invalidateAllSessions(user);
+        SecurityContextHolder.clearContext();
+
+        HttpServletResponse response = getHttpServletResponse();
+        if (response != null) {
+            response.setHeader("Authorization", "");
+        }
     }
 
     @Override
     public void invalidateAllSessions(User user) {
-        if (user != null && user.getId() != null) {
-            invalidatedUsers.add(user.getId());
+        SecurityContextHolder.clearContext();
+
+        HttpServletResponse response = getHttpServletResponse();
+        if (response != null) {
+            response.setHeader("Authorization", "");
         }
     }
 
     @Override
     public void logoutUser(User user) {
-        invalidateAllSessions(user);
-    }
+        SecurityContextHolder.clearContext();
 
-    public String generateToken(User user) {
-        if (user == null || user.getId() == null) {
-            throw new IllegalArgumentException("User and user ID cannot be null");
-        }
-
-        Instant now = Instant.now();
-        Instant expiration = now.plus(expirationTimeInMinutes, ChronoUnit.MINUTES);
-
-        return Jwts.builder()
-                .subject(String.valueOf(user.getId()))
-                .claim("email", user.getEmail().getValue())
-                .claim("roleId", user.getRoleId())
-                .issuedAt(Date.from(now))
-                .expiration(Date.from(expiration))
-                .signWith(secretKey)
-                .compact();
-    }
-
-    public Claims validateToken(String token) {
-        if (token == null || token.isEmpty()) {
-            throw new IllegalArgumentException("Token cannot be null or empty");
-        }
-
-        // Check if token is in revoked list
-        if (revokedTokens.contains(token)) {
-            throw new SecurityException("Token has been revoked");
-        }
-
-        try {
-            Claims claims = Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-
-            // Check if user's sessions have been invalidated
-            Integer userId = Integer.parseInt(claims.getSubject());
-            if (invalidatedUsers.contains(userId)) {
-                throw new SecurityException("User sessions have been invalidated");
-            }
-
-            return claims;
-        } catch (Exception e) {
-            throw new SecurityException("Invalid token: " + e.getMessage());
+        HttpServletResponse response = getHttpServletResponse();
+        if (response != null) {
+            response.setHeader("Authorization", "");
         }
     }
 
-    public void revokeToken(String token) {
-        if (token != null && !token.isEmpty()) {
-            revokedTokens.add(token);
-        }
+    private HttpServletRequest getHttpServletRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return attributes != null ? attributes.getRequest() : null;
     }
 
-    public Integer getUserIdFromToken(String token) {
-        Claims claims = validateToken(token);
-        return Integer.parseInt(claims.getSubject());
+    private HttpServletResponse getHttpServletResponse() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return attributes != null ? attributes.getResponse() : null;
     }
 }
-
