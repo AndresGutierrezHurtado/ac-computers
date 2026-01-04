@@ -1,6 +1,5 @@
 package com.accomputers.api.infrastructure.http;
 
-import com.accomputers.api.infrastructure.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +11,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+// Filters
+import com.accomputers.api.infrastructure.security.JwtAuthenticationFilter;
+
 // Responses
 import com.accomputers.api.infrastructure.http.responses.CustomAuthenticationEntryPoint;
 import com.accomputers.api.infrastructure.http.responses.CustomAccessDeniedHandler;
@@ -20,15 +22,18 @@ import com.accomputers.api.infrastructure.http.responses.CustomAccessDeniedHandl
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final RateLimiter rateLimiter;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Autowired
     public SecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
+            RateLimiter rateLimiter,
             CustomAuthenticationEntryPoint authenticationEntryPoint,
             CustomAccessDeniedHandler accessDeniedHandler) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.rateLimiter = rateLimiter;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
     }
@@ -59,6 +64,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(rateLimiter, JwtAuthenticationFilter.class)
                 .build();
     }
 
