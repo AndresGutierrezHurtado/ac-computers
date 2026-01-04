@@ -1,4 +1,4 @@
-package com.accomputers.api.infrastructure.http;
+package com.accomputers.api.infrastructure.http.responses;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

@@ -8,5 +8,7 @@ import com.accomputers.api.application.dtos.response.UserResponseDTO;
 public interface AuthServiceInterface {
     UserResponseDTO login(LoginDTO loginDTO);
     UserResponseDTO register(RegisterDTO registerDTO);
+    UserResponseDTO getSession();
+    void logout();
 }
 

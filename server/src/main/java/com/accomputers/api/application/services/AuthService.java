@@ -65,4 +65,24 @@ public class AuthService implements AuthServiceInterface {
 
         return UserResponseDTO.fromUser(savedUser);
     }
+
+    public UserResponseDTO getSession() {
+        User user = userAuthService.getAuthenticatedUser();
+
+        if (user == null) {
+            throw new EntityNotFoundException("User", "authenticated user not found");
+        }
+
+        return UserResponseDTO.fromUser(user);
+    }
+
+    public void logout() {
+        User user = userAuthService.getAuthenticatedUser();
+
+        if (user == null) {
+            throw new EntityNotFoundException("User", "authenticated user not found");
+        }
+
+        userAuthService.logoutUser(user);
+    }
 }

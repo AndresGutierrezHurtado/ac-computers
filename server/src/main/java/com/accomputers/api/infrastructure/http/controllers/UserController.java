@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 // Application
 import com.accomputers.api.application.dtos.auth.UpdateUserDTO;
 import com.accomputers.api.application.ports.input.UserServiceInterface;
+import com.accomputers.api.infrastructure.http.responses.PaginatedResponseDTO;
 
 // Infrastructure
-import com.accomputers.api.infrastructure.http.ResponseDTO;
-
-import java.util.List;
+import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
 
 @RestController
 @RequestMapping("/users")
@@ -35,12 +34,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAllUsers(
+    public ResponseEntity<PaginatedResponseDTO<UserResponseDTO>> getAllUsers(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer perPage,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Integer roleId) {
-        
+
         UserFiltersDTO queryParams = new UserFiltersDTO();
         queryParams.setPage(page);
         queryParams.setPerPage(perPage);
@@ -49,7 +48,7 @@ public class UserController {
 
         PageDTO<UserResponseDTO> users = userServiceInterface.getAllUsers(queryParams);
 
-        ResponseDTO<List<UserResponseDTO>> responseDTO = new ResponseDTO<>(
+        PaginatedResponseDTO<UserResponseDTO> responseDTO = new PaginatedResponseDTO<>(
                 "Users retrieved successfully",
                 true,
                 users.data(),

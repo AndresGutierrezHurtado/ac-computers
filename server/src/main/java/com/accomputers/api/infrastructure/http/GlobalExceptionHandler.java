@@ -12,6 +12,9 @@ import com.accomputers.api.domain.exceptions.EntityNotFoundException;
 import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 import com.accomputers.api.domain.exceptions.DomainException;
 
+// Responses
+import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     

@@ -19,11 +19,9 @@ import com.accomputers.api.application.dtos.ProductFiltersDTO;
 import com.accomputers.api.application.dtos.createProductDTO;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
-
+import com.accomputers.api.infrastructure.http.responses.PaginatedResponseDTO;
 // Infrastructure
-import com.accomputers.api.infrastructure.http.ResponseDTO;
-
-import java.util.List;
+import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
 
 @RestController
 @RequestMapping("/products")
@@ -60,7 +58,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<ProductResponseDTO>>> getAllProducts(
+    public ResponseEntity<PaginatedResponseDTO<ProductResponseDTO>> getAllProducts(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer perPage,
             @RequestParam(required = false) String search,
@@ -72,7 +70,7 @@ public class ProductController {
             @RequestParam(required = false) Float maxPrice,
             @RequestParam(required = false) Float minDiscount,
             @RequestParam(required = false) Float maxDiscount) {
-        
+
         ProductFiltersDTO queryParams = new ProductFiltersDTO();
         queryParams.setPage(page);
         queryParams.setPerPage(perPage);
@@ -88,7 +86,7 @@ public class ProductController {
 
         PageDTO<ProductResponseDTO> products = productServiceInterface.getAllProducts(queryParams);
 
-        ResponseDTO<List<ProductResponseDTO>> responseDTO = new ResponseDTO<>(
+        PaginatedResponseDTO<ProductResponseDTO> responseDTO = new PaginatedResponseDTO<>(
                 "Products retrieved successfully",
                 true,
                 products.data(),
@@ -135,4 +133,3 @@ public class ProductController {
         return ResponseEntity.ok(responseDTO);
     }
 }
-

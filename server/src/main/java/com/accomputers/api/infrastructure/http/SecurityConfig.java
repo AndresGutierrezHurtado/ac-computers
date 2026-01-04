@@ -12,6 +12,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+// Responses
+import com.accomputers.api.infrastructure.http.responses.CustomAuthenticationEntryPoint;
+import com.accomputers.api.infrastructure.http.responses.CustomAccessDeniedHandler;
+
 @Configuration
 public class SecurityConfig {
 
