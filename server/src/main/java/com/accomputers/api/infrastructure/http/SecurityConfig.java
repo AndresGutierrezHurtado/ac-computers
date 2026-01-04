@@ -4,6 +4,7 @@ import com.accomputers.api.infrastructure.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,13 +35,25 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Auth
                         .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+
+                        // Users
+                        .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("SUPERUSER", "ADMINISTRATOR", "VIEWER")
+                        .requestMatchers("/users/**").hasRole("SUPERUSER")
+
+                        // Products (catálogo público)
+                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products/recommendations").permitAll()
+
+                        // Products (gestión)
+                        .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("SUPERUSER", "ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("SUPERUSER", "ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasAnyRole("SUPERUSER", "ADMINISTRATOR")
+                        .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler)
-                )
+                        .accessDeniedHandler(accessDeniedHandler))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
