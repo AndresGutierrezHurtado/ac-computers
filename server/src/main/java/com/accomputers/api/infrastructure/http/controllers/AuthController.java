@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 // Application
 import com.accomputers.api.application.dtos.auth.LoginDTO;
-import com.accomputers.api.application.dtos.auth.LoginResponseDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
@@ -29,10 +28,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO<LoginResponseDTO>> login(@RequestBody LoginDTO loginDTO) {
-        LoginResponseDTO loginResponse = authServiceInterface.login(loginDTO);
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> login(@RequestBody LoginDTO loginDTO) {
+        UserResponseDTO user = authServiceInterface.login(loginDTO);
 
-        ResponseDTO<LoginResponseDTO> responseDTO = new ResponseDTO<LoginResponseDTO>("Login successful", true, loginResponse);
+        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("Login successful", true, user);
 
         return ResponseEntity.ok(responseDTO);
     }

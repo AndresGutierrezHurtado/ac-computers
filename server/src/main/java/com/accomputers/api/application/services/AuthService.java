@@ -10,6 +10,7 @@ import com.accomputers.api.domain.valueobjects.Password;
 // Ports
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
 import com.accomputers.api.application.ports.output.PasswordHasherInterface;
+import com.accomputers.api.application.ports.output.UserAuthServiceInterface;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 
 // DTOs
@@ -24,11 +25,13 @@ import org.springframework.stereotype.Service;
 public class AuthService implements AuthServiceInterface {
     private final UserRepositoryInterface userRepository;
     private final PasswordHasherInterface passwordHasher;
+    private final UserAuthServiceInterface userAuthService;
 
     @Autowired
-    public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher) {
+    public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher, UserAuthServiceInterface userAuthService) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
+        this.userAuthService = userAuthService;
     }
 
     public UserResponseDTO login(LoginDTO loginDTO) {
@@ -42,7 +45,7 @@ public class AuthService implements AuthServiceInterface {
             throw new InvalidValueObjectException("Password", loginDTO.password(), "is incorrect");
         }
 
-        // todo: authenticate user
+        userAuthService.authenticateUser(user);
 
         return UserResponseDTO.fromUser(user);
     }
