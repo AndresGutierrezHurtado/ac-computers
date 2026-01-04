@@ -43,6 +43,9 @@ dependencies {
 
 	// Spring AI
     implementation 'org.springframework.ai:spring-ai-starter-model-ollama:2.0.0-M1'
+
+	// Cloudinary
+	implementation 'com.cloudinary:cloudinary-http5:2.0.0'
 }
 
 tasks.named('test') {

@@ -19,21 +19,23 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserRepositoryInterface userRepository;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public JwtAuthenticationFilter(UserRepositoryInterface userRepository) {
+    public JwtAuthenticationFilter(UserRepositoryInterface userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String token = JwtUtil.extractTokenFromRequest(request);
+        String token = jwtUtil.extractTokenFromRequest(request);
 
-        if (token != null && JwtUtil.validateToken(token)) {
+        if (token != null && jwtUtil.validateToken(token)) {
             try {
-                String userIdStr = JwtUtil.getUserIdFromToken(token);
+                String userIdStr = jwtUtil.getUserIdFromToken(token);
                 Integer userId = Integer.parseInt(userIdStr);
                 User user = userRepository.findById(userId);
 

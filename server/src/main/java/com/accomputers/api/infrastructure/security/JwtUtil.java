@@ -4,22 +4,30 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+@Component
 public class JwtUtil {
 
-    // Generate a 256-bit (32-byte) key for HS256
-    private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(
-        "your-256-bit-secret-key-must-be-at-least-32-characters-long-for-production".getBytes()
-    );
+    private final SecretKey SECRET_KEY;
+    private final long EXPIRATION_TIME;
 
-    private static final long EXPIRATION_TIME = (60 * 1000) * 60; // 1 hour
+    public JwtUtil(
+            @Value("${jwt.secret}") String jwtSecret,
+            @Value("${jwt.expiration}") long expirationTime
+    ) {
+        this.SECRET_KEY = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        this.EXPIRATION_TIME = expirationTime;
+    }
 
-    public static String generateToken(Integer userId) {
+    public String generateToken(Integer userId) {
 
         return Jwts.builder()
                 .subject(userId.toString())
@@ -30,7 +38,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parser()
                 .verifyWith(SECRET_KEY)
@@ -43,7 +51,7 @@ public class JwtUtil {
         }
     }
 
-    public static String getUserIdFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(SECRET_KEY)
                 .build()
@@ -53,7 +61,7 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
-    public static String extractTokenFromRequest(HttpServletRequest request) {
+    public String extractTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
@@ -61,7 +69,7 @@ public class JwtUtil {
         return null;
     }
 
-    public static boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         try {
             Claims claims = Jwts.parser()
                     .verifyWith(SECRET_KEY)
@@ -76,7 +84,7 @@ public class JwtUtil {
         }
     }
 
-    public static Date getExpirationDateFromToken(String token) {
+    public Date getExpirationDateFromToken(String token) {
         try {
             Claims claims = Jwts.parser()
                     .verifyWith(SECRET_KEY)

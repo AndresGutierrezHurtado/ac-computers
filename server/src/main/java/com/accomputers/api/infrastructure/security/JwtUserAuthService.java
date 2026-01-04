@@ -19,9 +19,11 @@ import com.accomputers.api.domain.entities.User;
 public class JwtUserAuthService implements UserAuthServiceInterface {
 
     private final UserRepositoryInterface userRepository;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public JwtUserAuthService(UserRepositoryInterface userRepository) {
+    public JwtUserAuthService(UserRepositoryInterface userRepository, JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
     }
 
@@ -34,7 +36,7 @@ public class JwtUserAuthService implements UserAuthServiceInterface {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = JwtUtil.generateToken(user.getId());
+        String token = jwtUtil.generateToken(user.getId());
 
         HttpServletResponse response = getHttpServletResponse();
 
@@ -50,13 +52,13 @@ public class JwtUserAuthService implements UserAuthServiceInterface {
             return null;
         }
 
-        String token = JwtUtil.extractTokenFromRequest(request);
-        if (token == null || !JwtUtil.validateToken(token)) {
+        String token = jwtUtil.extractTokenFromRequest(request);
+        if (token == null || !jwtUtil.validateToken(token)) {
             return null;
         }
 
         try {
-            String userIdStr = JwtUtil.getUserIdFromToken(token);
+            String userIdStr = jwtUtil.getUserIdFromToken(token);
             Integer userId = Integer.parseInt(userIdStr);
             return userRepository.findById(userId);
         } catch (Exception e) {
@@ -70,7 +72,7 @@ public class JwtUserAuthService implements UserAuthServiceInterface {
             return;
         }
 
-        String newToken = JwtUtil.generateToken(user.getId());
+        String newToken = jwtUtil.generateToken(user.getId());
         HttpServletResponse response = getHttpServletResponse();
         if (response != null) {
             response.setHeader("Authorization", newToken);
