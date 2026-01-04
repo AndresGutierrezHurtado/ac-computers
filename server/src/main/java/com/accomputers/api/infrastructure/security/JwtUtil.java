@@ -17,7 +17,7 @@ public class JwtUtil {
         "your-256-bit-secret-key-must-be-at-least-32-characters-long-for-production".getBytes()
     );
 
-    private static final long EXPIRATION_TIME = 60 * 1000; // 1 min
+    private static final long EXPIRATION_TIME = (60 * 1000) * 60; // 1 hour
 
     public static String generateToken(Integer userId) {
 

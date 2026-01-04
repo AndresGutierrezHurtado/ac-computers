@@ -17,5 +17,7 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Integer>, J
     Optional<UserEntity> findByEmail(@Param("email") String email);
     boolean existsByEmail(String email);
     Page<UserEntity> findAll(Pageable pageable);
+    @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.role WHERE u.id = :id")
+    Optional<UserEntity> findById(@Param("id") Integer id);
 }
 

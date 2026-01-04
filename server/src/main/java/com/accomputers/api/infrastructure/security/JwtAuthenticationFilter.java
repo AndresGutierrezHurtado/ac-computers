@@ -47,7 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (Exception e) {
-                // Invalid token or user not found, continue without authentication
+                System.out.println("Error retrieving user from token: " + e.getMessage());
+                e.printStackTrace();
                 SecurityContextHolder.clearContext();
             }
         }
