@@ -28,13 +28,12 @@ public class ImageRepository implements ImageRepositoryInterface {
             return null;
         }
 
-        ProductEntity productEntity = null;
+        ImageEntity entity = mapper.toEntity(image);
         if (image.getProductId() != null) {
-            productEntity = new ProductEntity();
+            ProductEntity productEntity = new ProductEntity();
             productEntity.setId(image.getProductId());
+            entity.setProduct(productEntity);
         }
-
-        ImageEntity entity = mapper.toEntity(image, productEntity);
         ImageEntity savedEntity = jpaRepository.save(entity);
         return mapper.toDomain(savedEntity);
     }

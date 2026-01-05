@@ -30,13 +30,12 @@ public class ProductSpecificationRepository implements ProductSpecificationRepos
             return null;
         }
 
-        ProductEntity productEntity = null;
+        ProductSpecificationEntity entity = mapper.toEntity(productSpecification);
         if (productSpecification.getProductId() != null) {
-            productEntity = new ProductEntity();
+            ProductEntity productEntity = new ProductEntity();
             productEntity.setId(productSpecification.getProductId());
+            entity.setProduct(productEntity);
         }
-
-        ProductSpecificationEntity entity = mapper.toEntity(productSpecification, productEntity);
         ProductSpecificationEntity savedEntity = jpaRepository.save(entity);
         return mapper.toDomain(savedEntity);
     }

@@ -11,9 +11,11 @@ import com.accomputers.api.infrastructure.persistence.jpa.mappers.RoleMapper;
 @Repository
 public class RoleRepository implements RoleRepositoryInterface {
     private final RoleJpaRepository jpaRepository;
+    private final RoleMapper mapper;
 
-    public RoleRepository(RoleJpaRepository jpaRepository) {
+    public RoleRepository(RoleJpaRepository jpaRepository, RoleMapper mapper) {
         this.jpaRepository = jpaRepository;
+        this.mapper = mapper;
     }
 
     public Role save(Role role) {
@@ -21,9 +23,9 @@ public class RoleRepository implements RoleRepositoryInterface {
             return null;
         }
 
-        RoleEntity entity = RoleMapper.toEntity(role);
+        RoleEntity entity = mapper.toEntity(role);
         RoleEntity savedEntity = this.jpaRepository.save(entity);
 
-        return RoleMapper.toDomain(savedEntity);
+        return mapper.toDomain(savedEntity);
     }
 }
