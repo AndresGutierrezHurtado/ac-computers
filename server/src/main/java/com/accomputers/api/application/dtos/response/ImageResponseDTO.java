@@ -5,8 +5,7 @@ import com.accomputers.api.domain.entities.Image;
 public record ImageResponseDTO(
         Integer id,
         String url,
-        Boolean isMain,
-        Integer productId) {
+        Boolean isMain) {
 
     public static ImageResponseDTO fromImage(Image image) {
         if (image == null) {
@@ -16,8 +15,7 @@ public record ImageResponseDTO(
         return new ImageResponseDTO(
                 image.getId(),
                 image.getUrl() != null ? image.getUrl().getValue() : null,
-                image.getIsMain(),
-                image.getProductId());
+                image.getIsMain());
     }
 }
 

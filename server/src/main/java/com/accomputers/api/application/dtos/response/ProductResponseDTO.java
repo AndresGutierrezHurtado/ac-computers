@@ -1,6 +1,5 @@
 package com.accomputers.api.application.dtos.response;
 
-import com.accomputers.api.domain.entities.Brand;
 import com.accomputers.api.domain.entities.Product;
 
 import java.time.LocalDateTime;
@@ -14,13 +13,12 @@ public record ProductResponseDTO(
         Float price,
         String condition,
         Float discount,
-        Integer brandId,
         Integer subCategoryId,
-        LocalDateTime deletedAt,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        Brand brand,
-        List<ImageResponseDTO> images) {
+        BrandResponseDTO brand,
+        List<ImageResponseDTO> images,
+        List<ProductSpecificationResponseDTO> productSpecifications) {
 
     public static ProductResponseDTO fromProduct(Product product) {
         if (product == null) {
@@ -34,6 +32,18 @@ public record ProductResponseDTO(
                     .collect(Collectors.toList());
         }
 
+        List<ProductSpecificationResponseDTO> productSpecificationsDTO = null;
+        if (product.getProductSpecifications() != null) {
+            productSpecificationsDTO = product.getProductSpecifications().stream()
+                    .map(ProductSpecificationResponseDTO::fromProductSpecification)
+                    .collect(Collectors.toList());
+        }
+
+        BrandResponseDTO brandDTO = null;
+        if (product.getBrand() != null) {
+            brandDTO = BrandResponseDTO.fromBrand(product.getBrand());
+        }
+
         return new ProductResponseDTO(
                 product.getId(),
                 product.getName(),
@@ -41,13 +51,12 @@ public record ProductResponseDTO(
                 product.getPrice() != null ? product.getPrice().getValue() : null,
                 product.getCondition() != null ? product.getCondition().getValue() : null,
                 product.getDiscount() != null ? product.getDiscount().getValue() : null,
-                product.getBrandId(),
                 product.getSubCategoryId(),
-                product.getDeletedAt(),
                 product.getCreatedAt(),
                 product.getUpdatedAt(),
-                product.getBrand(),
-                imagesDTO);
+                brandDTO,
+                imagesDTO,
+                productSpecificationsDTO);
     }
 }
 
