@@ -1,27 +1,31 @@
 package com.accomputers.api.infrastructure.persistence.jpa.mappers;
 
-import com.accomputers.api.domain.entities.Role;
-import com.accomputers.api.infrastructure.persistence.jpa.entities.RoleEntity;
+import com.accomputers.api.domain.entities.Brand;
+import com.accomputers.api.infrastructure.persistence.jpa.entities.BrandEntity;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class RoleMapper {
+public class BrandMapper {
 
-    public Role toDomain(RoleEntity entity) {
+    public Brand toDomain(BrandEntity entity) {
         if (entity == null) {
             return null;
         }
 
-        return new Role(
-            entity.getId(),
-            entity.getName()
-        );
+        try {
+            Constructor<Brand> constructor = Brand.class.getDeclaredConstructor(Integer.class, String.class);
+            constructor.setAccessible(true);
+            return constructor.newInstance(entity.getId(), entity.getName());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create Brand from BrandEntity", e);
+        }
     }
 
-    public List<Role> toDomain(List<RoleEntity> entities) {
+    public List<Brand> toDomain(List<BrandEntity> entities) {
         if (entities == null || entities.isEmpty()) {
             return List.of();
         }
@@ -30,18 +34,18 @@ public class RoleMapper {
                 .collect(Collectors.toList());
     }
 
-    public RoleEntity toEntity(Role domain) {
+    public BrandEntity toEntity(Brand domain) {
         if (domain == null) {
             return null;
         }
 
-        RoleEntity entity = new RoleEntity();
+        BrandEntity entity = new BrandEntity();
         entity.setId(domain.getId());
         entity.setName(domain.getName());
         return entity;
     }
 
-    public List<RoleEntity> toEntity(List<Role> domains) {
+    public List<BrandEntity> toEntity(List<Brand> domains) {
         if (domains == null || domains.isEmpty()) {
             return List.of();
         }
@@ -50,3 +54,4 @@ public class RoleMapper {
                 .collect(Collectors.toList());
     }
 }
+

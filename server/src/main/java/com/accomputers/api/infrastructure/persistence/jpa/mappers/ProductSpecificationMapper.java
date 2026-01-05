@@ -1,52 +1,97 @@
 package com.accomputers.api.infrastructure.persistence.jpa.mappers;
 
 import com.accomputers.api.domain.entities.ProductSpecification;
-import com.accomputers.api.infrastructure.persistence.jpa.entities.ProductEntity;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.ProductSpecificationEntity;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.SpecificationEntity;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.SpecificationValueEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductSpecificationMapper {
+
+    private final SpecificationMapper specificationMapper;
+    private final SpecificationValueMapper specificationValueMapper;
+
+    @Autowired
+    public ProductSpecificationMapper(SpecificationMapper specificationMapper, SpecificationValueMapper specificationValueMapper) {
+        this.specificationMapper = specificationMapper;
+        this.specificationValueMapper = specificationValueMapper;
+    }
 
     public ProductSpecification toDomain(ProductSpecificationEntity entity) {
         if (entity == null) {
             return null;
         }
 
-        return new ProductSpecification(
+        ProductSpecification productSpecification = new ProductSpecification(
+            entity.getId(),
             entity.getProduct() != null ? entity.getProduct().getId() : null,
             entity.getSpecification() != null ? entity.getSpecification().getId() : null,
             entity.getValue(),
             entity.getSpecificationValue() != null ? entity.getSpecificationValue().getId() : null
         );
+
+        // Mapear relaciones usando mappers
+        if (entity.getSpecification() != null) {
+            productSpecification.setSpecification(specificationMapper.toDomain(entity.getSpecification()));
+        }
+        if (entity.getSpecificationValue() != null) {
+            productSpecification.setSpecificationValue(specificationValueMapper.toDomain(entity.getSpecificationValue()));
+        }
+
+        return productSpecification;
     }
 
-    public ProductSpecificationEntity toEntity(ProductSpecification domain, ProductEntity productEntity) {
+    public List<ProductSpecification> toDomain(List<ProductSpecificationEntity> entities) {
+        if (entities == null || entities.isEmpty()) {
+            return List.of();
+        }
+        return entities.stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    public ProductSpecificationEntity toEntity(ProductSpecification domain) {
         if (domain == null) {
             return null;
         }
 
         ProductSpecificationEntity entity = new ProductSpecificationEntity();
-        entity.setId(null); // New entity, no ID yet
-        entity.setProduct(productEntity);
+        entity.setId(domain.getId());
+        entity.setValue(domain.getValue());
 
-        if (domain.getSpecificationId() != null) {
+        // Mapear relaciones usando mappers
+        if (domain.getSpecification() != null) {
+            entity.setSpecification(specificationMapper.toEntity(domain.getSpecification()));
+        } else if (domain.getSpecificationId() != null) {
             SpecificationEntity specificationEntity = new SpecificationEntity();
             specificationEntity.setId(domain.getSpecificationId());
             entity.setSpecification(specificationEntity);
         }
 
-        entity.setValue(domain.getValue());
-
-        if (domain.getIdValue() != null) {
+        if (domain.getSpecificationValue() != null) {
+            entity.setSpecificationValue(specificationValueMapper.toEntity(domain.getSpecificationValue()));
+        } else if (domain.getIdValue() != null) {
             SpecificationValueEntity specificationValueEntity = new SpecificationValueEntity();
             specificationValueEntity.setId(domain.getIdValue());
             entity.setSpecificationValue(specificationValueEntity);
         }
 
+        // product se establece externamente si es necesario
         return entity;
+    }
+
+    public List<ProductSpecificationEntity> toEntity(List<ProductSpecification> domains) {
+        if (domains == null || domains.isEmpty()) {
+            return List.of();
+        }
+        return domains.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }
 

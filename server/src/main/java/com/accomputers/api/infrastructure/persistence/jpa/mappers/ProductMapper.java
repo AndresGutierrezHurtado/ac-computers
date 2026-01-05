@@ -1,24 +1,30 @@
 package com.accomputers.api.infrastructure.persistence.jpa.mappers;
 
-import com.accomputers.api.domain.entities.Brand;
-import com.accomputers.api.domain.entities.Image;
 import com.accomputers.api.domain.entities.Product;
 import com.accomputers.api.domain.valueobjects.Condition;
 import com.accomputers.api.domain.valueobjects.Discount;
 import com.accomputers.api.domain.valueobjects.Price;
-import com.accomputers.api.domain.valueobjects.Url;
-import com.accomputers.api.infrastructure.persistence.jpa.entities.BrandEntity;
-import com.accomputers.api.infrastructure.persistence.jpa.entities.ImageEntity;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.ProductEntity;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.SubCategoryEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class ProductMapper {
+
+    private final BrandMapper brandMapper;
+    private final ImageMapper imageMapper;
+    private final ProductSpecificationMapper productSpecificationMapper;
+
+    @Autowired
+    public ProductMapper(BrandMapper brandMapper, ImageMapper imageMapper, ProductSpecificationMapper productSpecificationMapper) {
+        this.brandMapper = brandMapper;
+        this.imageMapper = imageMapper;
+        this.productSpecificationMapper = productSpecificationMapper;
+    }
 
     public Product toDomain(ProductEntity entity) {
         if (entity == null) {
@@ -39,25 +45,18 @@ public class ProductMapper {
             entity.getUpdatedAt()
         );
 
+        // Mapear relaciones usando mappers
         if (entity.getBrand() != null) {
-            try {
-                Constructor<Brand> constructor = Brand.class.getDeclaredConstructor(String.class, String.class);
-                constructor.setAccessible(true);
-                Brand brand = constructor.newInstance(
-                    entity.getBrand().getId(),
-                    entity.getBrand().getName()
-                );
-                product.setBrand(brand);
-            } catch (Exception e) {
-                // If reflection fails, skip setting Brand
-            }
+            product.setBrand(brandMapper.toDomain(entity.getBrand()));
+            product.setBrandId(entity.getBrand().getId());
         }
 
         if (entity.getImages() != null && !entity.getImages().isEmpty()) {
-            List<Image> images = entity.getImages().stream()
-                .map(this::imageToDomain)
-                .collect(Collectors.toList());
-            product.setImages(images);
+            product.setImages(imageMapper.toDomain(entity.getImages()));
+        }
+
+        if (entity.getProductSpecifications() != null && !entity.getProductSpecifications().isEmpty()) {
+            product.setProductSpecifications(productSpecificationMapper.toDomain(entity.getProductSpecifications()));
         }
 
         return product;
@@ -86,13 +85,13 @@ public class ProductMapper {
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setUpdatedAt(domain.getUpdatedAt());
 
-        if (domain.getBrand() != null && domain.getBrand().getId() != null) {
-            BrandEntity brandEntity = new BrandEntity();
-            brandEntity.setId(domain.getBrand().getId());
-            brandEntity.setName(domain.getBrand().getName());
-            entity.setBrand(brandEntity);
+        // Mapear relaciones usando mappers
+        if (domain.getBrand() != null) {
+            entity.setBrand(brandMapper.toEntity(domain.getBrand()));
         } else if (domain.getBrandId() != null) {
-            BrandEntity brandEntity = new BrandEntity();
+            // Crear BrandEntity directamente cuando solo tenemos el ID
+            com.accomputers.api.infrastructure.persistence.jpa.entities.BrandEntity brandEntity = 
+                new com.accomputers.api.infrastructure.persistence.jpa.entities.BrandEntity();
             brandEntity.setId(domain.getBrandId());
             entity.setBrand(brandEntity);
         }
@@ -104,42 +103,40 @@ public class ProductMapper {
         }
 
         if (domain.getImages() != null && !domain.getImages().isEmpty()) {
-            List<ImageEntity> imageEntities = domain.getImages().stream()
-                .map(img -> imageToEntity(img, entity))
-                .collect(Collectors.toList());
+            List<com.accomputers.api.infrastructure.persistence.jpa.entities.ImageEntity> imageEntities = 
+                imageMapper.toEntity(domain.getImages());
+            // Establecer la relación con el producto
+            imageEntities.forEach(img -> img.setProduct(entity));
             entity.setImages(imageEntities);
         }
 
+        if (domain.getProductSpecifications() != null && !domain.getProductSpecifications().isEmpty()) {
+            List<com.accomputers.api.infrastructure.persistence.jpa.entities.ProductSpecificationEntity> specEntities = 
+                productSpecificationMapper.toEntity(domain.getProductSpecifications());
+            // Establecer la relación con el producto
+            specEntities.forEach(spec -> spec.setProduct(entity));
+            entity.setProductSpecifications(specEntities);
+        }
+
         return entity;
     }
 
-    private Image imageToDomain(ImageEntity entity) {
-        if (entity == null) {
-            return null;
+    public List<Product> toDomain(List<ProductEntity> entities) {
+        if (entities == null || entities.isEmpty()) {
+            return List.of();
         }
-
-        Image image = new Image(
-            entity.getId(),
-            new Url(entity.getUrl()),
-            entity.getIsMain(),
-            entity.getProduct() != null ? entity.getProduct().getId() : null
-        );
-
-        return image;
+        return entities.stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
     }
 
-    private ImageEntity imageToEntity(Image domain, ProductEntity productEntity) {
-        if (domain == null) {
-            return null;
+    public List<ProductEntity> toEntity(List<Product> domains) {
+        if (domains == null || domains.isEmpty()) {
+            return List.of();
         }
-
-        ImageEntity entity = new ImageEntity();
-        entity.setId(domain.getId());
-        entity.setUrl(domain.getUrl() != null ? domain.getUrl().getValue() : null);
-        entity.setIsMain(domain.getIsMain());
-        entity.setProduct(productEntity);
-
-        return entity;
+        return domains.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }
 
