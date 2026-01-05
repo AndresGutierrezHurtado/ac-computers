@@ -1,6 +1,7 @@
 package com.accomputers.api.domain.entities;
 
 public class ProductSpecification {
+    private Integer id;
     private Integer productId;
     private Integer specificationId;
     private String value;
@@ -9,7 +10,8 @@ public class ProductSpecification {
     private Specification specification;
     private SpecificationValue specificationValue;
 
-    public ProductSpecification(Integer productId, Integer specificationId, String value, Integer idValue) {
+    public ProductSpecification(Integer id, Integer productId, Integer specificationId, String value, Integer idValue) {
+        this.id = id;
         this.productId = productId;
         this.specificationId = specificationId;
         this.value = value;
@@ -17,6 +19,10 @@ public class ProductSpecification {
     }
 
     // Getters
+    public Integer getId() {
+        return id;
+    }
+
     public Integer getProductId() {
         return productId;
     }
@@ -46,6 +52,10 @@ public class ProductSpecification {
     }
 
     // Setters
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setProductId(Integer productId) {
         this.productId = productId;
     }

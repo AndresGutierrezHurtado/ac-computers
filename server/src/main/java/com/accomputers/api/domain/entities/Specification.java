@@ -12,7 +12,7 @@ public class Specification {
     private Boolean isMandatory;
     private Integer subCategoryId;
 
-    Specification(Integer id, String name, Slug slug, String type, String unit, Boolean isFilterable, Boolean isMandatory, Integer subCategoryId) {
+    public Specification(Integer id, String name, Slug slug, String type, String unit, Boolean isFilterable, Boolean isMandatory, Integer subCategoryId) {
         this.id = id;
         this.name = name;
         this.slug = slug;

@@ -20,6 +20,7 @@ public class Product {
     private LocalDateTime updatedAt;
     private Brand brand;
     private List<Image> images;
+    private List<ProductSpecification> productSpecifications;
 
     public Product(
             Integer id,
@@ -99,6 +100,10 @@ public class Product {
         return images;
     }
 
+    public List<ProductSpecification> getProductSpecifications() {
+        return productSpecifications;
+    }
+
     // Setters
     public void setId(Integer id) {
         this.id = id;
@@ -138,5 +143,9 @@ public class Product {
 
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    public void setProductSpecifications(List<ProductSpecification> productSpecifications) {
+        this.productSpecifications = productSpecifications;
     }
 }

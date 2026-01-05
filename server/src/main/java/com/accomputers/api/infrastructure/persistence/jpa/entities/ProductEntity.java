@@ -49,6 +49,9 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImageEntity> images = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductSpecificationEntity> productSpecifications = new ArrayList<>();
+
     public enum ConditionType {
         NEW,
         USED,
@@ -180,6 +183,14 @@ public class ProductEntity {
 
     public void setImages(List<ImageEntity> images) {
         this.images = images;
+    }
+
+    public List<ProductSpecificationEntity> getProductSpecifications() {
+        return productSpecifications;
+    }
+
+    public void setProductSpecifications(List<ProductSpecificationEntity> productSpecifications) {
+        this.productSpecifications = productSpecifications;
     }
 
     @Override
