@@ -2,8 +2,6 @@ package com.accomputers.api.infrastructure.persistence.jpa.mappers;
 
 import com.accomputers.api.domain.entities.ProductSpecification;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.ProductSpecificationEntity;
-import com.accomputers.api.infrastructure.persistence.jpa.entities.SpecificationEntity;
-import com.accomputers.api.infrastructure.persistence.jpa.entities.SpecificationValueEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +13,15 @@ public class ProductSpecificationMapper {
 
     private final SpecificationMapper specificationMapper;
     private final SpecificationValueMapper specificationValueMapper;
+    private final ProductMapper productMapper;
 
     @Autowired
-    public ProductSpecificationMapper(SpecificationMapper specificationMapper, SpecificationValueMapper specificationValueMapper) {
+    public ProductSpecificationMapper(SpecificationMapper specificationMapper,
+                                      SpecificationValueMapper specificationValueMapper,
+                                      ProductMapper productMapper) {
         this.specificationMapper = specificationMapper;
         this.specificationValueMapper = specificationValueMapper;
+        this.productMapper = productMapper;
     }
 
     public ProductSpecification toDomain(ProductSpecificationEntity entity) {
@@ -28,19 +30,19 @@ public class ProductSpecificationMapper {
         }
 
         ProductSpecification productSpecification = new ProductSpecification(
-            entity.getId(),
-            entity.getProduct() != null ? entity.getProduct().getId() : null,
-            entity.getSpecification() != null ? entity.getSpecification().getId() : null,
-            entity.getValue(),
-            entity.getSpecificationValue() != null ? entity.getSpecificationValue().getId() : null
-        );
+                entity.getId(),
+                entity.getProduct() != null ? entity.getProduct().getId() : null,
+                entity.getSpecification() != null ? entity.getSpecification().getId() : null,
+                entity.getValue(),
+                entity.getSpecificationValue() != null ? entity.getSpecificationValue().getId() : null);
 
         // Mapear relaciones usando mappers
         if (entity.getSpecification() != null) {
             productSpecification.setSpecification(specificationMapper.toDomain(entity.getSpecification()));
         }
         if (entity.getSpecificationValue() != null) {
-            productSpecification.setSpecificationValue(specificationValueMapper.toDomain(entity.getSpecificationValue()));
+            productSpecification
+                    .setSpecificationValue(specificationValueMapper.toDomain(entity.getSpecificationValue()));
         }
 
         return productSpecification;
@@ -65,20 +67,16 @@ public class ProductSpecificationMapper {
         entity.setValue(domain.getValue());
 
         // Mapear relaciones usando mappers
+        if (domain.getProduct() != null) {
+            entity.setProduct(productMapper.toEntity(domain.getProduct()));
+        }
+
         if (domain.getSpecification() != null) {
             entity.setSpecification(specificationMapper.toEntity(domain.getSpecification()));
-        } else if (domain.getSpecificationId() != null) {
-            SpecificationEntity specificationEntity = new SpecificationEntity();
-            specificationEntity.setId(domain.getSpecificationId());
-            entity.setSpecification(specificationEntity);
         }
 
         if (domain.getSpecificationValue() != null) {
             entity.setSpecificationValue(specificationValueMapper.toEntity(domain.getSpecificationValue()));
-        } else if (domain.getIdValue() != null) {
-            SpecificationValueEntity specificationValueEntity = new SpecificationValueEntity();
-            specificationValueEntity.setId(domain.getIdValue());
-            entity.setSpecificationValue(specificationValueEntity);
         }
 
         // product se establece externamente si es necesario
@@ -94,4 +92,3 @@ public class ProductSpecificationMapper {
                 .collect(Collectors.toList());
     }
 }
-

@@ -2,7 +2,6 @@ package com.accomputers.api.infrastructure.persistence.jpa.repositories;
 
 import com.accomputers.api.application.ports.output.repositories.ProductSpecificationRepositoryInterface;
 import com.accomputers.api.domain.entities.ProductSpecification;
-import com.accomputers.api.infrastructure.persistence.jpa.entities.ProductEntity;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.ProductSpecificationEntity;
 import com.accomputers.api.infrastructure.persistence.jpa.jpaRepositories.ProductSpecificationJpaRepository;
 import com.accomputers.api.infrastructure.persistence.jpa.mappers.ProductSpecificationMapper;
@@ -17,9 +16,7 @@ public class ProductSpecificationRepository implements ProductSpecificationRepos
     private final ProductSpecificationJpaRepository jpaRepository;
     private final ProductSpecificationMapper mapper;
 
-    public ProductSpecificationRepository(
-            ProductSpecificationJpaRepository jpaRepository,
-            ProductSpecificationMapper mapper) {
+    public ProductSpecificationRepository(ProductSpecificationJpaRepository jpaRepository, ProductSpecificationMapper mapper) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
     }
@@ -31,21 +28,16 @@ public class ProductSpecificationRepository implements ProductSpecificationRepos
         }
 
         ProductSpecificationEntity entity = mapper.toEntity(productSpecification);
-        if (productSpecification.getProductId() != null) {
-            ProductEntity productEntity = new ProductEntity();
-            productEntity.setId(productSpecification.getProductId());
-            entity.setProduct(productEntity);
-        }
+
         ProductSpecificationEntity savedEntity = jpaRepository.save(entity);
+
         return mapper.toDomain(savedEntity);
     }
 
     @Override
     public List<ProductSpecification> findByProductId(Integer productId) {
         List<ProductSpecificationEntity> entities = jpaRepository.findByProductId(productId);
-        return entities.stream()
-            .map(mapper::toDomain)
-            .collect(Collectors.toList());
+        return entities.stream().map(mapper::toDomain).collect(Collectors.toList());
     }
 
     @Override

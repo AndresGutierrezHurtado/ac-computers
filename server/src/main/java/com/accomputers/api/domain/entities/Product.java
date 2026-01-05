@@ -21,6 +21,7 @@ public class Product {
     private Brand brand;
     private List<Image> images;
     private List<ProductSpecification> productSpecifications;
+    private SubCategory subCategory;
 
     public Product(
             Integer id,
@@ -96,6 +97,10 @@ public class Product {
         return brand;
     }
 
+    public SubCategory getSubCategory() {
+        return subCategory;
+    }
+
     public List<Image> getImages() {
         return images;
     }
@@ -147,5 +152,9 @@ public class Product {
 
     public void setProductSpecifications(List<ProductSpecification> productSpecifications) {
         this.productSpecifications = productSpecifications;
+    }
+
+    public void setSubCategory(SubCategory subCategory) {
+        this.subCategory = subCategory;
     }
 }

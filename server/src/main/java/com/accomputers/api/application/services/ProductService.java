@@ -11,14 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.accomputers.api.domain.entities.Image;
+
 // Domain
 import com.accomputers.api.domain.entities.Product;
+import com.accomputers.api.domain.entities.Brand;
+import com.accomputers.api.domain.entities.SubCategory;
+import com.accomputers.api.domain.entities.Specification;
+import com.accomputers.api.domain.entities.SpecificationValue;
 import com.accomputers.api.domain.entities.ProductSpecification;
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
 import com.accomputers.api.domain.valueobjects.Condition;
 import com.accomputers.api.domain.valueobjects.Discount;
 import com.accomputers.api.domain.valueobjects.Price;
 import com.accomputers.api.domain.valueobjects.Url;
+
 // Ports
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
 import com.accomputers.api.application.ports.output.FileManagerInterface;
@@ -26,6 +32,10 @@ import com.accomputers.api.application.ports.output.ProductRecommendationInterfa
 import com.accomputers.api.application.ports.output.repositories.ImageRepositoryInterface;
 import com.accomputers.api.application.ports.output.repositories.ProductRepositoryInterface;
 import com.accomputers.api.application.ports.output.repositories.ProductSpecificationRepositoryInterface;
+import com.accomputers.api.application.ports.output.repositories.BrandRepositoryInterface;
+import com.accomputers.api.application.ports.output.repositories.SubCategoryRepositoryInterface;
+import com.accomputers.api.application.ports.output.repositories.SpecificationRepositoryInterface;
+import com.accomputers.api.application.ports.output.repositories.SpecificationValueRepositoryInterface;
 
 // DTOs
 import com.accomputers.api.application.dtos.createProductDTO;
@@ -43,6 +53,10 @@ public class ProductService implements ProductServiceInterface {
     private final FileManagerInterface fileManagerInterface;
     private final ImageRepositoryInterface imageRepository;
     private final ProductSpecificationRepositoryInterface productSpecificationRepository;
+    private final BrandRepositoryInterface brandRepository;
+    private final SubCategoryRepositoryInterface subCategoryRepository;
+    private final SpecificationRepositoryInterface specificationRepository;
+    private final SpecificationValueRepositoryInterface specificationValueRepository;
 
     @Autowired
     public ProductService(
@@ -50,11 +64,19 @@ public class ProductService implements ProductServiceInterface {
             ProductRecommendationInterface productRecommendationInterface,
             ImageRepositoryInterface imageRepository,
             ProductSpecificationRepositoryInterface productSpecificationRepository,
+            BrandRepositoryInterface brandRepository,
+            SubCategoryRepositoryInterface subCategoryRepository,
+            SpecificationRepositoryInterface specificationRepository,
+            SpecificationValueRepositoryInterface specificationValueRepository,
             FileManagerInterface fileManagerInterface) {
         this.productRepository = productRepository;
         this.productRecommendationInterface = productRecommendationInterface;
         this.imageRepository = imageRepository;
         this.productSpecificationRepository = productSpecificationRepository;
+        this.brandRepository = brandRepository;
+        this.subCategoryRepository = subCategoryRepository;
+        this.specificationRepository = specificationRepository;
+        this.specificationValueRepository = specificationValueRepository;
         this.fileManagerInterface = fileManagerInterface;
     }
 
@@ -62,23 +84,39 @@ public class ProductService implements ProductServiceInterface {
     public ProductResponseDTO createProduct(createProductDTO productDTO) {
         LocalDateTime now = LocalDateTime.now();
 
-        String conditionValue = StringUtils.hasText(productDTO.condition()) 
-            ? productDTO.condition() 
-            : "new";
+        String conditionValue = StringUtils.hasText(productDTO.condition())
+                ? productDTO.condition()
+                : "new";
 
         Product product = new Product(
                 null,
                 productDTO.name(),
                 productDTO.description(),
-                new Price((float) productDTO.price()),
+                new Price(productDTO.price()),
                 new Condition(conditionValue),
                 new Discount((float) productDTO.discount()),
                 productDTO.brandId(),
                 productDTO.subCategoryId(),
                 null,
                 now,
-                now
-        );
+                now);
+
+        // Search brand and subCategory
+        Brand brand = brandRepository.findById(productDTO.brandId());
+
+        if (brand == null) {
+            throw new EntityNotFoundException("Brand", productDTO.brandId());
+        }
+
+        product.setBrand(brand);
+
+        SubCategory subCategory = subCategoryRepository.findById(productDTO.subCategoryId());
+
+        if (subCategory == null) {
+            throw new EntityNotFoundException("SubCategory", productDTO.subCategoryId());
+        }
+
+        product.setSubCategory(subCategory);
 
         Product savedProduct = productRepository.save(product);
 
@@ -96,7 +134,29 @@ public class ProductService implements ProductServiceInterface {
         // save product specifications
         if (productDTO.specifications() != null) {
             for (ProductSpecificationDTO productSpecificationDTO : productDTO.specifications()) {
-                ProductSpecification productSpecification = new ProductSpecification(null, savedProduct.getId(), productSpecificationDTO.specificationId(), productSpecificationDTO.value(), productSpecificationDTO.specificationValueId());
+                ProductSpecification productSpecification = new ProductSpecification(null, savedProduct.getId(),
+                        productSpecificationDTO.specificationId(), productSpecificationDTO.value(),
+                        productSpecificationDTO.specificationValueId());
+
+                productSpecification.setProduct(savedProduct);
+
+                Specification specification = specificationRepository
+                        .findById(productSpecificationDTO.specificationId());
+                if (specification == null) {
+                    throw new EntityNotFoundException("Specification", productSpecificationDTO.specificationId());
+                }
+                productSpecification.setSpecification(specification);
+
+                if (productSpecificationDTO.specificationValueId() != null) {
+                    SpecificationValue specificationValue = specificationValueRepository
+                            .findById(productSpecificationDTO.specificationValueId());
+                    if (specificationValue == null) {
+                        throw new EntityNotFoundException("SpecificationValue",
+                                productSpecificationDTO.specificationValueId());
+                    }
+                    productSpecification.setSpecificationValue(specificationValue);
+                }
+
                 productSpecificationRepository.save(productSpecification);
             }
         }
@@ -164,8 +224,7 @@ public class ProductService implements ProductServiceInterface {
                 product.getSubCategoryId(),
                 product.getDeletedAt(),
                 product.getCreatedAt(),
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
 
         // Preserve brand if it exists
         updatedProduct.setBrand(product.getBrand());

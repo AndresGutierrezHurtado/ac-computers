@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDTO<Void>> handleException(Exception e) {
-        System.out.println("SQLException: " + e.getMessage() + " Stack Trace: " + e.getStackTrace());
+        System.out.println("Exception: " + e.getMessage() + " Stack Trace: " + e.getStackTrace());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO<Void>("Internal server error", false));
     }
 }
