@@ -42,7 +42,7 @@ public class ImageMapper {
         entity.setId(domain.getId());
         entity.setUrl(domain.getUrl() != null ? domain.getUrl().getValue() : null);
         entity.setIsMain(domain.getIsMain());
-        // product se establece externamente si es necesario
+
         return entity;
     }
 

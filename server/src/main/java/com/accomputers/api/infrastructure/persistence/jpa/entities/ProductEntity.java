@@ -29,13 +29,11 @@ public class ProductEntity {
     @Column(name = "discount", nullable = false)
     private Float discount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brand_id", nullable = false)
-    private BrandEntity brand;
+    @Column(name = "brand_id", nullable = false, insertable = false, updatable = false)
+    private Integer brandId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sub_category_id", nullable = false)
-    private SubCategoryEntity subCategory;
+    @Column(name = "sub_category_id", nullable = false, insertable = false, updatable = false)
+    private Integer subCategoryId;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
@@ -45,6 +43,14 @@ public class ProductEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sub_category_id", nullable = false)
+    private SubCategoryEntity subCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id", nullable = false)
+    private BrandEntity brand;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImageEntity> images = new ArrayList<>();
@@ -74,129 +80,150 @@ public class ProductEntity {
     }
 
     public ProductEntity(Integer id, String name, String description, Float price, ConditionType condition,
-                        Float discount, BrandEntity brand, SubCategoryEntity subCategory, LocalDateTime deletedAt,
-                        LocalDateTime createdAt, LocalDateTime updatedAt) {
+            Float discount, Integer brandId, Integer subCategoryId, LocalDateTime deletedAt,
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.condition = condition;
         this.discount = discount;
-        this.brand = brand;
-        this.subCategory = subCategory;
+        this.brandId = brandId;
+        this.subCategoryId = subCategoryId;
         this.deletedAt = deletedAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
+    // Getters
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
-        this.price = price;
-    }
-
     public ConditionType getCondition() {
         return condition;
-    }
-
-    public void setCondition(ConditionType condition) {
-        this.condition = condition;
     }
 
     public Float getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Float discount) {
-        this.discount = discount;
+    public Integer getBrandId() {
+        return brandId;
     }
 
     public BrandEntity getBrand() {
         return brand;
     }
 
-    public void setBrand(BrandEntity brand) {
-        this.brand = brand;
+    public Integer getSubCategoryId() {
+        return subCategoryId;
     }
 
     public SubCategoryEntity getSubCategory() {
         return subCategory;
     }
 
-    public void setSubCategory(SubCategoryEntity subCategory) {
-        this.subCategory = subCategory;
-    }
-
     public LocalDateTime getDeletedAt() {
         return deletedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
     }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public List<ImageEntity> getImages() {
         return images;
     }
 
-    public void setImages(List<ImageEntity> images) {
-        this.images = images;
-    }
-
     public List<ProductSpecificationEntity> getProductSpecifications() {
         return productSpecifications;
+    }
+
+    // Getters
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
+    }
+
+    public void setCondition(ConditionType condition) {
+        this.condition = condition;
+    }
+
+    public void setDiscount(Float discount) {
+        this.discount = discount;
+    }
+
+    public void setBrandId(Integer brandId) {
+        this.brandId = brandId;
+    }
+
+    public void setBrand(BrandEntity brand) {
+        this.brand = brand;
+    }
+
+    public void setSubCategoryId(Integer subCategoryId) {
+        this.subCategoryId = subCategoryId;
+    }
+
+    public void setSubCategory(SubCategoryEntity subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setImages(List<ImageEntity> images) {
+        this.images = images;
     }
 
     public void setProductSpecifications(List<ProductSpecificationEntity> productSpecifications) {
         this.productSpecifications = productSpecifications;
     }
 
+    // Equals and HashCode
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ProductEntity that = (ProductEntity) o;
         return Objects.equals(id, that.id);
     }
@@ -206,4 +233,3 @@ public class ProductEntity {
         return Objects.hash(id);
     }
 }
-

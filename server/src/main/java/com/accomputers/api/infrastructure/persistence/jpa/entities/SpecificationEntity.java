@@ -28,6 +28,9 @@ public class SpecificationEntity {
     @Column(name = "is_mandatory", nullable = false)
     private Boolean isMandatory;
 
+    @Column(name = "sub_category_id", nullable = false, insertable = false, updatable = false)
+    private Integer subCategoryId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sub_category_id", nullable = false)
     private SubCategoryEntity subCategory;
@@ -36,7 +39,7 @@ public class SpecificationEntity {
     }
 
     public SpecificationEntity(Integer id, String name, String slug, String type, String unit,
-                               Boolean isFilterable, Boolean isMandatory, SubCategoryEntity subCategory) {
+            Boolean isFilterable, Boolean isMandatory, Integer subCategoryId) {
         this.id = id;
         this.name = name;
         this.slug = slug;
@@ -44,77 +47,90 @@ public class SpecificationEntity {
         this.unit = unit;
         this.isFilterable = isFilterable;
         this.isMandatory = isMandatory;
-        this.subCategory = subCategory;
+        this.subCategoryId = subCategoryId;
     }
 
+    // Getters
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getSlug() {
         return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getUnit() {
         return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
     }
 
     public Boolean getIsFilterable() {
         return isFilterable;
     }
 
-    public void setIsFilterable(Boolean isFilterable) {
-        this.isFilterable = isFilterable;
-    }
-
     public Boolean getIsMandatory() {
         return isMandatory;
     }
 
-    public void setIsMandatory(Boolean isMandatory) {
-        this.isMandatory = isMandatory;
+    public Integer getSubCategoryId() {
+        return subCategoryId;
     }
 
     public SubCategoryEntity getSubCategory() {
         return subCategory;
     }
 
+    // Setters
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public void setIsFilterable(Boolean isFilterable) {
+        this.isFilterable = isFilterable;
+    }
+
+    public void setIsMandatory(Boolean isMandatory) {
+        this.isMandatory = isMandatory;
+    }
+
+    public void setSubCategoryId(Integer subCategoryId) {
+        this.subCategoryId = subCategoryId;
+    }
+
     public void setSubCategory(SubCategoryEntity subCategory) {
         this.subCategory = subCategory;
     }
 
+    // Equals and HashCode
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         SpecificationEntity that = (SpecificationEntity) o;
         return Objects.equals(id, that.id);
     }
@@ -124,4 +140,3 @@ public class SpecificationEntity {
         return Objects.hash(id);
     }
 }
-

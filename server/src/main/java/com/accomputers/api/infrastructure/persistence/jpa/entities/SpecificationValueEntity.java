@@ -10,9 +10,8 @@ public class SpecificationValueEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "specification_id", nullable = false)
-    private SpecificationEntity specification;
+    @Column(name = "specification_id", nullable = false, insertable = false, updatable = false)
+    private Integer specificationId;
 
     @Column(name = "value", nullable = false, columnDefinition = "TEXT")
     private String value;
@@ -20,52 +19,69 @@ public class SpecificationValueEntity {
     @Column(name = "specification_order", nullable = false)
     private Integer order;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "specification_id", nullable = false)
+    private SpecificationEntity specification;
+
     public SpecificationValueEntity() {
     }
 
-    public SpecificationValueEntity(Integer id, SpecificationEntity specification, String value, Integer order) {
+    public SpecificationValueEntity(Integer id, Integer specificationId, String value, Integer order) {
         this.id = id;
-        this.specification = specification;
+        this.specificationId = specificationId;
         this.value = value;
         this.order = order;
     }
 
+    // Getters
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Integer getSpecificationId() {
+        return specificationId;
     }
 
     public SpecificationEntity getSpecification() {
         return specification;
     }
 
-    public void setSpecification(SpecificationEntity specification) {
-        this.specification = specification;
-    }
-
     public String getValue() {
         return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
     public Integer getOrder() {
         return order;
     }
 
+    // Setters
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setSpecificationId(Integer specificationId) {
+        this.specificationId = specificationId;
+    }
+
+    public void setSpecification(SpecificationEntity specification) {
+        this.specification = specification;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public void setOrder(Integer order) {
         this.order = order;
     }
 
+    // Equals and HashCode
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         SpecificationValueEntity that = (SpecificationValueEntity) o;
         return Objects.equals(id, that.id);
     }
@@ -75,4 +91,3 @@ public class SpecificationValueEntity {
         return Objects.hash(id);
     }
 }
-

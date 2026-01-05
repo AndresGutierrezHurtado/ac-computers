@@ -16,6 +16,9 @@ public class ImageEntity {
     @Column(name = "is_main", nullable = false)
     private Boolean isMain;
 
+    @Column(name = "product_id", nullable = false, insertable = false, updatable = false)
+    private Integer productId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
@@ -23,11 +26,11 @@ public class ImageEntity {
     public ImageEntity() {
     }
 
-    public ImageEntity(Integer id, String url, Boolean isMain, ProductEntity product) {
+    public ImageEntity(Integer id, String url, Boolean isMain, Integer productId) {
         this.id = id;
         this.url = url;
         this.isMain = isMain;
-        this.product = product;
+        this.productId = productId;
     }
 
     public Integer getId() {
@@ -52,6 +55,14 @@ public class ImageEntity {
 
     public void setIsMain(Boolean isMain) {
         this.isMain = isMain;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public ProductEntity getProduct() {

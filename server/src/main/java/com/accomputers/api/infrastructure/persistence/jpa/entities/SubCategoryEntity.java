@@ -19,6 +19,9 @@ public class SubCategoryEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "category_id", nullable = false, insertable = false, updatable = false)
+    private Integer categoryId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
@@ -26,48 +29,58 @@ public class SubCategoryEntity {
     public SubCategoryEntity() {
     }
 
-    public SubCategoryEntity(Integer id, String name, String slug, String description, CategoryEntity category) {
+    public SubCategoryEntity(Integer id, String name, String slug, String description, Integer categoryId) {
         this.id = id;
         this.name = name;
         this.slug = slug;
         this.description = description;
-        this.category = category;
+        this.categoryId = categoryId;
     }
 
+    // Getters
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getSlug() {
         return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public Integer getCategoryId() {
+        return categoryId;
     }
 
     public CategoryEntity getCategory() {
         return category;
+    }
+
+    // Setters
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public void setCategory(CategoryEntity category) {
@@ -76,8 +89,10 @@ public class SubCategoryEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         SubCategoryEntity that = (SubCategoryEntity) o;
         return Objects.equals(id, that.id);
     }
@@ -87,4 +102,3 @@ public class SubCategoryEntity {
         return Objects.hash(id);
     }
 }
-

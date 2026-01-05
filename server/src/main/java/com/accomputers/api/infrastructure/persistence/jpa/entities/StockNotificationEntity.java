@@ -11,9 +11,8 @@ public class StockNotificationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private ProductEntity product;
+    @Column(name = "product_id", nullable = false, insertable = false, updatable = false)
+    private Integer productId;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -26,6 +25,10 @@ public class StockNotificationEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private ProductEntity product;
 
     @PrePersist
     protected void onCreate() {
@@ -41,68 +44,81 @@ public class StockNotificationEntity {
     public StockNotificationEntity() {
     }
 
-    public StockNotificationEntity(Integer id, ProductEntity product, String email, Boolean isNotified,
-                                  LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public StockNotificationEntity(Integer id, Integer productId, String email, Boolean isNotified,
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.product = product;
+        this.productId = productId;
         this.email = email;
         this.isNotified = isNotified;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
+    // Getters
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Integer getProductId() {
+        return productId;
     }
 
     public ProductEntity getProduct() {
         return product;
     }
 
-    public void setProduct(ProductEntity product) {
-        this.product = product;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Boolean getIsNotified() {
         return isNotified;
     }
 
-    public void setIsNotified(Boolean isNotified) {
-        this.isNotified = isNotified;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
+    // Setters
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public void setProduct(ProductEntity product) {
+        this.product = product;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setIsNotified(Boolean isNotified) {
+        this.isNotified = isNotified;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
+    // Equals and HashCode
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         StockNotificationEntity that = (StockNotificationEntity) o;
         return Objects.equals(id, that.id);
     }
@@ -112,4 +128,3 @@ public class StockNotificationEntity {
         return Objects.hash(id);
     }
 }
-
