@@ -13,15 +13,12 @@ public class ProductSpecificationMapper {
 
     private final SpecificationMapper specificationMapper;
     private final SpecificationValueMapper specificationValueMapper;
-    private final ProductMapper productMapper;
 
     @Autowired
     public ProductSpecificationMapper(SpecificationMapper specificationMapper,
-                                      SpecificationValueMapper specificationValueMapper,
-                                      ProductMapper productMapper) {
+            SpecificationValueMapper specificationValueMapper) {
         this.specificationMapper = specificationMapper;
         this.specificationValueMapper = specificationValueMapper;
-        this.productMapper = productMapper;
     }
 
     public ProductSpecification toDomain(ProductSpecificationEntity entity) {
@@ -37,9 +34,6 @@ public class ProductSpecificationMapper {
                 entity.getSpecificationValueId());
 
         // Mapear relaciones usando mappers
-        if (entity.getProduct() != null) {
-            productSpecification.setProduct(productMapper.toDomain(entity.getProduct()));
-        }
         if (entity.getSpecification() != null) {
             productSpecification.setSpecification(specificationMapper.toDomain(entity.getSpecification()));
         }

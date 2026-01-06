@@ -38,7 +38,7 @@ public class ProductMapper {
                 entity.getName(),
                 entity.getDescription(),
                 new Price(entity.getPrice()),
-                new Condition(entity.getCondition() != null ? entity.getCondition().name().toLowerCase() : "new"),
+                new Condition(entity.getCondition().name()),
                 new Discount(entity.getDiscount()),
                 entity.getBrandId(),
                 entity.getSubCategoryId(),
@@ -55,11 +55,11 @@ public class ProductMapper {
             product.setSubCategory(subCategoryMapper.toDomain(entity.getSubCategory()));
         }
 
-        if (entity.getImages() != null && !entity.getImages().isEmpty()) {
+        if (entity.getImages() != null) {
             product.setImages(imageMapper.toDomain(entity.getImages()));
         }
 
-        if (entity.getProductSpecifications() != null && !entity.getProductSpecifications().isEmpty()) {
+        if (entity.getProductSpecifications() != null) {
             product.setProductSpecifications(productSpecificationMapper.toDomain(entity.getProductSpecifications()));
         }
 
@@ -76,19 +76,18 @@ public class ProductMapper {
         entity.setName(domain.getName());
         entity.setDescription(domain.getDescription());
         entity.setPrice(domain.getPrice() != null ? domain.getPrice().getValue() : null);
-
-        if (domain.getCondition() != null) {
-            ProductEntity.ConditionType conditionType = ProductEntity.ConditionType.valueOf(
-                    domain.getCondition().getConditionType().name());
-            entity.setCondition(conditionType);
-        }
-
         entity.setDiscount(domain.getDiscount() != null ? domain.getDiscount().getValue() : null);
         entity.setBrandId(domain.getBrandId());
         entity.setSubCategoryId(domain.getSubCategoryId());
         entity.setDeletedAt(domain.getDeletedAt());
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setUpdatedAt(domain.getUpdatedAt());
+
+        if (domain.getCondition() != null) {
+            ProductEntity.ConditionType conditionType = ProductEntity.ConditionType.valueOf(
+                    domain.getCondition().getConditionType().name());
+            entity.setCondition(conditionType);
+        }
 
         return entity;
     }

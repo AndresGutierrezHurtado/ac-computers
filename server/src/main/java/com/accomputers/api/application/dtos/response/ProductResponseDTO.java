@@ -13,10 +13,10 @@ public record ProductResponseDTO(
         Float price,
         String condition,
         Float discount,
-        Integer subCategoryId,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         BrandResponseDTO brand,
+        SubCategoryDTO subCategory,
         List<ImageResponseDTO> images,
         List<ProductSpecificationResponseDTO> productSpecifications) {
 
@@ -44,6 +44,11 @@ public record ProductResponseDTO(
             brandDTO = BrandResponseDTO.fromBrand(product.getBrand());
         }
 
+        SubCategoryDTO subCategoryDTO = null;
+        if (product.getSubCategory() != null) {
+            subCategoryDTO = SubCategoryDTO.fromSubCategory(product.getSubCategory());
+        }
+
         return new ProductResponseDTO(
                 product.getId(),
                 product.getName(),
@@ -51,10 +56,10 @@ public record ProductResponseDTO(
                 product.getPrice() != null ? product.getPrice().getValue() : null,
                 product.getCondition() != null ? product.getCondition().getValue() : null,
                 product.getDiscount() != null ? product.getDiscount().getValue() : null,
-                product.getSubCategoryId(),
                 product.getCreatedAt(),
                 product.getUpdatedAt(),
                 brandDTO,
+                subCategoryDTO,
                 imagesDTO,
                 productSpecificationsDTO);
     }
