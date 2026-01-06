@@ -8,7 +8,6 @@ public record UserResponseDTO(
         String firstName,
         String lastName,
         String email,
-        Integer roleId,
         Role role) {
 
     public static UserResponseDTO fromUser(User user) {
@@ -21,7 +20,6 @@ public record UserResponseDTO(
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail() != null ? user.getEmail().getValue() : null,
-                user.getRoleId(),
                 user.getRole());
     }
 }
