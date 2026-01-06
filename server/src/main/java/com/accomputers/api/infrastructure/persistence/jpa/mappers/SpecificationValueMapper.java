@@ -1,7 +1,6 @@
 package com.accomputers.api.infrastructure.persistence.jpa.mappers;
 
 import com.accomputers.api.domain.entities.SpecificationValue;
-import com.accomputers.api.infrastructure.persistence.jpa.entities.SpecificationEntity;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.SpecificationValueEntity;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +15,14 @@ public class SpecificationValueMapper {
             return null;
         }
 
-        return new SpecificationValue(
+        SpecificationValue specificationValue = new SpecificationValue(
                 entity.getId(),
-                entity.getSpecification() != null ? entity.getSpecification().getId() : null,
+                entity.getSpecificationId() != null ? entity.getSpecificationId() : (entity.getSpecification() != null ? entity.getSpecification().getId() : null),
                 entity.getValue(),
                 entity.getOrder()
         );
+
+        return specificationValue;
     }
 
     public List<SpecificationValue> toDomain(List<SpecificationValueEntity> entities) {
@@ -40,15 +41,10 @@ public class SpecificationValueMapper {
 
         SpecificationValueEntity entity = new SpecificationValueEntity();
         entity.setId(domain.getId());
+        entity.setSpecificationId(domain.getSpecificationId());
         entity.setValue(domain.getValue());
         entity.setOrder(domain.getOrder());
-        
-        if (domain.getSpecificationId() != null) {
-            SpecificationEntity specificationEntity = new SpecificationEntity();
-            specificationEntity.setId(domain.getSpecificationId());
-            entity.setSpecification(specificationEntity);
-        }
-        
+
         return entity;
     }
 

@@ -31,12 +31,15 @@ public class ProductSpecificationMapper {
 
         ProductSpecification productSpecification = new ProductSpecification(
                 entity.getId(),
-                entity.getProduct() != null ? entity.getProduct().getId() : null,
-                entity.getSpecification() != null ? entity.getSpecification().getId() : null,
+                entity.getProductId(),
+                entity.getSpecificationId(),
                 entity.getValue(),
-                entity.getSpecificationValue() != null ? entity.getSpecificationValue().getId() : null);
+                entity.getSpecificationValueId());
 
         // Mapear relaciones usando mappers
+        if (entity.getProduct() != null) {
+            productSpecification.setProduct(productMapper.toDomain(entity.getProduct()));
+        }
         if (entity.getSpecification() != null) {
             productSpecification.setSpecification(specificationMapper.toDomain(entity.getSpecification()));
         }
@@ -64,22 +67,11 @@ public class ProductSpecificationMapper {
 
         ProductSpecificationEntity entity = new ProductSpecificationEntity();
         entity.setId(domain.getId());
+        entity.setProductId(domain.getProductId());
+        entity.setSpecificationId(domain.getSpecificationId());
         entity.setValue(domain.getValue());
+        entity.setSpecificationValueId(domain.getIdValue());
 
-        // Mapear relaciones usando mappers
-        if (domain.getProduct() != null) {
-            entity.setProduct(productMapper.toEntity(domain.getProduct()));
-        }
-
-        if (domain.getSpecification() != null) {
-            entity.setSpecification(specificationMapper.toEntity(domain.getSpecification()));
-        }
-
-        if (domain.getSpecificationValue() != null) {
-            entity.setSpecificationValue(specificationValueMapper.toEntity(domain.getSpecificationValue()));
-        }
-
-        // product se establece externamente si es necesario
         return entity;
     }
 

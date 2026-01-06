@@ -15,10 +15,11 @@ public class RoleMapper {
             return null;
         }
 
-        return new Role(
-            entity.getId(),
-            entity.getName()
-        );
+        Role role = new Role(
+                entity.getId(),
+                entity.getName());
+
+        return role;
     }
 
     public List<Role> toDomain(List<RoleEntity> entities) {
@@ -38,6 +39,7 @@ public class RoleMapper {
         RoleEntity entity = new RoleEntity();
         entity.setId(domain.getId());
         entity.setName(domain.getName());
+
         return entity;
     }
 

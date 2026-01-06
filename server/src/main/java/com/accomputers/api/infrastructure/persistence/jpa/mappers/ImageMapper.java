@@ -16,12 +16,14 @@ public class ImageMapper {
             return null;
         }
 
-        return new Image(
+        Image image = new Image(
             entity.getId(),
             new Url(entity.getUrl()),
             entity.getIsMain(),
-            entity.getProduct() != null ? entity.getProduct().getId() : null
+            entity.getProductId()
         );
+
+        return image;
     }
 
     public List<Image> toDomain(List<ImageEntity> entities) {
@@ -42,6 +44,7 @@ public class ImageMapper {
         entity.setId(domain.getId());
         entity.setUrl(domain.getUrl() != null ? domain.getUrl().getValue() : null);
         entity.setIsMain(domain.getIsMain());
+        entity.setProductId(domain.getProductId());
 
         return entity;
     }

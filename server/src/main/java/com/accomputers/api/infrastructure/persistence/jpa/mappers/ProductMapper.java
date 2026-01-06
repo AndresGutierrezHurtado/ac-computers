@@ -40,8 +40,8 @@ public class ProductMapper {
                 new Price(entity.getPrice()),
                 new Condition(entity.getCondition() != null ? entity.getCondition().name().toLowerCase() : "new"),
                 new Discount(entity.getDiscount()),
-                null, // brandId - cannot convert String to Integer, use Brand object instead
-                entity.getSubCategory() != null ? entity.getSubCategory().getId() : null,
+                entity.getBrandId(),
+                entity.getSubCategoryId(),
                 entity.getDeletedAt(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt());
@@ -49,7 +49,10 @@ public class ProductMapper {
         // Mapear relaciones usando mappers
         if (entity.getBrand() != null) {
             product.setBrand(brandMapper.toDomain(entity.getBrand()));
-            product.setBrandId(entity.getBrand().getId());
+        }
+
+        if (entity.getSubCategory() != null) {
+            product.setSubCategory(subCategoryMapper.toDomain(entity.getSubCategory()));
         }
 
         if (entity.getImages() != null && !entity.getImages().isEmpty()) {
@@ -81,26 +84,11 @@ public class ProductMapper {
         }
 
         entity.setDiscount(domain.getDiscount() != null ? domain.getDiscount().getValue() : null);
+        entity.setBrandId(domain.getBrandId());
+        entity.setSubCategoryId(domain.getSubCategoryId());
         entity.setDeletedAt(domain.getDeletedAt());
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setUpdatedAt(domain.getUpdatedAt());
-
-        // Mapear relaciones usando mappers
-        if (domain.getBrand() != null) {
-            entity.setBrand(brandMapper.toEntity(domain.getBrand()));
-        }
-
-        if (domain.getSubCategory() != null) {
-            entity.setSubCategory(subCategoryMapper.toEntity(domain.getSubCategory()));
-        }
-
-        if (domain.getImages() != null && !domain.getImages().isEmpty()) {
-            entity.setImages(imageMapper.toEntity(domain.getImages()));
-        }
-
-        if (domain.getProductSpecifications() != null && !domain.getProductSpecifications().isEmpty()) {
-            entity.setProductSpecifications(productSpecificationMapper.toEntity(domain.getProductSpecifications()));
-        }
 
         return entity;
     }

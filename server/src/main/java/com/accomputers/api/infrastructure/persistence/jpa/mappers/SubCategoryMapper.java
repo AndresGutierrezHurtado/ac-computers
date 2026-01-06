@@ -21,7 +21,7 @@ public class SubCategoryMapper {
                 entity.getName(),
                 new Slug(entity.getSlug()),
                 entity.getDescription(),
-                entity.getCategory() != null ? entity.getCategory().getId() : null);
+                entity.getCategoryId());
 
         return subCategory;
     }
@@ -45,7 +45,8 @@ public class SubCategoryMapper {
         entity.setName(domain.getName());
         entity.setSlug(domain.getSlug() != null ? domain.getSlug().getValue() : null);
         entity.setDescription(domain.getDescription());
-        // category se establece externamente si es necesario
+        entity.setCategoryId(domain.getCategoryId());
+
         return entity;
     }
 

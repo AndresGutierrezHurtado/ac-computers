@@ -24,7 +24,7 @@ public class SpecificationMapper {
                 entity.getUnit(),
                 entity.getIsFilterable(),
                 entity.getIsMandatory(),
-                entity.getSubCategory() != null ? entity.getSubCategory().getId() : null);
+                entity.getSubCategoryId());
 
         return specification;
     }
@@ -51,7 +51,8 @@ public class SpecificationMapper {
         entity.setUnit(domain.getUnit());
         entity.setIsFilterable(domain.getIsFilterable());
         entity.setIsMandatory(domain.getIsMandatory());
-        // subCategory se establece externamente si es necesario
+        entity.setSubCategoryId(domain.getSubCategoryId());
+
         return entity;
     }
 

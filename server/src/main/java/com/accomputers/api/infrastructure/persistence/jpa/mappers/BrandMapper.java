@@ -4,7 +4,6 @@ import com.accomputers.api.domain.entities.Brand;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.BrandEntity;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,13 +15,9 @@ public class BrandMapper {
             return null;
         }
 
-        try {
-            Constructor<Brand> constructor = Brand.class.getDeclaredConstructor(Integer.class, String.class);
-            constructor.setAccessible(true);
-            return constructor.newInstance(entity.getId(), entity.getName());
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create Brand from BrandEntity", e);
-        }
+        Brand brand = new Brand(entity.getId(), entity.getName());
+
+        return brand;
     }
 
     public List<Brand> toDomain(List<BrandEntity> entities) {
@@ -42,6 +37,7 @@ public class BrandMapper {
         BrandEntity entity = new BrandEntity();
         entity.setId(domain.getId());
         entity.setName(domain.getName());
+
         return entity;
     }
 
@@ -54,4 +50,3 @@ public class BrandMapper {
                 .collect(Collectors.toList());
     }
 }
-

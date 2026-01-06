@@ -31,7 +31,7 @@ public class UserMapper {
             entity.getLastName(),
             new Email(entity.getEmail()),
             new Password(entity.getPassword()),
-            entity.getRole() != null ? entity.getRole().getId() : null
+            entity.getRoleId()
         );
 
         // Mapear relación usando mapper
@@ -62,17 +62,7 @@ public class UserMapper {
         entity.setLastName(domain.getLastName());
         entity.setEmail(domain.getEmail() != null ? domain.getEmail().getValue() : null);
         entity.setPassword(domain.getPassword() != null ? domain.getPassword().getValue() : null);
-
-        // Mapear relación usando mapper
-        if (domain.getRole() != null) {
-            entity.setRole(roleMapper.toEntity(domain.getRole()));
-        } else if (domain.getRoleId() != null) {
-            // Crear RoleEntity directamente cuando solo tenemos el ID
-            com.accomputers.api.infrastructure.persistence.jpa.entities.RoleEntity roleEntity = 
-                new com.accomputers.api.infrastructure.persistence.jpa.entities.RoleEntity();
-            roleEntity.setId(domain.getRoleId());
-            entity.setRole(roleEntity);
-        }
+        entity.setRoleId(domain.getRoleId());
 
         return entity;
     }
