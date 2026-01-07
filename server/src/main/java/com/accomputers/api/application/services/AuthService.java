@@ -28,7 +28,8 @@ public class AuthService implements AuthServiceInterface {
     private final UserAuthServiceInterface userAuthService;
 
     @Autowired
-    public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher, UserAuthServiceInterface userAuthService) {
+    public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher,
+            UserAuthServiceInterface userAuthService) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
         this.userAuthService = userAuthService;
@@ -53,15 +54,15 @@ public class AuthService implements AuthServiceInterface {
     public UserResponseDTO register(RegisterDTO registerDTO) {
         String hashedPassword = passwordHasher.hashPassword(registerDTO.password());
 
-        User savedUser = userRepository
-                .save(
-                        new User(
-                                null,
-                                registerDTO.firstName(),
-                                registerDTO.lastName(),
-                                new Email(registerDTO.email()),
-                                new Password(hashedPassword),
-                                registerDTO.roleId()));
+        User newUser = new User(
+                null,
+                registerDTO.firstName(),
+                registerDTO.lastName(),
+                new Email(registerDTO.email()),
+                new Password(hashedPassword),
+                registerDTO.roleId());
+
+        User savedUser = userRepository.save(newUser);
 
         return UserResponseDTO.fromUser(savedUser);
     }

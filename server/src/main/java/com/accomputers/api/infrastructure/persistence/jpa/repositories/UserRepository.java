@@ -17,7 +17,9 @@ import com.accomputers.api.application.dtos.UserCriteria;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 import com.accomputers.api.domain.entities.User;
 import com.accomputers.api.domain.valueobjects.Email;
+import com.accomputers.api.infrastructure.persistence.jpa.entities.RoleEntity;
 import com.accomputers.api.infrastructure.persistence.jpa.entities.UserEntity;
+import com.accomputers.api.infrastructure.persistence.jpa.jpaRepositories.RoleJpaRepository;
 import com.accomputers.api.infrastructure.persistence.jpa.jpaRepositories.UserJpaRepository;
 import com.accomputers.api.infrastructure.persistence.jpa.mappers.UserMapper;
 
@@ -25,10 +27,12 @@ import com.accomputers.api.infrastructure.persistence.jpa.mappers.UserMapper;
 public class UserRepository implements UserRepositoryInterface {
 
     private final UserJpaRepository jpaRepository;
+    private final RoleJpaRepository roleJpaRepository;
     private final UserMapper mapper;
 
-    public UserRepository(UserJpaRepository jpaRepository, UserMapper mapper) {
+    public UserRepository(UserJpaRepository jpaRepository, RoleJpaRepository roleJpaRepository, UserMapper mapper) {
         this.jpaRepository = jpaRepository;
+        this.roleJpaRepository = roleJpaRepository;
         this.mapper = mapper;
     }
 
@@ -38,8 +42,8 @@ public class UserRepository implements UserRepositoryInterface {
         Specification<UserEntity> spec = buildSpecification(userCriteria);
         Page<UserEntity> page = jpaRepository.findAll(spec, pageable);
         List<User> users = page.getContent().stream()
-            .map(mapper::toDomain)
-            .collect(Collectors.toList());
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
         return new PageDTO<>(users, page.getTotalElements());
     }
 
@@ -68,8 +72,8 @@ public class UserRepository implements UserRepositoryInterface {
     @Override
     public User findById(Integer id) {
         return jpaRepository.findById(id)
-            .map(mapper::toDomain)
-            .orElse(null);
+                .map(mapper::toDomain)
+                .orElse(null);
     }
 
     @Override
@@ -78,8 +82,8 @@ public class UserRepository implements UserRepositoryInterface {
             return null;
         }
         return jpaRepository.findByEmail(email.getValue())
-            .map(mapper::toDomain)
-            .orElse(null);
+                .map(mapper::toDomain)
+                .orElse(null);
     }
 
     @Override
@@ -90,6 +94,11 @@ public class UserRepository implements UserRepositoryInterface {
 
         UserEntity entity = mapper.toEntity(user);
         UserEntity savedEntity = jpaRepository.save(entity);
+        
+        RoleEntity role = roleJpaRepository.findById(user.getRoleId())
+                .orElse(null);
+        savedEntity.setRole(role);
+
         return mapper.toDomain(savedEntity);
     }
 
@@ -98,4 +107,3 @@ public class UserRepository implements UserRepositoryInterface {
         jpaRepository.deleteById(id);
     }
 }
-
