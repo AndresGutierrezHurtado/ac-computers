@@ -28,11 +28,11 @@ public class SpecificationEntity {
     @Column(name = "is_mandatory", nullable = false)
     private Boolean isMandatory;
 
-    @Column(name = "sub_category_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "sub_category_id", nullable = false)
     private Integer subCategoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sub_category_id", nullable = false)
+    @JoinColumn(name = "sub_category_id", insertable = false, updatable = false)
     private SubCategoryEntity subCategory;
 
     public SpecificationEntity() {

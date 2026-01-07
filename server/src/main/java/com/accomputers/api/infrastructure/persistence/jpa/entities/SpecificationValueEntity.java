@@ -10,7 +10,7 @@ public class SpecificationValueEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "specification_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "specification_id", nullable = false)
     private Integer specificationId;
 
     @Column(name = "value", nullable = false, columnDefinition = "TEXT")
@@ -20,7 +20,7 @@ public class SpecificationValueEntity {
     private Integer order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "specification_id", nullable = false)
+    @JoinColumn(name = "specification_id", insertable = false, updatable = false)
     private SpecificationEntity specification;
 
     public SpecificationValueEntity() {

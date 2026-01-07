@@ -10,28 +10,28 @@ public class ProductSpecificationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "product_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "product_id", nullable = false)
     private Integer productId;
 
-    @Column(name = "specification_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "specification_id", nullable = false)
     private Integer specificationId;
 
-    @Column(name = "value", columnDefinition = "TEXT")
+    @Column(name = "value", columnDefinition = "TEXT", nullable = true)
     private String value;
 
-    @Column(name = "id_value", insertable = false, updatable = false)
+    @Column(name = "id_value", nullable = true)
     private Integer specificationValueId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private ProductEntity product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "specification_id", nullable = false)
+    @JoinColumn(name = "specification_id", insertable = false, updatable = false)
     private SpecificationEntity specification;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_value")
+    @JoinColumn(name = "id_value", insertable = false, updatable = false)
     private SpecificationValueEntity specificationValue;
 
     public ProductSpecificationEntity() {

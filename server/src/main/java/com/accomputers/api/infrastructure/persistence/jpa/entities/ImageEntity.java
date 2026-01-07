@@ -16,11 +16,11 @@ public class ImageEntity {
     @Column(name = "is_main", nullable = false)
     private Boolean isMain;
 
-    @Column(name = "product_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "product_id", nullable = false)
     private Integer productId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private ProductEntity product;
 
     public ImageEntity() {

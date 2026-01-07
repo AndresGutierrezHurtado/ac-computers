@@ -29,10 +29,10 @@ public class ProductEntity {
     @Column(name = "discount", nullable = false)
     private Float discount;
 
-    @Column(name = "brand_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "brand_id", nullable = false)
     private Integer brandId;
 
-    @Column(name = "sub_category_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "sub_category_id", nullable = false)
     private Integer subCategoryId;
 
     @Column(name = "deleted_at")
@@ -45,11 +45,11 @@ public class ProductEntity {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sub_category_id", nullable = false)
+    @JoinColumn(name = "sub_category_id", insertable = false, updatable = false)
     private SubCategoryEntity subCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brand_id", nullable = false)
+    @JoinColumn(name = "brand_id", insertable = false, updatable = false)
     private BrandEntity brand;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

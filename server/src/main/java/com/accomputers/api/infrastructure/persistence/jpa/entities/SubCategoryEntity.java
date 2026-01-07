@@ -19,11 +19,11 @@ public class SubCategoryEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "category_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "category_id", nullable = false)
     private Integer categoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private CategoryEntity category;
 
     public SubCategoryEntity() {

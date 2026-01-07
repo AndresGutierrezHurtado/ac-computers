@@ -11,7 +11,7 @@ public class StockNotificationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "product_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "product_id", nullable = false)
     private Integer productId;
 
     @Column(name = "email", nullable = false)
@@ -27,7 +27,7 @@ public class StockNotificationEntity {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private ProductEntity product;
 
     @PrePersist
