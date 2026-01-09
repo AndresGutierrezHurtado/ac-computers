@@ -3,15 +3,18 @@ package com.accomputers.api.infrastructure.http.controllers;
 // Spring
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.accomputers.api.application.dtos.PageDTO;
 // Application
@@ -33,9 +36,25 @@ public class ProductController {
         this.productServiceInterface = productServiceInterface;
     }
 
-    @PostMapping
-    public ResponseEntity<ResponseDTO<ProductResponseDTO>> createProduct(@RequestBody createProductDTO productDTO) {
-        ProductResponseDTO product = productServiceInterface.createProduct(productDTO);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ResponseDTO<ProductResponseDTO>> createProduct(
+        @ModelAttribute createProductDTO productDTO,
+        @RequestParam("image") MultipartFile image
+    ) {
+        System.out.println(productDTO.toString());
+        createProductDTO productDTOWithImage = new createProductDTO(
+            productDTO.name(),
+            productDTO.description(),
+            productDTO.price(),
+            productDTO.condition(),
+            productDTO.discount(),
+            productDTO.brandId(),
+            productDTO.subCategoryId(),
+            image,
+            productDTO.specifications()
+        );
+        
+        ProductResponseDTO product = productServiceInterface.createProduct(productDTOWithImage);
 
         ResponseDTO<ProductResponseDTO> responseDTO = new ResponseDTO<>(
                 "Product created successfully",
@@ -98,7 +117,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO<ProductResponseDTO>> updateProduct(
             @PathVariable Integer id,
-            @RequestBody createProductDTO productDTO) {
+            @ModelAttribute createProductDTO productDTO) {
 
         ProductResponseDTO product = productServiceInterface.updateProduct(id, productDTO);
 

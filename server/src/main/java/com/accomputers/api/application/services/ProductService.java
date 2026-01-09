@@ -1,24 +1,17 @@
 package com.accomputers.api.application.services;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import com.accomputers.api.domain.entities.Image;
-
 // Domain
-import com.accomputers.api.domain.entities.Product;
-import com.accomputers.api.domain.entities.Brand;
-import com.accomputers.api.domain.entities.SubCategory;
-import com.accomputers.api.domain.entities.Specification;
-import com.accomputers.api.domain.entities.SpecificationValue;
-import com.accomputers.api.domain.entities.ProductSpecification;
+import com.accomputers.api.domain.entities.*;
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
 import com.accomputers.api.domain.valueobjects.Condition;
 import com.accomputers.api.domain.valueobjects.Discount;
@@ -29,22 +22,15 @@ import com.accomputers.api.domain.valueobjects.Url;
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
 import com.accomputers.api.application.ports.output.FileManagerInterface;
 import com.accomputers.api.application.ports.output.ProductRecommendationInterface;
-import com.accomputers.api.application.ports.output.repositories.ImageRepositoryInterface;
-import com.accomputers.api.application.ports.output.repositories.ProductRepositoryInterface;
-import com.accomputers.api.application.ports.output.repositories.ProductSpecificationRepositoryInterface;
-import com.accomputers.api.application.ports.output.repositories.BrandRepositoryInterface;
-import com.accomputers.api.application.ports.output.repositories.SubCategoryRepositoryInterface;
-import com.accomputers.api.application.ports.output.repositories.SpecificationRepositoryInterface;
-import com.accomputers.api.application.ports.output.repositories.SpecificationValueRepositoryInterface;
+import com.accomputers.api.application.ports.output.repositories.*;
 
 // DTOs
-import com.accomputers.api.application.dtos.createProductDTO;
-import com.accomputers.api.application.dtos.createProductDTO.ImageDTO;
-import com.accomputers.api.application.dtos.createProductDTO.ProductSpecificationDTO;
-import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 import com.accomputers.api.application.dtos.PageDTO;
 import com.accomputers.api.application.dtos.ProductCriteria;
 import com.accomputers.api.application.dtos.ProductFiltersDTO;
+import com.accomputers.api.application.dtos.createProductDTO;
+import com.accomputers.api.application.dtos.createProductDTO.ProductSpecificationDTO;
+import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 
 @Service
 public class ProductService implements ProductServiceInterface {
@@ -121,17 +107,20 @@ public class ProductService implements ProductServiceInterface {
         Product savedProduct = productRepository.save(product);
 
         // upload images
-        if (productDTO.images() != null) {
-            for (ImageDTO imageDTO : productDTO.images()) {
-                if (imageDTO.file() != null && !imageDTO.file().isEmpty()) {
-                    String url = fileManagerInterface.uploadFile(imageDTO.file(), "products");
-                    Image image = new Image(null, new Url(url), imageDTO.isMain(), savedProduct.getId());
-                    imageRepository.save(image);
-                }
+        if (productDTO.image() != null) {
+            System.out.println("not null");
+            if (!productDTO.image().isEmpty()) {
+                System.out.println("not empty");
+                String url = fileManagerInterface.uploadFile(productDTO.image(), "/medias");
+                Image image = new Image(null, new Url(url), true, savedProduct.getId());
+                imageRepository.save(image);
+                savedProduct.setImages(List.of(image));
             }
         }
 
         // save product specifications
+        List<ProductSpecification> productSpecifications = new ArrayList<>();
+
         if (productDTO.specifications() != null) {
             for (ProductSpecificationDTO productSpecificationDTO : productDTO.specifications()) {
                 ProductSpecification productSpecification = new ProductSpecification(null, savedProduct.getId(),
@@ -157,9 +146,13 @@ public class ProductService implements ProductServiceInterface {
                     productSpecification.setSpecificationValue(specificationValue);
                 }
 
-                productSpecificationRepository.save(productSpecification);
+                ProductSpecification savedSpecificationValue = productSpecificationRepository
+                        .save(productSpecification);
+                productSpecifications.add(savedSpecificationValue);
             }
         }
+
+        savedProduct.setProductSpecifications(productSpecifications);
 
         return ProductResponseDTO.fromProduct(savedProduct);
     }
@@ -232,8 +225,11 @@ public class ProductService implements ProductServiceInterface {
         Product savedProduct = productRepository.save(updatedProduct);
 
         // Update images if provided
-        if (productDTO.images() != null) {
-            updateImages(savedProduct.getId(), productDTO.images());
+        if (productDTO.image() != null && !productDTO.image().isEmpty()) {
+            String url = fileManagerInterface.uploadFile(productDTO.image(), "/medias");
+            Image image = new Image(null, new Url(url), true, savedProduct.getId());
+            imageRepository.save(image);
+            savedProduct.setImages(List.of(image));
         }
 
         // Update specifications if provided
@@ -242,61 +238,6 @@ public class ProductService implements ProductServiceInterface {
         }
 
         return ProductResponseDTO.fromProduct(savedProduct);
-    }
-
-    private void updateImages(Integer productId, List<ImageDTO> imageDTOs) {
-        // Get existing images
-        List<Image> existingImages = imageRepository.findByProductId(productId);
-        Set<Integer> existingImageIds = existingImages.stream()
-                .map(Image::getId)
-                .collect(Collectors.toSet());
-
-        // Track which images are being kept/updated
-        Set<Integer> updatedImageIds = new HashSet<>();
-
-        // Process images from DTO
-        for (ImageDTO imageDTO : imageDTOs) {
-            if (imageDTO.id() != null && existingImageIds.contains(imageDTO.id())) {
-                // Update existing image
-                Image existingImage = existingImages.stream()
-                        .filter(img -> img.getId().equals(imageDTO.id()))
-                        .findFirst()
-                        .orElse(null);
-
-                if (existingImage != null) {
-                    // If file is provided, upload new file and delete old one
-                    if (imageDTO.file() != null && !imageDTO.file().isEmpty()) {
-                        // Delete old file from storage
-                        fileManagerInterface.deleteFile(existingImage.getUrl().getValue());
-                        // Upload new file
-                        String newUrl = fileManagerInterface.uploadFile(imageDTO.file(), "products");
-                        existingImage.setUrl(new Url(newUrl));
-                    }
-                    // Update isMain flag
-                    existingImage.setIsMain(imageDTO.isMain());
-                    imageRepository.save(existingImage);
-                    updatedImageIds.add(imageDTO.id());
-                }
-            } else {
-                // Create new image
-                if (imageDTO.file() != null && !imageDTO.file().isEmpty()) {
-                    String url = fileManagerInterface.uploadFile(imageDTO.file(), "products");
-                    Image newImage = new Image(null, new Url(url), imageDTO.isMain(), productId);
-                    Image savedImage = imageRepository.save(newImage);
-                    updatedImageIds.add(savedImage.getId());
-                }
-            }
-        }
-
-        // Delete images that are no longer in the DTO
-        for (Image existingImage : existingImages) {
-            if (!updatedImageIds.contains(existingImage.getId())) {
-                // Delete file from storage
-                fileManagerInterface.deleteFile(existingImage.getUrl().getValue());
-                // Delete from database
-                imageRepository.delete(existingImage.getId());
-            }
-        }
     }
 
     private void updateSpecifications(Integer productId, List<ProductSpecificationDTO> specificationDTOs) {

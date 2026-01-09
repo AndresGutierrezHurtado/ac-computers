@@ -12,11 +12,8 @@ public record createProductDTO(
                 Float discount,
                 Integer brandId,
                 Integer subCategoryId,
-                List<ImageDTO> images,
+                MultipartFile image,
                 List<ProductSpecificationDTO> specifications) {
-
-        public record ImageDTO(Integer id, MultipartFile file, Boolean isMain) {
-        }
 
         public record ProductSpecificationDTO(
                         Integer id,
