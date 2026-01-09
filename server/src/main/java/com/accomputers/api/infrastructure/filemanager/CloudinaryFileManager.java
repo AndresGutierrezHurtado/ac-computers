@@ -32,7 +32,7 @@ public class CloudinaryFileManager implements FileManagerInterface {
         }
 
         try {
-            Map<String, Object> uploadParams = ObjectUtils.asMap("folder", folder, "resource_type", "auto");
+            Map<String, Object> uploadParams = ObjectUtils.asMap("folder", "ac-computers/" + folder, "resource_type", "auto");
 
             Map<?, ?> uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
@@ -77,6 +77,7 @@ public class CloudinaryFileManager implements FileManagerInterface {
                 return afterUpload;
             }
         } catch (Exception e) {
+
         }
 
         return urlOrPublicId;
