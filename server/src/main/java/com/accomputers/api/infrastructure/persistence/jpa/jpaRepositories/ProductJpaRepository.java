@@ -17,9 +17,21 @@ import java.util.Optional;
 @Repository
 public interface ProductJpaRepository
                 extends JpaRepository<ProductEntity, Integer>, JpaSpecificationExecutor<ProductEntity> {
+
+        // Standard pagination
         @Query("""
                         SELECT DISTINCT p FROM ProductEntity p
                         LEFT JOIN FETCH p.images
+                        LEFT JOIN FETCH p.brand
+                        LEFT JOIN FETCH p.productSpecifications ps
+                        LEFT JOIN FETCH ps.specification
+                        LEFT JOIN FETCH ps.specificationValue
+                        WHERE p.deletedAt IS NULL
+                        """)
+        Page<ProductEntity> findAll(Pageable pageable);
+
+        @Query("""
+                        SELECT DISTINCT p FROM ProductEntity p
                         LEFT JOIN FETCH p.brand
                         LEFT JOIN FETCH p.productSpecifications ps
                         LEFT JOIN FETCH ps.specification
@@ -33,16 +45,4 @@ public interface ProductJpaRepository
         @Transactional
         @Query("UPDATE ProductEntity p SET p.deletedAt = :deletedAt WHERE p.id = :id")
         void softDelete(@Param("id") Integer id, @Param("deletedAt") LocalDateTime deletedAt);
-
-        // Standard pagination
-        @Query("""
-                        SELECT DISTINCT p FROM ProductEntity p
-                        LEFT JOIN FETCH p.images
-                        LEFT JOIN FETCH p.brand
-                        LEFT JOIN FETCH p.productSpecifications ps
-                        LEFT JOIN FETCH ps.specification
-                        LEFT JOIN FETCH ps.specificationValue
-                        WHERE p.deletedAt IS NULL
-                        """)
-        Page<ProductEntity> findAll(Pageable pageable);
 }
