@@ -1,8 +1,7 @@
 package com.accomputers.api.infrastructure.http;
 
-import com.accomputers.api.infrastructure.http.responses.CustomAccessDeniedHandler;
-import com.accomputers.api.infrastructure.http.responses.CustomAuthenticationEntryPoint;
-import com.accomputers.api.infrastructure.security.JwtAuthenticationFilter;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +16,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+// Responses & Filters
+import com.accomputers.api.infrastructure.http.responses.CustomAccessDeniedHandler;
+import com.accomputers.api.infrastructure.http.responses.CustomAuthenticationEntryPoint;
+import com.accomputers.api.infrastructure.security.JwtAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
