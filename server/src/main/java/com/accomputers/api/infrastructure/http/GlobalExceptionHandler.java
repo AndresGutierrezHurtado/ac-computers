@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MultipartException;
 
 // Domain
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
@@ -37,12 +38,21 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDTO<Void>> handleDataAccessException(DataAccessException e) {
         if (e.getMessage().toLowerCase().contains("cannot add or update a child row: a foreign key constraint fails")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO<Void>(
-                    "The entity cannot be manipulated because it has a foreign key constraint to another entity", false));
+                    "The entity cannot be manipulated because it has a foreign key constraint to another entity",
+                    false));
         }
 
         System.out.println("Database error: " + e.getMessage() + " Stack Trace: " + e.getStackTrace());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO<Void>(
                 "There was an error with the database, check the server logs for more information", false));
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    protected ResponseEntity<ResponseDTO<Void>> handleFileUploadingError(Exception e) {
+        e.printStackTrace();
+        System.out.println("Failed to upload attachment: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseDTO<Void>(e.getMessage(), false));
     }
 
     @ExceptionHandler(Exception.class)
