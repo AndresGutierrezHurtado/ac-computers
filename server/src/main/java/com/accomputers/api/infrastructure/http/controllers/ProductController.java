@@ -108,8 +108,8 @@ public class ProductController {
         PaginatedResponseDTO<ProductResponseDTO> responseDTO = new PaginatedResponseDTO<>(
                 "Products retrieved successfully",
                 true,
-                products.data(),
-                products.total());
+                products.total(),
+                products.data());
 
         return ResponseEntity.ok(responseDTO);
     }

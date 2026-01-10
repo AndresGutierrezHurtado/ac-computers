@@ -51,8 +51,8 @@ public class UserController {
         PaginatedResponseDTO<UserResponseDTO> responseDTO = new PaginatedResponseDTO<>(
                 "Users retrieved successfully",
                 true,
-                users.data(),
-                users.total());
+                users.total(),
+                users.data());
 
         return ResponseEntity.ok(responseDTO);
     }
