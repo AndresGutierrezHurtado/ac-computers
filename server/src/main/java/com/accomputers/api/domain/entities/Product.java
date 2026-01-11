@@ -141,6 +141,15 @@ public class Product {
     public void setSubCategoryId(Integer subCategoryId) {
         this.subCategoryId = subCategoryId;
     }
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     public void setBrand(Brand brand) {
         this.brand = brand;
