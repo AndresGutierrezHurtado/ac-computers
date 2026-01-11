@@ -1,21 +1,7 @@
 package com.accomputers.api.application.services;
 
-import com.accomputers.api.application.dtos.PageDTO;
-import com.accomputers.api.application.dtos.ProductCriteria;
-import com.accomputers.api.application.dtos.ProductFiltersDTO;
-import com.accomputers.api.application.dtos.createProductDTO;
-import com.accomputers.api.application.dtos.createProductDTO.ProductSpecificationDTO;
-import com.accomputers.api.application.dtos.response.ProductResponseDTO;
-import com.accomputers.api.application.ports.input.ProductServiceInterface;
-import com.accomputers.api.application.ports.output.FileManagerInterface;
-import com.accomputers.api.application.ports.output.ProductRecommendationInterface;
-import com.accomputers.api.application.ports.output.repositories.*;
-import com.accomputers.api.domain.entities.*;
-import com.accomputers.api.domain.exceptions.EntityNotFoundException;
-import com.accomputers.api.domain.valueobjects.Condition;
-import com.accomputers.api.domain.valueobjects.Discount;
-import com.accomputers.api.domain.valueobjects.Price;
-import com.accomputers.api.domain.valueobjects.Url;
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -23,6 +9,28 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+// Domain
+import com.accomputers.api.domain.entities.*;
+import com.accomputers.api.domain.exceptions.EntityNotFoundException;
+import com.accomputers.api.domain.valueobjects.Condition;
+import com.accomputers.api.domain.valueobjects.Discount;
+import com.accomputers.api.domain.valueobjects.Price;
+import com.accomputers.api.domain.valueobjects.Url;
+
+// Ports
+import com.accomputers.api.application.ports.input.ProductServiceInterface;
+import com.accomputers.api.application.ports.output.FileManagerInterface;
+import com.accomputers.api.application.ports.output.ProductRecommendationInterface;
+import com.accomputers.api.application.ports.output.repositories.*;
+
+// DTOs
+import com.accomputers.api.application.dtos.PageDTO;
+import com.accomputers.api.application.dtos.ProductCriteria;
+import com.accomputers.api.application.dtos.ProductFiltersDTO;
+import com.accomputers.api.application.dtos.createProductDTO;
+import com.accomputers.api.application.dtos.createProductDTO.ProductSpecificationDTO;
+import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 
 @Service
 public class ProductService implements ProductServiceInterface {
@@ -59,6 +67,7 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
+    @Transactional
     public ProductResponseDTO createProduct(createProductDTO productDTO) {
         LocalDateTime now = LocalDateTime.now();
 
@@ -171,6 +180,7 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
+    @Transactional
     public ProductResponseDTO updateProduct(Integer id, createProductDTO productDTO) {
         Product product = productRepository.findById(id);
 
@@ -240,6 +250,7 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Integer id) {
         Product product = productRepository.findById(id);
 

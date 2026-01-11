@@ -1,5 +1,7 @@
 package com.accomputers.api.application.services;
 
+import jakarta.transaction.Transactional;
+
 // Domain
 import com.accomputers.api.domain.entities.User;
 import com.accomputers.api.domain.exceptions.EmailAlreadyExistsException;
@@ -54,6 +56,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
+    @Transactional
     public UserResponseDTO updateUser(Integer id, UpdateUserDTO updateUserDTO) {
         User user = userRepository.findById(id);
 
@@ -86,6 +89,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
+    @Transactional
     public void deleteUser(Integer id) {
         User user = userRepository.findById(id);
 

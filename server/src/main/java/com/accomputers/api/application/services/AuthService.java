@@ -1,5 +1,7 @@
 package com.accomputers.api.application.services;
 
+import jakarta.transaction.Transactional;
+
 // Domain
 import com.accomputers.api.domain.entities.User;
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
@@ -51,6 +53,7 @@ public class AuthService implements AuthServiceInterface {
         return UserResponseDTO.fromUser(user);
     }
 
+    @Transactional
     public UserResponseDTO register(RegisterDTO registerDTO) {
         String hashedPassword = passwordHasher.hashPassword(registerDTO.password());
 
@@ -77,6 +80,7 @@ public class AuthService implements AuthServiceInterface {
         return UserResponseDTO.fromUser(user);
     }
 
+    @Transactional
     public void logout() {
         User user = userAuthService.getAuthenticatedUser();
 
