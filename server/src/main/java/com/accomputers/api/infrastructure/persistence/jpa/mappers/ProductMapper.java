@@ -89,6 +89,14 @@ public class ProductMapper {
             entity.setCondition(conditionType);
         }
 
+        if (domain.getImages() != null) {
+            entity.setImages(imageMapper.toEntity(domain.getImages()));
+        }
+
+        if (domain.getProductSpecifications() != null) {
+            entity.setProductSpecifications(productSpecificationMapper.toEntity(domain.getProductSpecifications()));
+        }
+
         return entity;
     }
 
