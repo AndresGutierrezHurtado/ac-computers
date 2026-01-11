@@ -1,36 +1,28 @@
 package com.accomputers.api.application.services;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-// Domain
-import com.accomputers.api.domain.entities.*;
-import com.accomputers.api.domain.exceptions.EntityNotFoundException;
-import com.accomputers.api.domain.valueobjects.Condition;
-import com.accomputers.api.domain.valueobjects.Discount;
-import com.accomputers.api.domain.valueobjects.Price;
-import com.accomputers.api.domain.valueobjects.Url;
-
-// Ports
-import com.accomputers.api.application.ports.input.ProductServiceInterface;
-import com.accomputers.api.application.ports.output.FileManagerInterface;
-import com.accomputers.api.application.ports.output.ProductRecommendationInterface;
-import com.accomputers.api.application.ports.output.repositories.*;
-
-// DTOs
 import com.accomputers.api.application.dtos.PageDTO;
 import com.accomputers.api.application.dtos.ProductCriteria;
 import com.accomputers.api.application.dtos.ProductFiltersDTO;
 import com.accomputers.api.application.dtos.createProductDTO;
 import com.accomputers.api.application.dtos.createProductDTO.ProductSpecificationDTO;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
+import com.accomputers.api.application.ports.input.ProductServiceInterface;
+import com.accomputers.api.application.ports.output.FileManagerInterface;
+import com.accomputers.api.application.ports.output.ProductRecommendationInterface;
+import com.accomputers.api.application.ports.output.repositories.*;
+import com.accomputers.api.domain.entities.*;
+import com.accomputers.api.domain.exceptions.EntityNotFoundException;
+import com.accomputers.api.domain.valueobjects.Condition;
+import com.accomputers.api.domain.valueobjects.Discount;
+import com.accomputers.api.domain.valueobjects.Price;
+import com.accomputers.api.domain.valueobjects.Url;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements ProductServiceInterface {
@@ -202,89 +194,49 @@ public class ProductService implements ProductServiceInterface {
         if (StringUtils.hasText(productDTO.condition())) {
             product.setCondition(new Condition(productDTO.condition()));
         }
-        product.setBrandId(productDTO.brandId());
-        product.setSubCategoryId(productDTO.subCategoryId());
-
-        // Create new Product instance with updated timestamp
-        Product updatedProduct = new Product(
-                product.getId(),
-                product.getName(),
-                product.getDescription(),
-                product.getPrice(),
-                product.getCondition(),
-                product.getDiscount(),
-                product.getBrandId(),
-                product.getSubCategoryId(),
-                product.getDeletedAt(),
-                product.getCreatedAt(),
-                LocalDateTime.now());
-
-        // Preserve brand if it exists
-        updatedProduct.setBrand(product.getBrand());
-
-        Product savedProduct = productRepository.save(updatedProduct);
-
-        // Update images if provided
-        if (productDTO.image() != null && !productDTO.image().isEmpty()) {
-            String url = fileManagerInterface.uploadFile(productDTO.image(), "/medias");
-            Image image = new Image(null, new Url(url), true, savedProduct.getId());
-            imageRepository.save(image);
-            savedProduct.setImages(List.of(image));
+        if (!Objects.equals(product.getBrandId(), productDTO.brandId())) {
+            product.setBrandId(productDTO.brandId());
+        }
+        if (!Objects.equals(product.getSubCategoryId(), productDTO.subCategoryId())) {
+            product.setSubCategoryId(productDTO.subCategoryId());
         }
 
         // Update specifications if provided
         if (productDTO.specifications() != null) {
-            updateSpecifications(savedProduct.getId(), productDTO.specifications());
-        }
+            List<ProductSpecification> productSpecifications = new ArrayList<>();
+            for (ProductSpecificationDTO productSpecificationDTO : productDTO.specifications()) {
+                ProductSpecification ps = new ProductSpecification(
+                        productSpecificationDTO.id(),
+                        product.getId(),
+                        productSpecificationDTO.specificationId(),
+                        productSpecificationDTO.value(),
+                        productSpecificationDTO.specificationValueId());
 
-        return ProductResponseDTO.fromProduct(savedProduct);
-    }
-
-    private void updateSpecifications(Integer productId, List<ProductSpecificationDTO> specificationDTOs) {
-        // Get existing specifications
-        List<ProductSpecification> existingSpecifications = productSpecificationRepository.findByProductId(productId);
-        Set<Integer> existingSpecIds = existingSpecifications.stream()
-                .map(ProductSpecification::getId)
-                .collect(Collectors.toSet());
-
-        // Track which specifications are being kept/updated
-        Set<Integer> updatedSpecIds = new HashSet<>();
-
-        // Process specifications from DTO
-        for (ProductSpecificationDTO specDTO : specificationDTOs) {
-            if (specDTO.id() != null && existingSpecIds.contains(specDTO.id())) {
-                // Update existing specification
-                ProductSpecification existingSpec = existingSpecifications.stream()
-                        .filter(spec -> spec.getId().equals(specDTO.id()))
-                        .findFirst()
-                        .orElse(null);
-
-                if (existingSpec != null) {
-                    existingSpec.setSpecificationId(specDTO.specificationId());
-                    existingSpec.setValue(specDTO.value());
-                    existingSpec.setIdValue(specDTO.specificationValueId());
-                    productSpecificationRepository.save(existingSpec);
-                    updatedSpecIds.add(specDTO.id());
+                if (productSpecificationDTO.specificationValueId() != null) {
+                    SpecificationValue specificationValue = specificationValueRepository
+                            .findById(productSpecificationDTO.specificationValueId());
+                    if (specificationValue == null) {
+                        throw new EntityNotFoundException("SpecificationValue",
+                                productSpecificationDTO.specificationValueId());
+                    }
+                    ps.setSpecificationValue(specificationValue);
                 }
-            } else {
-                // Create new specification
-                ProductSpecification newSpec = new ProductSpecification(
-                        null,
-                        productId,
-                        specDTO.specificationId(),
-                        specDTO.value(),
-                        specDTO.specificationValueId());
-                ProductSpecification savedSpec = productSpecificationRepository.save(newSpec);
-                updatedSpecIds.add(savedSpec.getId());
+
+                Specification specification = specificationRepository
+                        .findById(productSpecificationDTO.specificationId());
+                if (specification == null) {
+                    throw new EntityNotFoundException("Specification", productSpecificationDTO.specificationId());
+                }
+                ps.setSpecification(specification);
+
+                productSpecifications.add(ps);
             }
+            product.setProductSpecifications(productSpecifications);
         }
 
-        // Delete specifications that are no longer in the DTO
-        for (ProductSpecification existingSpec : existingSpecifications) {
-            if (!updatedSpecIds.contains(existingSpec.getId())) {
-                productSpecificationRepository.delete(existingSpec.getId());
-            }
-        }
+        productRepository.save(product);
+
+        return ProductResponseDTO.fromProduct(product);
     }
 
     @Override
