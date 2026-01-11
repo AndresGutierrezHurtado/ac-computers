@@ -211,6 +211,8 @@ public class ProductService implements ProductServiceInterface {
             product.setSubCategoryId(productDTO.subCategoryId());
         }
 
+        product.setUpdatedAt(LocalDateTime.now());
+
         // Update specifications if provided
         if (productDTO.specifications() != null) {
             List<ProductSpecification> productSpecifications = new ArrayList<>();
