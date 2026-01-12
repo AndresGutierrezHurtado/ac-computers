@@ -39,6 +39,13 @@ public class ImageRepository implements ImageRepositoryInterface {
     }
 
     @Override
+    public Image findById(Integer id) {
+        return jpaRepository.findById(id)
+                .map(mapper::toDomain)
+                .orElse(null);
+    }
+
+    @Override
     public List<Image> findByProductId(Integer productId) {
         List<ImageEntity> entities = jpaRepository.findByProductId(productId);
         return entities.stream()
@@ -54,6 +61,11 @@ public class ImageRepository implements ImageRepositoryInterface {
     @Override
     public void delete(Integer id) {
         jpaRepository.deleteById(id);
+    }
+
+    @Override
+    public void setAllImagesAsNotMainByProductId(Integer productId) {
+        jpaRepository.setAllImagesAsNotMainByProductId(productId);
     }
 }
 
