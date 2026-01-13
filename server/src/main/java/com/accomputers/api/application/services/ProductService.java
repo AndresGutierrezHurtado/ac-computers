@@ -21,6 +21,7 @@ import com.accomputers.api.domain.valueobjects.Url;
 // Ports
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
 import com.accomputers.api.application.ports.output.FileManagerInterface;
+import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.application.ports.output.ProductRecommendationInterface;
 import com.accomputers.api.application.ports.output.repositories.*;
 
@@ -43,6 +44,7 @@ public class ProductService implements ProductServiceInterface {
     private final SubCategoryRepositoryInterface subCategoryRepository;
     private final SpecificationRepositoryInterface specificationRepository;
     private final SpecificationValueRepositoryInterface specificationValueRepository;
+    private final LoggerPort loggerPort;
 
     @Autowired
     public ProductService(
@@ -54,7 +56,8 @@ public class ProductService implements ProductServiceInterface {
             SubCategoryRepositoryInterface subCategoryRepository,
             SpecificationRepositoryInterface specificationRepository,
             SpecificationValueRepositoryInterface specificationValueRepository,
-            FileManagerInterface fileManagerInterface) {
+            FileManagerInterface fileManagerInterface,
+            LoggerPort loggerPort) {
         this.productRepository = productRepository;
         this.productRecommendationInterface = productRecommendationInterface;
         this.imageRepository = imageRepository;
@@ -64,6 +67,7 @@ public class ProductService implements ProductServiceInterface {
         this.specificationRepository = specificationRepository;
         this.specificationValueRepository = specificationValueRepository;
         this.fileManagerInterface = fileManagerInterface;
+        this.loggerPort = loggerPort;
     }
 
     @Override
@@ -154,6 +158,9 @@ public class ProductService implements ProductServiceInterface {
         }
 
         savedProduct.setProductSpecifications(productSpecifications);
+
+        loggerPort.info(String.format("Product created successfully - ID: %d, Name: %s, Price: %.2f", 
+            savedProduct.getId(), savedProduct.getName(), savedProduct.getPrice().getValue()));
 
         return ProductResponseDTO.fromProduct(savedProduct);
     }
