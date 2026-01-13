@@ -113,9 +113,7 @@ public class ProductService implements ProductServiceInterface {
 
         // upload images
         if (productDTO.image() != null) {
-            System.out.println("not null");
             if (!productDTO.image().isEmpty()) {
-                System.out.println("not empty");
                 String url = fileManagerInterface.uploadFile(productDTO.image(), "/medias");
                 Image image = new Image(null, new Url(url), true, savedProduct.getId());
                 imageRepository.save(image);

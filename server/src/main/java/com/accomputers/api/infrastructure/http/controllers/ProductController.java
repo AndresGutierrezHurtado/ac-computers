@@ -41,7 +41,6 @@ public class ProductController {
         @ModelAttribute createProductDTO productDTO,
         @RequestParam("image") MultipartFile image
     ) {
-        System.out.println(productDTO.toString());
         createProductDTO productDTOWithImage = new createProductDTO(
             productDTO.name(),
             productDTO.description(),
