@@ -253,6 +253,9 @@ public class ProductService implements ProductServiceInterface {
 
         productRepository.save(product);
 
+        loggerPort.info(String.format("Product updated successfully - ID: %d, Name: %s, Price: %.2f", 
+            product.getId(), product.getName(), product.getPrice().getValue()));
+
         return ProductResponseDTO.fromProduct(product);
     }
 
@@ -264,6 +267,9 @@ public class ProductService implements ProductServiceInterface {
         if (product == null) {
             throw new EntityNotFoundException("Product", id);
         }
+
+        loggerPort.info(String.format("Product deleted successfully - ID: %d, Name: %s", 
+            product.getId(), product.getName()));
 
         productRepository.delete(id);
     }

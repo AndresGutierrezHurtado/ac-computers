@@ -9,6 +9,7 @@ import com.accomputers.api.application.dtos.CreateImageDTO;
 import com.accomputers.api.application.dtos.response.ImageResponseDTO;
 import com.accomputers.api.application.ports.input.ImageServiceInterface;
 import com.accomputers.api.application.ports.output.FileManagerInterface;
+import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.application.ports.output.repositories.ImageRepositoryInterface;
 import com.accomputers.api.application.ports.output.repositories.ProductRepositoryInterface;
 import com.accomputers.api.domain.entities.Image;
@@ -20,15 +21,18 @@ public class ImageService implements ImageServiceInterface {
     private final ImageRepositoryInterface imageRepository;
     private final ProductRepositoryInterface productRepository;
     private final FileManagerInterface fileManagerInterface;
+    private final LoggerPort loggerPort;
 
     @Autowired
     public ImageService(
             ImageRepositoryInterface imageRepository,
             ProductRepositoryInterface productRepository,
-            FileManagerInterface fileManagerInterface) {
+            FileManagerInterface fileManagerInterface,
+            LoggerPort loggerPort) {
         this.imageRepository = imageRepository;
         this.productRepository = productRepository;
         this.fileManagerInterface = fileManagerInterface;
+        this.loggerPort = loggerPort;
     }
 
     @Override
@@ -63,6 +67,9 @@ public class ImageService implements ImageServiceInterface {
         // Save the image
         Image savedImage = imageRepository.save(image);
 
+        loggerPort.info(String.format("Image created successfully - ID: %d, Product ID: %d, Is Main: %s", 
+            savedImage.getId(), savedImage.getProductId(), savedImage.getIsMain()));
+
         return ImageResponseDTO.fromImage(savedImage);
     }
 
@@ -75,6 +82,9 @@ public class ImageService implements ImageServiceInterface {
         if (image == null) {
             throw new EntityNotFoundException("Image", imageId);
         }
+
+        loggerPort.info(String.format("Image deleted successfully - ID: %d, Product ID: %d", 
+            image.getId(), image.getProductId()));
 
         // Delete the file from storage
         if (image.getUrl() != null && image.getUrl().getValue() != null) {

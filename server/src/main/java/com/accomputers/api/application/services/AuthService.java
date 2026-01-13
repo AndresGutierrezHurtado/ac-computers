@@ -11,6 +11,7 @@ import com.accomputers.api.domain.valueobjects.Password;
 
 // Ports
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
+import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.application.ports.output.PasswordHasherInterface;
 import com.accomputers.api.application.ports.output.UserAuthServiceInterface;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
@@ -28,13 +29,15 @@ public class AuthService implements AuthServiceInterface {
     private final UserRepositoryInterface userRepository;
     private final PasswordHasherInterface passwordHasher;
     private final UserAuthServiceInterface userAuthService;
+    private final LoggerPort loggerPort;
 
     @Autowired
     public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher,
-            UserAuthServiceInterface userAuthService) {
+            UserAuthServiceInterface userAuthService, LoggerPort loggerPort) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
         this.userAuthService = userAuthService;
+        this.loggerPort = loggerPort;
     }
 
     public UserResponseDTO login(LoginDTO loginDTO) {
@@ -49,6 +52,9 @@ public class AuthService implements AuthServiceInterface {
         }
 
         userAuthService.authenticateUser(user);
+
+        loggerPort.info(String.format("User logged in successfully - ID: %d, Email: %s", 
+            user.getId(), user.getEmail().getValue()));
 
         return UserResponseDTO.fromUser(user);
     }
@@ -66,6 +72,10 @@ public class AuthService implements AuthServiceInterface {
                 registerDTO.roleId());
 
         User savedUser = userRepository.save(newUser);
+
+        loggerPort.info(String.format("User registered successfully - ID: %d, Email: %s, Name: %s %s", 
+            savedUser.getId(), savedUser.getEmail().getValue(), 
+            savedUser.getFirstName(), savedUser.getLastName()));
 
         return UserResponseDTO.fromUser(savedUser);
     }
@@ -87,6 +97,9 @@ public class AuthService implements AuthServiceInterface {
         if (user == null) {
             throw new EntityNotFoundException("User", "authenticated user not found");
         }
+
+        loggerPort.info(String.format("User logged out successfully - ID: %d, Email: %s", 
+            user.getId(), user.getEmail().getValue()));
 
         userAuthService.logoutUser(user);
     }

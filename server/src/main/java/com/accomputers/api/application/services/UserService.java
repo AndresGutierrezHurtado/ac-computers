@@ -10,6 +10,7 @@ import com.accomputers.api.domain.valueobjects.Email;
 
 // Ports
 import com.accomputers.api.application.ports.input.UserServiceInterface;
+import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 
 // DTOs
@@ -28,10 +29,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserServiceInterface {
     private final UserRepositoryInterface userRepository;
+    private final LoggerPort loggerPort;
 
     @Autowired
-    public UserService(UserRepositoryInterface userRepository) {
+    public UserService(UserRepositoryInterface userRepository, LoggerPort loggerPort) {
         this.userRepository = userRepository;
+        this.loggerPort = loggerPort;
     }
 
     @Override
@@ -85,6 +88,11 @@ public class UserService implements UserServiceInterface {
         }
 
         User updatedUser = userRepository.save(user);
+        
+        loggerPort.info(String.format("User updated successfully - ID: %d, Email: %s, Name: %s %s", 
+            updatedUser.getId(), updatedUser.getEmail().getValue(), 
+            updatedUser.getFirstName(), updatedUser.getLastName()));
+        
         return UserResponseDTO.fromUser(updatedUser);
     }
 
@@ -96,6 +104,9 @@ public class UserService implements UserServiceInterface {
         if (user == null) {
             throw new EntityNotFoundException("User", id);
         }
+
+        loggerPort.info(String.format("User deleted successfully - ID: %d, Email: %s, Name: %s %s", 
+            user.getId(), user.getEmail().getValue(), user.getFirstName(), user.getLastName()));
 
         userRepository.delete(id);
     }
