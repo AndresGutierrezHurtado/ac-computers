@@ -66,6 +66,13 @@ public class ProductSpecificationMapper {
         entity.setValue(domain.getValue());
         entity.setSpecificationValueId(domain.getIdValue());
 
+        if (domain.getSpecificationValue() != null) {
+            entity.setSpecificationValue(specificationValueMapper.toEntity(domain.getSpecificationValue()));
+        }
+        if (domain.getSpecification() != null) {
+            entity.setSpecification(specificationMapper.toEntity(domain.getSpecification()));
+        }
+
         return entity;
     }
 

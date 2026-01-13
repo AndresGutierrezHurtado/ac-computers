@@ -126,17 +126,20 @@ public class ProductService implements ProductServiceInterface {
 
         if (productDTO.specifications() != null) {
             for (ProductSpecificationDTO productSpecificationDTO : productDTO.specifications()) {
-                ProductSpecification productSpecification = new ProductSpecification(null, savedProduct.getId(),
-                        productSpecificationDTO.specificationId(), productSpecificationDTO.value(),
+                ProductSpecification productSpecification = new ProductSpecification(
+                        null,
+                        savedProduct.getId(),
+                        productSpecificationDTO.specificationId(),
+                        productSpecificationDTO.value(),
                         productSpecificationDTO.specificationValueId());
-
-                productSpecification.setProduct(savedProduct);
 
                 Specification specification = specificationRepository
                         .findById(productSpecificationDTO.specificationId());
+
                 if (specification == null) {
                     throw new EntityNotFoundException("Specification", productSpecificationDTO.specificationId());
                 }
+
                 productSpecification.setSpecification(specification);
 
                 if (productSpecificationDTO.specificationValueId() != null) {
@@ -157,8 +160,10 @@ public class ProductService implements ProductServiceInterface {
 
         savedProduct.setProductSpecifications(productSpecifications);
 
-        loggerPort.info(String.format("Product created successfully - ID: %d, Name: %s, Price: %.2f", 
-            savedProduct.getId(), savedProduct.getName(), savedProduct.getPrice().getValue()));
+        productRepository.save(savedProduct);
+
+        loggerPort.info(String.format("Product created successfully - ID: %d, Name: %s, Price: %.2f",
+                savedProduct.getId(), savedProduct.getName(), savedProduct.getPrice().getValue()));
 
         return ProductResponseDTO.fromProduct(savedProduct);
     }
@@ -253,8 +258,8 @@ public class ProductService implements ProductServiceInterface {
 
         productRepository.save(product);
 
-        loggerPort.info(String.format("Product updated successfully - ID: %d, Name: %s, Price: %.2f", 
-            product.getId(), product.getName(), product.getPrice().getValue()));
+        loggerPort.info(String.format("Product updated successfully - ID: %d, Name: %s, Price: %.2f",
+                product.getId(), product.getName(), product.getPrice().getValue()));
 
         return ProductResponseDTO.fromProduct(product);
     }
@@ -268,8 +273,8 @@ public class ProductService implements ProductServiceInterface {
             throw new EntityNotFoundException("Product", id);
         }
 
-        loggerPort.info(String.format("Product deleted successfully - ID: %d, Name: %s", 
-            product.getId(), product.getName()));
+        loggerPort.info(String.format("Product deleted successfully - ID: %d, Name: %s",
+                product.getId(), product.getName()));
 
         productRepository.delete(id);
     }
