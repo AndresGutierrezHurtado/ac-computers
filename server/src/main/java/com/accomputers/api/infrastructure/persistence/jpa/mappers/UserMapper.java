@@ -34,7 +34,7 @@ public class UserMapper {
             entity.getRoleId()
         );
 
-        // Mapear relación usando mapper
+        // Map relationship using mapper
         if (entity.getRole() != null) {
             user.setRole(roleMapper.toDomain(entity.getRole()));
         }

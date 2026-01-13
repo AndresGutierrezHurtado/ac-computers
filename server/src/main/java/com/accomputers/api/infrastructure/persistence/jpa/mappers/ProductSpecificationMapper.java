@@ -33,7 +33,7 @@ public class ProductSpecificationMapper {
                 entity.getValue(),
                 entity.getSpecificationValueId());
 
-        // Mapear relaciones usando mappers
+        // Map relationships using mappers
         if (entity.getSpecification() != null) {
             productSpecification.setSpecification(specificationMapper.toDomain(entity.getSpecification()));
         }

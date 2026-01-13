@@ -34,33 +34,33 @@ public class ImageService implements ImageServiceInterface {
     @Override
     @Transactional
     public ImageResponseDTO createImage(CreateImageDTO imageDTO) {
-        // Validar que el producto existe
+        // Validate that the product exists
         if (productRepository.findById(imageDTO.productId()) == null) {
             throw new EntityNotFoundException("Product", imageDTO.productId());
         }
 
-        // Validar que se proporcionó una imagen
+        // Validate that an image was provided
         MultipartFile file = imageDTO.image();
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Image file is required");
         }
 
-        // Si la imagen es principal, actualizar todas las demás imágenes del producto como no principales
+        // If the image is main, update all other images of the product as not main
         if (Boolean.TRUE.equals(imageDTO.isMain())) {
             imageRepository.setAllImagesAsNotMainByProductId(imageDTO.productId());
         }
 
-        // Subir la imagen al almacenamiento
+        // Upload the image to storage
         String url = fileManagerInterface.uploadFile(file, "/medias");
 
-        // Crear la entidad Image
+        // Create the Image entity
         Image image = new Image(
                 null,
                 new Url(url),
                 imageDTO.isMain() != null ? imageDTO.isMain() : false,
                 imageDTO.productId());
 
-        // Guardar la imagen
+        // Save the image
         Image savedImage = imageRepository.save(image);
 
         return ImageResponseDTO.fromImage(savedImage);
@@ -69,19 +69,19 @@ public class ImageService implements ImageServiceInterface {
     @Override
     @Transactional
     public void deleteImage(Integer imageId) {
-        // Buscar la imagen
+        // Find the image
         Image image = imageRepository.findById(imageId);
 
         if (image == null) {
             throw new EntityNotFoundException("Image", imageId);
         }
 
-        // Eliminar el archivo del almacenamiento
+        // Delete the file from storage
         if (image.getUrl() != null && image.getUrl().getValue() != null) {
             fileManagerInterface.deleteFile(image.getUrl().getValue());
         }
 
-        // Eliminar la imagen de la base de datos
+        // Delete the image from the database
         imageRepository.delete(imageId);
     }
 }

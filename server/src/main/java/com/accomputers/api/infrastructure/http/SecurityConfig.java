@@ -61,18 +61,18 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Auth
+                        // Auth endpoints
                         .requestMatchers("/auth/**").permitAll()
 
-                        // Users
+                        // User management
                         .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("SUPERUSER", "ADMINISTRATOR", "VIEWER")
                         .requestMatchers("/users/**").hasRole("SUPERUSER")
 
-                        // Products (catálogo público)
+                        // Products (public catalog)
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/products/recommendations").permitAll()
 
-                        // Products (gestión)
+                        // Products (management)
                         .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("SUPERUSER", "ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("SUPERUSER", "ADMINISTRATOR")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasAnyRole("SUPERUSER", "ADMINISTRATOR")

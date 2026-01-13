@@ -46,7 +46,7 @@ public class ProductMapper {
                 entity.getCreatedAt(),
                 entity.getUpdatedAt());
 
-        // Mapear relaciones usando mappers
+        // Map relationships using mappers
         if (entity.getBrand() != null) {
             product.setBrand(brandMapper.toDomain(entity.getBrand()));
         }
