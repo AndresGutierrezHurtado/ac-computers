@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.accomputers.api.infrastructure.http.responses.CustomAccessDeniedHandler;
 import com.accomputers.api.infrastructure.http.responses.CustomAuthenticationEntryPoint;
 import com.accomputers.api.infrastructure.security.JwtAuthenticationFilter;
+import com.accomputers.api.infrastructure.logging.LoggingContextFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -28,17 +29,20 @@ public class SecurityConfig {
     private final RateLimiter rateLimiter;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final LoggingContextFilter loggingContextFilter;
 
     @Autowired
     public SecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
             RateLimiter rateLimiter,
             CustomAuthenticationEntryPoint authenticationEntryPoint,
-            CustomAccessDeniedHandler accessDeniedHandler) {
+            CustomAccessDeniedHandler accessDeniedHandler,
+            LoggingContextFilter loggingContextFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.rateLimiter = rateLimiter;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
+        this.loggingContextFilter = loggingContextFilter;
     }
 
     @Bean
@@ -82,6 +86,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(rateLimiter, JwtAuthenticationFilter.class)
+                .addFilterBefore(loggingContextFilter, JwtAuthenticationFilter.class)
                 .build();
     }
 
