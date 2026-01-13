@@ -1,0 +1,32 @@
+<configuration>
+
+    <!-- Normal logs (Spring, Hibernate, etc.) -->
+    <appender name="STDOUT_DEFAULT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- Structured logs ONLY from the app -->
+    <appender name="STDOUT_APP_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdc>true</includeMdc>
+            <customFields>
+                {"service":"accomputers-api"}
+            </customFields>
+        </encoder>
+    </appender>
+
+    <!-- Logger exclusive for your adapter -->
+    <logger name="ApplicationLogger" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT_APP_JSON"/>
+    </logger>
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT_DEFAULT"/>
+    </root>
+
+</configuration>

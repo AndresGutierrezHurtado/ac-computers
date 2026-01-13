@@ -86,7 +86,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(rateLimiter, JwtAuthenticationFilter.class)
-                .addFilterBefore(loggingContextFilter, JwtAuthenticationFilter.class)
+                .addFilterAfter(loggingContextFilter, JwtAuthenticationFilter.class)
                 .build();
     }
 
