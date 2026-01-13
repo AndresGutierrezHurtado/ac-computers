@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartException;
 // Domain
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
 import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
+import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.domain.exceptions.DomainException;
 
 // Responses
@@ -17,6 +18,12 @@ import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private final LoggerPort logger;
+
+    public GlobalExceptionHandler(LoggerPort loggerPort) {
+        this.logger = loggerPort;
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ResponseDTO<Void>> handleEntityNotFoundException(EntityNotFoundException e) {
@@ -42,22 +49,21 @@ public class GlobalExceptionHandler {
                     false));
         }
 
-        System.out.println("Database error: " + e.getMessage() + " Stack Trace: " + e.getStackTrace());
+        logger.error("Database error", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO<Void>(
                 "There was an error with the database, check the server logs for more information", false));
     }
 
     @ExceptionHandler(MultipartException.class)
     protected ResponseEntity<ResponseDTO<Void>> handleFileUploadingError(Exception e) {
-        e.printStackTrace();
-        System.out.println("Failed to upload attachment: " + e.getMessage());
+        logger.error("Failed to upload attachment", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseDTO<Void>(e.getMessage(), false));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDTO<Void>> handleException(Exception e) {
-        System.out.println("Exception: " + e.getMessage() + " Stack Trace: " + e.getStackTrace());
+        logger.error("Unexpected exception occurred", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseDTO<Void>("Internal server error", false));
     }
