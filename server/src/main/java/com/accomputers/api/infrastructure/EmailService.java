@@ -14,11 +14,19 @@ public class EmailService implements MessagingService {
     private JavaMailSender mailSender;
 
     @Override
-    public void sendEmail(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        mailSender.send(message);
+    public void sendFeedback(String subject, String name, String email, String message) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo("andres52885241@gmail.com");
+        mail.setSubject("[AC Computers] Feedback form: " + subject);
+        mail.setText(
+                String.format(
+                        "You have received a new feedback from:\n\n" +
+                                "%nName: %s\n" +
+                                "%nEmail: %s\n" +
+                                "%nMessage: %s",
+                        name,
+                        email,
+                        message));
+        mailSender.send(mail);
     }
 }

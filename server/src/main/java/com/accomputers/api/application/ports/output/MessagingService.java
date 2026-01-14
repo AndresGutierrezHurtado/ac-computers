@@ -1,5 +1,5 @@
 package com.accomputers.api.application.ports.output;
 
 public interface MessagingService {
-    void sendEmail(String to, String subject, String text);
+    void sendFeedback(String subject, String name, String email, String message);
 }

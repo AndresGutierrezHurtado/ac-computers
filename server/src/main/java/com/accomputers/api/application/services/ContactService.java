@@ -13,8 +13,6 @@ import com.accomputers.api.application.dtos.ContactDTO;
 
 @Service
 public class ContactService implements ContactServiceInterface {
-    private static final String CONTACT_EMAIL = "andres52885241@gmail.com";
-    
     private final MessagingService messagingService;
     private final LoggerPort loggerPort;
 
@@ -26,21 +24,9 @@ public class ContactService implements ContactServiceInterface {
 
     @Override
     public void sendContactFeedback(ContactDTO contactDTO) {
-        String subject = String.format("Nuevo mensaje de contacto de %s", contactDTO.name());
-        
-        String emailBody = String.format(
-            "Has recibido un nuevo mensaje de contacto desde el formulario de contacto de AC Computers:\n\n" +
-            "Nombre: %s\n" +
-            "Email: %s\n" +
-            "Mensaje:\n%s",
-            contactDTO.name(),
-            contactDTO.email(),
-            contactDTO.message()
-        );
+        messagingService.sendFeedback(contactDTO.subject(), contactDTO.name(), contactDTO.email(), contactDTO.message());
 
-        messagingService.sendEmail(CONTACT_EMAIL, subject, emailBody);
-
-        loggerPort.info(String.format("Contact feedback sent - Name: %s, Email: %s", 
-            contactDTO.name(), contactDTO.email()));
+        loggerPort.info(String.format("Contact feedback sent - Subject: %s, Name: %s, Email: %s, Message: %s", 
+            contactDTO.subject(), contactDTO.name(), contactDTO.email(), contactDTO.message()));
     }
 }
