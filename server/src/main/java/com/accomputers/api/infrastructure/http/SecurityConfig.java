@@ -68,6 +68,9 @@ public class SecurityConfig {
                         // Auth endpoints
                         .requestMatchers("/auth/**").permitAll()
 
+                        // Contact form
+                        .requestMatchers(HttpMethod.POST, "/contact").permitAll()
+
                         // User management
                         .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("SUPERUSER", "ADMINISTRATOR", "VIEWER")
                         .requestMatchers("/users/**").hasRole("SUPERUSER")
