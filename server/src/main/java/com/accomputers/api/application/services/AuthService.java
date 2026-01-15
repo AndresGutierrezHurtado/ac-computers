@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 
 // Domain
 import com.accomputers.api.domain.entities.User;
+import com.accomputers.api.domain.exceptions.EmailAlreadyExistsException;
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
 import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 import com.accomputers.api.domain.valueobjects.Email;
@@ -53,14 +54,20 @@ public class AuthService implements AuthServiceInterface {
 
         userAuthService.authenticateUser(user);
 
-        loggerPort.info(String.format("User logged in successfully - ID: %d, Email: %s", 
-            user.getId(), user.getEmail().getValue()));
+        loggerPort.info(String.format("User logged in successfully - ID: %d, Email: %s",
+                user.getId(), user.getEmail().getValue()));
 
         return UserResponseDTO.fromUser(user);
     }
 
     @Transactional
     public UserResponseDTO register(RegisterDTO registerDTO) {
+        User existingUser = userRepository.findByEmail(new Email(registerDTO.email()));
+
+        if (existingUser != null) {
+            throw EmailAlreadyExistsException.forEmail(registerDTO.email());
+        }
+
         String hashedPassword = passwordHasher.hashPassword(registerDTO.password());
 
         User newUser = new User(
@@ -73,9 +80,9 @@ public class AuthService implements AuthServiceInterface {
 
         User savedUser = userRepository.save(newUser);
 
-        loggerPort.info(String.format("User registered successfully - ID: %d, Email: %s, Name: %s %s", 
-            savedUser.getId(), savedUser.getEmail().getValue(), 
-            savedUser.getFirstName(), savedUser.getLastName()));
+        loggerPort.info(String.format("User registered successfully - ID: %d, Email: %s, Name: %s %s",
+                savedUser.getId(), savedUser.getEmail().getValue(),
+                savedUser.getFirstName(), savedUser.getLastName()));
 
         return UserResponseDTO.fromUser(savedUser);
     }
@@ -98,8 +105,8 @@ public class AuthService implements AuthServiceInterface {
             throw new EntityNotFoundException("User", "authenticated user not found");
         }
 
-        loggerPort.info(String.format("User logged out successfully - ID: %d, Email: %s", 
-            user.getId(), user.getEmail().getValue()));
+        loggerPort.info(String.format("User logged out successfully - ID: %d, Email: %s",
+                user.getId(), user.getEmail().getValue()));
 
         userAuthService.logoutUser(user);
     }
