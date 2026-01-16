@@ -18,6 +18,14 @@ public class RoleRepository implements RoleRepositoryInterface {
         this.mapper = mapper;
     }
 
+    @Override
+    public Role findById(Integer id) {
+        return jpaRepository.findById(id)
+                .map(mapper::toDomain)
+                .orElse(null);
+    }
+
+    @Override
     public Role save(Role role) {
         if (role == null) {
             return null;
