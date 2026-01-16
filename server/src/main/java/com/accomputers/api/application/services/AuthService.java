@@ -2,6 +2,7 @@ package com.accomputers.api.application.services;
 
 import jakarta.transaction.Transactional;
 
+import com.accomputers.api.domain.entities.Role;
 // Domain
 import com.accomputers.api.domain.entities.User;
 import com.accomputers.api.domain.exceptions.EmailAlreadyExistsException;
@@ -15,6 +16,7 @@ import com.accomputers.api.application.ports.input.AuthServiceInterface;
 import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.application.ports.output.PasswordHasherInterface;
 import com.accomputers.api.application.ports.output.UserAuthServiceInterface;
+import com.accomputers.api.application.ports.output.repositories.RoleRepositoryInterface;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 
 // DTOs
@@ -29,14 +31,16 @@ import org.springframework.stereotype.Service;
 public class AuthService implements AuthServiceInterface {
     private final UserRepositoryInterface userRepository;
     private final PasswordHasherInterface passwordHasher;
+    private final RoleRepositoryInterface roleRepository;
     private final UserAuthServiceInterface userAuthService;
     private final LoggerPort loggerPort;
 
     @Autowired
     public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher,
-            UserAuthServiceInterface userAuthService, LoggerPort loggerPort) {
+            RoleRepositoryInterface roleRepository, UserAuthServiceInterface userAuthService, LoggerPort loggerPort) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
+        this.roleRepository = roleRepository;
         this.userAuthService = userAuthService;
         this.loggerPort = loggerPort;
     }
@@ -48,7 +52,7 @@ public class AuthService implements AuthServiceInterface {
             throw new EntityNotFoundException("User", loginDTO.email());
         }
 
-        if (!passwordHasher.verifyPassword(loginDTO.password(), user.getPassword().getValue())) {
+        if (!passwordHasher.verifyPassword(new Password(loginDTO.password()), user.getPassword())) {
             throw new InvalidValueObjectException("Password", loginDTO.password(), "is incorrect");
         }
 
@@ -68,15 +72,20 @@ public class AuthService implements AuthServiceInterface {
             throw EmailAlreadyExistsException.forEmail(registerDTO.email());
         }
 
-        String hashedPassword = passwordHasher.hashPassword(registerDTO.password());
+        Password hashedPassword = passwordHasher.hashPassword(new Password(registerDTO.password()));
+
+        Role role = roleRepository.findById(registerDTO.roleId());
+        if (role == null) {
+            throw new InvalidValueObjectException("Role", registerDTO.roleId(), "does not exist");
+        }
 
         User newUser = new User(
                 null,
                 registerDTO.firstName(),
                 registerDTO.lastName(),
                 new Email(registerDTO.email()),
-                new Password(hashedPassword),
-                registerDTO.roleId());
+                hashedPassword,
+                role.getId());
 
         User savedUser = userRepository.save(newUser);
 
