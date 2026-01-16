@@ -2,15 +2,18 @@ package com.accomputers.api.application.services;
 
 import jakarta.transaction.Transactional;
 
+import com.accomputers.api.domain.entities.Role;
 // Domain
 import com.accomputers.api.domain.entities.User;
 import com.accomputers.api.domain.exceptions.EmailAlreadyExistsException;
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 import com.accomputers.api.domain.valueobjects.Email;
 
 // Ports
 import com.accomputers.api.application.ports.input.UserServiceInterface;
 import com.accomputers.api.application.ports.output.LoggerPort;
+import com.accomputers.api.application.ports.output.repositories.RoleRepositoryInterface;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 
 // DTOs
@@ -29,11 +32,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserServiceInterface {
     private final UserRepositoryInterface userRepository;
+    private final RoleRepositoryInterface roleRepository;
     private final LoggerPort loggerPort;
 
     @Autowired
-    public UserService(UserRepositoryInterface userRepository, LoggerPort loggerPort) {
+    public UserService(UserRepositoryInterface userRepository, RoleRepositoryInterface roleRepository, LoggerPort loggerPort) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.loggerPort = loggerPort;
     }
 
@@ -84,7 +89,11 @@ public class UserService implements UserServiceInterface {
             user.setLastName(updateUserDTO.lastName());
         }
         if (updateUserDTO.roleId() != null) {
-            user.setRoleId(updateUserDTO.roleId());
+            Role role = roleRepository.findById(updateUserDTO.roleId());
+            if (role == null) {
+                throw new InvalidValueObjectException("Role", updateUserDTO.roleId(), "does not exist");
+            }
+            user.setRoleId(role.getId());
         }
 
         User updatedUser = userRepository.save(user);
