@@ -1,6 +1,8 @@
 package com.accomputers.api.application.ports.output;
 
+import com.accomputers.api.domain.valueobjects.Password;
+
 public interface PasswordHasherInterface {
-    String hashPassword(String password);
-    boolean verifyPassword(String password, String hashedPassword);
+    Password hashPassword(Password password);
+    boolean verifyPassword(Password password, Password hashedPassword);
 }
