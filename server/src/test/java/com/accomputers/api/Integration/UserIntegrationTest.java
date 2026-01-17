@@ -14,6 +14,7 @@ import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
 import com.accomputers.api.domain.exceptions.EmailAlreadyExistsException;
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 
 import jakarta.transaction.Transactional;
 
@@ -53,5 +54,11 @@ public class UserIntegrationTest {
         authService.register(registerDTO);
 
         assertThrows(EmailAlreadyExistsException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
+    public void create_user_with_invalid_email() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "invalid-email", "password", 1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
     }
 }
