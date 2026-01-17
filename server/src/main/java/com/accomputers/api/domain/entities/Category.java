@@ -8,7 +8,7 @@ public class Category {
     private Slug slug;
     private String description;
 
-    Category(Integer id, String name, Slug slug, String description) {
+    public Category(Integer id, String name, Slug slug, String description) {
         this.id = id;
         this.name = name;
         this.slug = slug;
