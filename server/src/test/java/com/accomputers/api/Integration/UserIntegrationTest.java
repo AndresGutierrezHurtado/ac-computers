@@ -2,6 +2,7 @@ package com.accomputers.api.Integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
+import com.accomputers.api.domain.exceptions.EmailAlreadyExistsException;
 
 import jakarta.transaction.Transactional;
 
@@ -42,5 +44,14 @@ public class UserIntegrationTest {
         assertNotNull(user);
         assertNotNull(user.id());
         assertEquals(uniqueEmail, user.email());
+    }
+
+    @Test
+    public void create_user_with_existing_email() {
+        String uniqueEmail = uniqueEmail();
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", uniqueEmail, "password", 1);
+        authService.register(registerDTO);
+
+        assertThrows(EmailAlreadyExistsException.class, () -> authService.register(registerDTO));
     }
 }
