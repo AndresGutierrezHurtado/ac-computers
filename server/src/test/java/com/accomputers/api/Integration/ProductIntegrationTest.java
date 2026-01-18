@@ -2,6 +2,7 @@ package com.accomputers.api.Integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.accomputers.api.application.ports.output.repositories.SubCategoryRepo
 import com.accomputers.api.domain.entities.Brand;
 import com.accomputers.api.domain.entities.Category;
 import com.accomputers.api.domain.entities.SubCategory;
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 import com.accomputers.api.domain.valueobjects.Slug;
 
 import jakarta.transaction.Transactional;
@@ -98,5 +100,59 @@ public class ProductIntegrationTest {
         assertEquals(99.99f, product.price());
         assertEquals("new", product.condition());
         assertEquals(10.0f, product.discount());
+    }
+
+    @Test
+    public void create_product_with_invalid_price() {
+        Brand brand = createTestBrand();
+        SubCategory subCategory = createTestSubCategory();
+        createProductDTO productDTO = new createProductDTO(
+                "Test Product",
+                "Test product description",
+                -10.0f,
+                "new",
+                10.0f,
+                brand.getId(),
+                subCategory.getId(),
+                null,
+                null);
+
+        assertThrows(InvalidValueObjectException.class, () -> productService.createProduct(productDTO));
+    }
+
+    @Test
+    public void create_product_with_invalid_discount() {
+        Brand brand = createTestBrand();
+        SubCategory subCategory = createTestSubCategory();
+        createProductDTO productDTO = new createProductDTO(
+                "Test Product",
+                "Test product description",
+                99.99f,
+                "new",
+                150.0f,
+                brand.getId(),
+                subCategory.getId(),
+                null,
+                null);
+
+        assertThrows(InvalidValueObjectException.class, () -> productService.createProduct(productDTO));
+    }
+
+    @Test
+    public void create_product_with_invalid_condition() {
+        Brand brand = createTestBrand();
+        SubCategory subCategory = createTestSubCategory();
+        createProductDTO productDTO = new createProductDTO(
+                "Test Product",
+                "Test product description",
+                99.99f,
+                "invalid-condition",
+                10.0f,
+                brand.getId(),
+                subCategory.getId(),
+                null,
+                null);
+
+        assertThrows(InvalidValueObjectException.class, () -> productService.createProduct(productDTO));
     }
 }
