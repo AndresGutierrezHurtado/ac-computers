@@ -87,6 +87,20 @@ public class ProductIntegrationTest {
     }
 
     @Test
+    public void get_product_by_id_successfully() {
+        Brand brand = createTestBrand();
+        SubCategory subCategory = createTestSubCategory();
+        createProductDTO productDTO = createValidProductDTO(brand.getId(), subCategory.getId());
+        ProductResponseDTO createdProduct = productService.createProduct(productDTO);
+
+        ProductResponseDTO retrievedProduct = productService.getProductById(createdProduct.id());
+
+        assertNotNull(retrievedProduct);
+        assertEquals(createdProduct.id(), retrievedProduct.id());
+        assertEquals(createdProduct.name(), retrievedProduct.name());
+    }
+
+    @Test
     public void create_product_successfully() {
         Brand brand = createTestBrand();
         SubCategory subCategory = createTestSubCategory();
