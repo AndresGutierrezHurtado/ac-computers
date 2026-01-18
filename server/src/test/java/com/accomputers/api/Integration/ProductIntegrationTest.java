@@ -19,6 +19,7 @@ import com.accomputers.api.application.ports.output.repositories.SubCategoryRepo
 import com.accomputers.api.domain.entities.Brand;
 import com.accomputers.api.domain.entities.Category;
 import com.accomputers.api.domain.entities.SubCategory;
+import com.accomputers.api.domain.exceptions.EntityNotFoundException;
 import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 import com.accomputers.api.domain.valueobjects.Slug;
 
@@ -98,6 +99,11 @@ public class ProductIntegrationTest {
         assertNotNull(retrievedProduct);
         assertEquals(createdProduct.id(), retrievedProduct.id());
         assertEquals(createdProduct.name(), retrievedProduct.name());
+    }
+
+    @Test
+    public void get_product_by_nonexistent_id() {
+        assertThrows(EntityNotFoundException.class, () -> productService.getProductById(99999));
     }
 
     @Test
