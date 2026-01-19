@@ -2,6 +2,7 @@ package com.accomputers.api.Integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.accomputers.api.application.dtos.auth.LoginDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 
 import jakarta.transaction.Transactional;
 
@@ -51,5 +53,21 @@ public class AuthIntegrationTest {
         assertEquals(registeredUser.email(), loggedInUser.email());
         assertEquals(registeredUser.firstName(), loggedInUser.firstName());
         assertEquals(registeredUser.lastName(), loggedInUser.lastName());
+    }
+
+    @Test
+    public void login_with_incorrect_password() {
+        String uniqueEmail = uniqueEmail();
+        String correctPassword = "password123";
+        String incorrectPassword = "wrongpassword";
+        
+        // First register a user
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", uniqueEmail, correctPassword, 1);
+        authService.register(registerDTO);
+
+        // Try to login with wrong password
+        LoginDTO loginDTO = new LoginDTO(uniqueEmail, incorrectPassword);
+        
+        assertThrows(InvalidValueObjectException.class, () -> authService.login(loginDTO));
     }
 }
