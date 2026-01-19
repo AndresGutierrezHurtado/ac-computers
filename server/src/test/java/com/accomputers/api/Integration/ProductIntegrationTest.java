@@ -191,4 +191,41 @@ public class ProductIntegrationTest {
 
         assertThrows(EntityNotFoundException.class, () -> productService.createProduct(productDTO));
     }
+
+    @Test
+    public void update_product_successfully() {
+        Brand brand = createTestBrand();
+        SubCategory subCategory = createTestSubCategory();
+        createProductDTO productDTO = createValidProductDTO(brand.getId(), subCategory.getId());
+        ProductResponseDTO createdProduct = productService.createProduct(productDTO);
+
+        createProductDTO updateDTO = new createProductDTO(
+                "Updated Product Name",
+                "Updated description",
+                149.99f,
+                "used",
+                15.0f,
+                brand.getId(),
+                subCategory.getId(),
+                null,
+                null);
+
+        ProductResponseDTO updatedProduct = productService.updateProduct(createdProduct.id(), updateDTO);
+
+        assertNotNull(updatedProduct);
+        assertEquals(createdProduct.id(), updatedProduct.id());
+        assertEquals("Updated Product Name", updatedProduct.name());
+        assertEquals(149.99f, updatedProduct.price());
+        assertEquals("used", updatedProduct.condition());
+        assertEquals(15.0f, updatedProduct.discount());
+    }
+
+    @Test
+    public void update_product_with_nonexistent_id() {
+        Brand brand = createTestBrand();
+        SubCategory subCategory = createTestSubCategory();
+        createProductDTO updateDTO = createValidProductDTO(brand.getId(), subCategory.getId());
+
+        assertThrows(EntityNotFoundException.class, () -> productService.updateProduct(99999, updateDTO));
+    }
 }
