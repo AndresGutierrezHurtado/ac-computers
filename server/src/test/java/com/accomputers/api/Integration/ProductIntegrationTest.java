@@ -228,4 +228,21 @@ public class ProductIntegrationTest {
 
         assertThrows(EntityNotFoundException.class, () -> productService.updateProduct(99999, updateDTO));
     }
+
+    @Test
+    public void delete_product_successfully() {
+        Brand brand = createTestBrand();
+        SubCategory subCategory = createTestSubCategory();
+        createProductDTO productDTO = createValidProductDTO(brand.getId(), subCategory.getId());
+        ProductResponseDTO createdProduct = productService.createProduct(productDTO);
+
+        productService.deleteProduct(createdProduct.id());
+
+        assertThrows(EntityNotFoundException.class, () -> productService.getProductById(createdProduct.id()));
+    }
+
+    @Test
+    public void delete_product_with_nonexistent_id() {
+        assertThrows(EntityNotFoundException.class, () -> productService.deleteProduct(99999));
+    }
 }
