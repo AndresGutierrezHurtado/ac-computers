@@ -175,4 +175,20 @@ public class ProductIntegrationTest {
 
         assertThrows(InvalidValueObjectException.class, () -> productService.createProduct(productDTO));
     }
+
+    @Test
+    public void create_product_with_nonexistent_brand() {
+        SubCategory subCategory = createTestSubCategory();
+        createProductDTO productDTO = createValidProductDTO(99999, subCategory.getId());
+
+        assertThrows(EntityNotFoundException.class, () -> productService.createProduct(productDTO));
+    }
+
+    @Test
+    public void create_product_with_nonexistent_subcategory() {
+        Brand brand = createTestBrand();
+        createProductDTO productDTO = createValidProductDTO(brand.getId(), 99999);
+
+        assertThrows(EntityNotFoundException.class, () -> productService.createProduct(productDTO));
+    }
 }
