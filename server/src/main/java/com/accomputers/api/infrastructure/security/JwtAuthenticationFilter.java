@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 import com.accomputers.api.domain.entities.User;
 
@@ -20,11 +21,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserRepositoryInterface userRepository;
     private final JwtUtil jwtUtil;
+    private final LoggerPort logger;
 
     @Autowired
-    public JwtAuthenticationFilter(UserRepositoryInterface userRepository, JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(UserRepositoryInterface userRepository, JwtUtil jwtUtil, LoggerPort logger) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
+        this.logger = logger;
     }
 
     @Override
@@ -49,8 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (Exception e) {
-                System.out.println("Error retrieving user from token: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Error retrieving user from token", e);
                 SecurityContextHolder.clearContext();
             }
         }
