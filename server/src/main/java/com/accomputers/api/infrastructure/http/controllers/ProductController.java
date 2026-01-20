@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.Valid;
 
 import com.accomputers.api.application.dtos.PageDTO;
 // Application
@@ -38,7 +39,7 @@ public class ProductController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDTO<ProductResponseDTO>> createProduct(
-        @ModelAttribute createProductDTO productDTO,
+        @Valid @ModelAttribute createProductDTO productDTO,
         @RequestParam("image") MultipartFile image
     ) {
         createProductDTO productDTOWithImage = new createProductDTO(
@@ -116,7 +117,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO<ProductResponseDTO>> updateProduct(
             @PathVariable Integer id,
-            @ModelAttribute createProductDTO productDTO) {
+            @Valid @ModelAttribute createProductDTO productDTO) {
 
         ProductResponseDTO product = productServiceInterface.updateProduct(id, productDTO);
 

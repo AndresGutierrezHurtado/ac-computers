@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 // Application
 import com.accomputers.api.application.dtos.auth.UpdateUserDTO;
@@ -72,7 +73,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> updateUser(
             @PathVariable Integer id,
-            @RequestBody UpdateUserDTO updateUserDTO) {
+            @Valid @RequestBody UpdateUserDTO updateUserDTO) {
 
         UserResponseDTO user = userServiceInterface.updateUser(id, updateUserDTO);
 
