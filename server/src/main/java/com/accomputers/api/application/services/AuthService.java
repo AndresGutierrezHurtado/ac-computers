@@ -26,8 +26,11 @@ import com.accomputers.api.application.dtos.response.UserResponseDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
 
 @Service
+@Validated
 public class AuthService implements AuthServiceInterface {
     private final UserRepositoryInterface userRepository;
     private final PasswordHasherInterface passwordHasher;
@@ -45,7 +48,8 @@ public class AuthService implements AuthServiceInterface {
         this.loggerPort = loggerPort;
     }
 
-    public UserResponseDTO login(LoginDTO loginDTO) {
+    @Override
+    public UserResponseDTO login(@Valid LoginDTO loginDTO) {
         User user = userRepository.findByEmail(new Email(loginDTO.email()));
 
         if (user == null) {
@@ -64,8 +68,9 @@ public class AuthService implements AuthServiceInterface {
         return UserResponseDTO.fromUser(user);
     }
 
+    @Override
     @Transactional
-    public UserResponseDTO register(RegisterDTO registerDTO) {
+    public UserResponseDTO register(@Valid RegisterDTO registerDTO) {
         User existingUser = userRepository.findByEmail(new Email(registerDTO.email()));
 
         if (existingUser != null) {

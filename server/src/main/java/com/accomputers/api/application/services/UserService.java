@@ -25,11 +25,14 @@ import com.accomputers.api.application.dtos.response.UserResponseDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 public class UserService implements UserServiceInterface {
     private final UserRepositoryInterface userRepository;
     private final RoleRepositoryInterface roleRepository;
@@ -65,7 +68,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     @Transactional
-    public UserResponseDTO updateUser(Integer id, UpdateUserDTO updateUserDTO) {
+    public UserResponseDTO updateUser(Integer id, @Valid UpdateUserDTO updateUserDTO) {
         User user = userRepository.findById(id);
 
         if (user == null) {

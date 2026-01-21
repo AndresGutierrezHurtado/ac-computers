@@ -5,6 +5,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -34,6 +36,7 @@ import com.accomputers.api.application.dtos.createProductDTO.ProductSpecificatio
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 
 @Service
+@Validated
 public class ProductService implements ProductServiceInterface {
     private final ProductRepositoryInterface productRepository;
     private final ProductRecommendationInterface productRecommendationInterface;
@@ -72,7 +75,7 @@ public class ProductService implements ProductServiceInterface {
 
     @Override
     @Transactional
-    public ProductResponseDTO createProduct(createProductDTO productDTO) {
+    public ProductResponseDTO createProduct(@Valid createProductDTO productDTO) {
         LocalDateTime now = LocalDateTime.now();
 
         String conditionValue = StringUtils.hasText(productDTO.condition())
@@ -191,7 +194,7 @@ public class ProductService implements ProductServiceInterface {
 
     @Override
     @Transactional
-    public ProductResponseDTO updateProduct(Integer id, createProductDTO productDTO) {
+    public ProductResponseDTO updateProduct(Integer id, @Valid createProductDTO productDTO) {
         Product product = productRepository.findById(id);
 
         if (product == null) {
