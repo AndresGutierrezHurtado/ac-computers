@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 // Assertions
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // Spring
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import org.springframework.test.context.ActiveProfiles;
 // DTOs and Ports
 import com.accomputers.api.application.dtos.ContactDTO;
 import com.accomputers.api.application.ports.input.ContactServiceInterface;
+
+// Domain
+import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 
 // Transactional
 import jakarta.transaction.Transactional;
@@ -42,5 +46,29 @@ public class ContactIntegrationTest {
         );
 
         assertDoesNotThrow(() -> contactService.sendContactFeedback(contactDTO));
+    }
+
+    @Test
+    public void send_contact_feedback_with_empty_subject() {
+        ContactDTO contactDTO = new ContactDTO(
+                "",
+                "John Doe",
+                "john.doe@example.com",
+                "This is a test message."
+        );
+
+        assertThrows(InvalidValueObjectException.class, () -> contactService.sendContactFeedback(contactDTO));
+    }
+
+    @Test
+    public void send_contact_feedback_with_null_subject() {
+        ContactDTO contactDTO = new ContactDTO(
+                null,
+                "John Doe",
+                "john.doe@example.com",
+                "This is a test message."
+        );
+
+        assertThrows(InvalidValueObjectException.class, () -> contactService.sendContactFeedback(contactDTO));
     }
 }
