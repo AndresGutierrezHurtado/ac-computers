@@ -17,6 +17,8 @@ import com.accomputers.api.domain.exceptions.DomainException;
 // Responses
 import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
 
+import jakarta.validation.ConstraintViolationException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -34,6 +36,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidValueObjectException.class)
     public ResponseEntity<ResponseDTO<Void>> handleInvalidValueObjectException(InvalidValueObjectException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO<Void>(e.getMessage(), false));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ResponseDTO<Void>> handleConstraintViolationException(ConstraintViolationException e) {
+        String errorMessage = e.getConstraintViolations().stream().findFirst().get().getMessage();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO<Void>(errorMessage, false));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

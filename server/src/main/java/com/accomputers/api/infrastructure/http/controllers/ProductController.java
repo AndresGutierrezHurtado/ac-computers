@@ -15,14 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.Valid;
 
-import com.accomputers.api.application.dtos.PageDTO;
 // Application
 import com.accomputers.api.application.dtos.ProductFiltersDTO;
 import com.accomputers.api.application.dtos.createProductDTO;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
+import com.accomputers.api.application.dtos.PageDTO;
 import com.accomputers.api.infrastructure.http.responses.PaginatedResponseDTO;
+
 // Infrastructure
 import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
 
@@ -38,7 +40,7 @@ public class ProductController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDTO<ProductResponseDTO>> createProduct(
-        @ModelAttribute createProductDTO productDTO,
+        @ModelAttribute @Valid createProductDTO productDTO,
         @RequestParam("image") MultipartFile image
     ) {
         createProductDTO productDTOWithImage = new createProductDTO(

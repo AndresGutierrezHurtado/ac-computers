@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 // Application
 import com.accomputers.api.application.dtos.auth.LoginDTO;
@@ -29,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO<UserResponseDTO>> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> login(@RequestBody @Valid LoginDTO loginDTO) {
         UserResponseDTO user = authServiceInterface.login(loginDTO);
 
         ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("Login successful", true, user);
@@ -38,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO<UserResponseDTO>> register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> register(@RequestBody @Valid RegisterDTO registerDTO) {
         UserResponseDTO user = authServiceInterface.register(registerDTO);
 
         ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("User registered successfully",

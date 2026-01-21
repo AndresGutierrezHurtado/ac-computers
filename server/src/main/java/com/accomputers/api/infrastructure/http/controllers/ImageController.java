@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+// DTOs
 import com.accomputers.api.application.dtos.CreateImageDTO;
 import com.accomputers.api.application.dtos.response.ImageResponseDTO;
-import com.accomputers.api.application.ports.input.ImageServiceInterface;
 import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
+
+// Ports
+import com.accomputers.api.application.ports.input.ImageServiceInterface;
 
 @RestController
 @RequestMapping("/images")
