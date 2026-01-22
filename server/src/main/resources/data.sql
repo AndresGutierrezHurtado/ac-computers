@@ -29,16 +29,16 @@ INSERT INTO `roles` (`id`, `name`) VALUES
 
 -- USERS
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `role_id`) VALUES
-(1, "Andrés", "Gutiérrez Hurtado", "andres52885241@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 1),
-(2, "Wendy Alejandra", "Navarro Arias", "nwendy798@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 2),
-(3, "Amalia", "Castro Ardila", "amalia.castro.ardila@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 2),
-(4, "Andres Felipe", "Quevedo Vega", "andres.quevedo.vega@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 3),
-(5, "Jennifer", "Fajardo", "jennifer.fajardo@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 2),
-(6, "Carlos Alberto", "Rodríguez Martínez", "carlos.rodriguez.martinez@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 3),
-(7, "María Fernanda", "López González", "maria.lopez.gonzalez@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 2),
-(8, "Juan Pablo", "Sánchez Torres", "juan.sanchez.torres@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 3),
-(9, "Laura Camila", "García Ramírez", "laura.garcia.ramirez@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 2),
-(10, "Diego Alejandro", "Morales Herrera", "diego.morales.herrera@gmail.com", "$2a$12$kW8WFoPynAA1d7FNt/stU.qFzRclDfENJ9eIx7CNrSoKd2QfreUW.", 3);
+(1, "Andrés", "Gutiérrez Hurtado", "andres52885241@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 1),
+(2, "Wendy Alejandra", "Navarro Arias", "nwendy798@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 2),
+(3, "Amalia", "Castro Ardila", "amalia.castro.ardila@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 2),
+(4, "Andres Felipe", "Quevedo Vega", "andres.quevedo.vega@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 3),
+(5, "Jennifer", "Fajardo", "jennifer.fajardo@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 2),
+(6, "Carlos Alberto", "Rodríguez Martínez", "carlos.rodriguez.martinez@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 3),
+(7, "María Fernanda", "López González", "maria.lopez.gonzalez@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 2),
+(8, "Juan Pablo", "Sánchez Torres", "juan.sanchez.torres@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 3),
+(9, "Laura Camila", "García Ramírez", "laura.garcia.ramirez@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 2),
+(10, "Diego Alejandro", "Morales Herrera", "diego.morales.herrera@gmail.com", "$2a$10$Dvtv6WTlj3jSDzmdu5BzOO3wEOCTGVTz7cmjPi0X3uOXUhxBk/N6u", 3);
 
 -- BRANDS
 INSERT INTO `brands` (`id`, `name`) VALUES
