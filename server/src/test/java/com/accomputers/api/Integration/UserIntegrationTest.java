@@ -99,7 +99,22 @@ public class UserIntegrationTest {
     }
 
     @Test
-    public void create_user_with_invalid_role_id() {
+    public void create_user_with_empty_password() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john.doe@example.com", "", 1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
+    public void create_user_with_null_password() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john.doe@example.com", null, 1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
+    public void create_user_with_password_too_short() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john.doe@example.com", "abc", 1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
         RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john.doe@example.com", "password", -1);
         assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
     }
