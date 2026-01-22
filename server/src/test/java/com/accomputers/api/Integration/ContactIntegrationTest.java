@@ -131,4 +131,28 @@ public class ContactIntegrationTest {
 
         assertThrows(InvalidValueObjectException.class, () -> contactService.sendContactFeedback(contactDTO));
     }
+
+    @Test
+    public void send_contact_feedback_with_empty_message() {
+        ContactDTO contactDTO = new ContactDTO(
+                "Test Subject",
+                "John Doe",
+                "john.doe@example.com",
+                ""
+        );
+
+        assertThrows(InvalidValueObjectException.class, () -> contactService.sendContactFeedback(contactDTO));
+    }
+
+    @Test
+    public void send_contact_feedback_with_null_message() {
+        ContactDTO contactDTO = new ContactDTO(
+                "Test Subject",
+                "John Doe",
+                "john.doe@example.com",
+                null
+        );
+
+        assertThrows(InvalidValueObjectException.class, () -> contactService.sendContactFeedback(contactDTO));
+    }
 }
