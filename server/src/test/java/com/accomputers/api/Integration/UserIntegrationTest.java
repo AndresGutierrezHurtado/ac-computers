@@ -63,6 +63,36 @@ public class UserIntegrationTest {
     }
 
     @Test
+    public void create_user_with_empty_email() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "", "password", 1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
+    public void create_user_with_null_email() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", null, "password", 1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
+    public void create_user_with_email_missing_at_symbol() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "johndoeexample.com", "password", 1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
+    public void create_user_with_email_missing_domain() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "johndoe@", "password", 1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
+    public void create_user_with_email_missing_username() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "@example.com", "password", 1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
     public void create_user_with_invalid_password() {
         RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john.doe@example.com", "123", 1);
         assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
