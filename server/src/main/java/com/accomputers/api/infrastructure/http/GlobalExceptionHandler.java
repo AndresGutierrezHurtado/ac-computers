@@ -65,21 +65,21 @@ public class GlobalExceptionHandler {
                     false));
         }
 
-        logger.error("Database error", e);
+        logger.error("Database error: " + e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO<Void>(
                 "There was an error with the database, check the server logs for more information", false));
     }
 
     @ExceptionHandler(MultipartException.class)
     protected ResponseEntity<ResponseDTO<Void>> handleFileUploadingError(Exception e) {
-        logger.error("Failed to upload attachment", e);
+        logger.error("Failed to upload attachment: " + e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseDTO<Void>(e.getMessage(), false));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDTO<Void>> handleException(Exception e) {
-        logger.error("Unexpected exception occurred", e);
+        logger.error("Unexpected exception occurred: " + e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseDTO<Void>("Internal server error", false));
     }

@@ -38,7 +38,7 @@ public class LogAdapter implements LoggerPort {
 
     @Override
     public void error(String message, Throwable throwable) {
-        logger.error("[ERROR] {}", message, throwable);
+        logger.error("[ERROR] {}", message);
     }
 
     @Override

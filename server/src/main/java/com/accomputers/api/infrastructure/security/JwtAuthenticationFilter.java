@@ -52,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (Exception e) {
-                logger.error("Error retrieving user from token", e);
+                logger.error("Error retrieving user from token: " + e.getMessage(), e);
                 SecurityContextHolder.clearContext();
             }
         }
