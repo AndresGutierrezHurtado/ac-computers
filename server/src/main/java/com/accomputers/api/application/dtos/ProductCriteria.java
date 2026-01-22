@@ -24,9 +24,9 @@ public class ProductCriteria {
         this.perPage = 10;
     }
 
-    public ProductCriteria(Integer page, Integer perPage, String search, Integer categoryId, 
-                          Integer subCategoryId, String condition, Integer brandId, 
-                          Float minPrice, Float maxPrice, Float minDiscount, Float maxDiscount) {
+    public ProductCriteria(Integer page, Integer perPage, String search, Integer categoryId,
+            Integer subCategoryId, String condition, Integer brandId,
+            Float minPrice, Float maxPrice, Float minDiscount, Float maxDiscount) {
         this.page = page != null && page > 0 ? page : 1;
         this.perPage = perPage != null && perPage > 0 ? perPage : 10;
         this.search = search;
@@ -130,6 +130,7 @@ public class ProductCriteria {
 
     /**
      * Validates the condition value against valid Condition types.
+     * 
      * @return true if condition is null or valid, false otherwise
      */
     public boolean isValidCondition() {
@@ -139,4 +140,3 @@ public class ProductCriteria {
         return Condition.ConditionType.fromString(condition) != null;
     }
 }
-

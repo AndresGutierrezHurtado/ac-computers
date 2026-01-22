@@ -52,6 +52,11 @@ dependencies {
 
 	// Messaging
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// PDF Generation
+    implementation 'com.itextpdf:kernel:9.5.0'
+    implementation 'com.itextpdf:layout:9.5.0'
+    implementation 'com.itextpdf:html2pdf:6.3.1'
 }
 
 tasks.named('test') {
