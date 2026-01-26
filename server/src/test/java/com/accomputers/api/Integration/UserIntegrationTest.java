@@ -115,7 +115,22 @@ public class UserIntegrationTest {
         RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john.doe@example.com", "abc", 1);
         assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
     }
+
+    @Test
+    public void create_user_with_invalid_role_id_negative() {
         RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john.doe@example.com", "password", -1);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
+    public void create_user_with_invalid_role_id_zero() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john.doe@example.com", "password", 0);
+        assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
+    }
+
+    @Test
+    public void create_user_with_nonexistent_role_id() {
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", "john.doe@example.com", "password", 99999);
         assertThrows(InvalidValueObjectException.class, () -> authService.register(registerDTO));
     }
 }
