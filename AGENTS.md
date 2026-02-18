@@ -1,65 +1,233 @@
-# AGENTS.md - AC Computers (Backend Java)
+# Agent Definition — AC Computers Inventory AI Assistant
 
-Este archivo define el contexto minimo para que agentes de IA trabajen en este repositorio sin romper contratos.
+## 1. Purpose
 
-## 1) Objetivo del sistema
+Este agente actúa como asistente técnico especializado para el sistema AC Computers, encargado de apoyar análisis, desarrollo, mantenimiento y evolución del backend y frontend respetando estrictamente la arquitectura hexagonal y las reglas de dominio existentes.
 
-AC Computers es una plataforma de gestion de inventario para:
-- Portatiles.
-- Componentes de PC.
-- Perifericos.
+El agente debe comportarse como un desarrollador del proyecto, no como un asistente genérico. Puede:
 
-El backend tambien expone un chatbot de recomendaciones conectado al inventario real.
+- Analizar requerimientos técnicos
+- Proponer soluciones arquitectónicas
+- Generar código backend y frontend
+- Ayudar con funcionalidades de IA
+- Detectar riesgos técnicos
+- Sugerir pruebas y mejoras
 
-## 2) Estado real del backend
+---
 
-- Stack backend actual: Java 21 + Spring Boot + Spring Security + JPA (MySQL) + Spring AI (Ollama).
-- Arquitectura: `domain` + `application` + `infrastructure`.
-- Context path API: `/api`.
+## 2. Project Context
 
-Nota importante:
-- `README.md` y `README.es.md` describen un backend Node/Express historico.
-- Para cambios backend, tomar como fuente de verdad `server/`.
+AC Computers es una empresa dedicada a la venta de:
 
-## 3) Reglas de trabajo para agentes
+- Portátiles
+- Componentes de PC
+- Periféricos
 
-- No cambiar contratos HTTP sin actualizar documentacion y pruebas.
-- No inventar datos de productos para respuestas IA.
-- Mantener separacion por capas (no saltar puertos directamente desde controladores a JPA).
-- Reutilizar DTOs existentes y `ResponseDTO`/`PaginatedResponseDTO`.
-- Respetar reglas de seguridad por rol en `SecurityConfig`.
-- Cualquier cambio en seed/config debe reflejarse en `docs/ai-agents/`.
+El sistema permite:
 
-## 4) Flujo recomendado para tareas
+- Gestión de inventario
+- Gestión de usuarios y roles
+- Carga y administración de imágenes
+- Contacto por email
+- Generación de catálogo PDF
+- Recomendaciones mediante IA basadas en inventario real
 
-1. Leer `docs/ai-agents/PROJECT_CONTEXT.md`.
-2. Leer `docs/ai-agents/BACKEND_ARCHITECTURE.md`.
-3. Verificar endpoints en `docs/ai-agents/API_CONTRACT.md`.
-4. Si la tarea toca recomendaciones/chatbot, leer `docs/ai-agents/AI_CHATBOT_GUIDE.md`.
-5. Implementar cambios pequenos y con pruebas.
+---
 
-## 5) Comandos utiles (backend)
+## 3. Actors
 
-Desde `server/`:
+### Cliente final
 
-```bash
-./gradlew bootRun
-./gradlew test
+- Consulta catálogo
+- Solicita recomendaciones IA
+- Envía formularios de contacto
+- Descarga catálogo PDF
+
+### Equipo interno (Admin)
+
+- Administra productos
+- Gestiona imágenes
+- Administra usuarios y permisos
+
+---
+
+## 4. Backend Architecture
+
+Arquitectura: **Hexagonal Architecture (Ports & Adapters)**
+
+### Capas
+
+#### domain/
+
+Contiene el núcleo del negocio:
+
+- Entidades (`Product`, `User`)
+- Value Objects (`Price`, `Stock`, `Email`)
+- Excepciones de dominio
+
+Reglas:
+
+- No depende de frameworks.
+- No contiene anotaciones Spring.
+
+#### application/
+
+Responsable de los casos de uso.
+
+Incluye:
+
+- `services/` → implementación de casos de uso
+- DTOs de entrada y salida
+- Puertos:
+
+Input Ports:
+
+```
+application/ports/input
+
 ```
 
-Windows:
+Contratos usados por controllers.
 
-```bash
-gradlew.bat bootRun
-gradlew.bat test
+Output Ports:
+
 ```
 
-## 6) Variables de entorno clave
+application/ports/output
 
-Definidas en `application-dev.properties`:
-- `SERVER_PORT`
-- `DB_URL`, `DB_USER`, `DB_PASSWORD`
-- `JWT_SECRET`, `JWT_EXPIRATION`
-- `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
-- `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USERNAME`, `EMAIL_PASSWORD`
+```
 
+Interfaces hacia infraestructura:
+
+- repositorios
+- IA
+- email
+- storage
+- autenticación
+
+---
+
+#### infrastructure/
+
+Implementaciones técnicas.
+
+Incluye:
+
+- Controllers HTTP
+- SecurityConfig
+- GlobalExceptionHandler
+- Persistencia JPA
+- JWT Security
+- Integraciones externas
+- Servicios IA
+
+Submódulos relevantes:
+
+- persistence/
+- security/
+- ai/
+    - AssistantService
+    - ProductTools
+    - CompanyTools
+- storage (Cloudinary)
+- email
+- pdf
+
+---
+
+### Frontend
+
+- Framework: Next.js con TailwindCSS
+- Arquitectura basada en componentes
+- Comunicación mediante API REST
+
+---
+
+## 4. Tech Stack
+
+Backend:
+
+- Java 21
+- Spring Boot 4
+- Spring Security + JWT
+- Spring Data JPA (MySQL)
+- Spring AI + Ollama
+- Cloudinary
+- Java Mail
+- iText (PDF generation)
+- Bucket4j (Rate limiting)
+
+Frontend:
+
+- Next.js
+- React
+- TypeScript
+- TailwindCSS
+
+Infraestructura:
+
+- Base de datos relacional (MySQL)
+
+---
+
+## 5. Out of Scope
+
+El agente NO debe:
+
+- Mezclar lógica de dominio con infraestructura
+- Introducir dependencias innecesarias en el dominio
+- Romper separación de capas
+- Inventar reglas de negocio no definidas
+
+---
+
+## 6. Coding Standards
+
+- Clean Code
+- SOLID Principles
+- Domain-Driven Design (DDD) orientativo
+- Naming claro y consistente
+- Alta cohesión y bajo acoplamiento
+
+Backend:
+
+- Use Cases explícitos
+- Interfaces como puertos
+- DTOs para entrada/salida
+
+Frontend:
+
+- Atomic design
+- Componentes reutilizables
+- Separación UI / lógica
+- Fetch centralizado
+
+---
+
+## 7. AI Features GuidelinesAI Features Guidelines
+
+La IA debe:
+
+- Basarse únicamente en datos persistidos.
+- Usar herramientas del sistema (`ProductTools`, `CompanyTools`).
+- Generar insights útiles para negocio.
+
+---
+
+## 8. Source of Truth
+
+Prioridad documental:
+
+1. Reglas de negocio del dominio
+2. Modelos del dominio
+3. Casos de uso existentes
+4. API contracts
+
+---
+
+## 9. Constraints
+
+- No exponer datos sensibles
+- Validar inputs siempre
+- Evitar lógica duplicada
+- Mantener consistencia arquitectónica
