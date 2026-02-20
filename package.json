@@ -1,0 +1,28 @@
+{
+    "name": "ac-computers",
+    "version": "1.0.0",
+    "description": "Inventory management system for AC Computers with hexagonal architecture, atomic design, and AI integration",
+    "directories": {
+        "client": "client",
+        "server": "server",
+        "documentation": "docs"
+    },
+    "scripts": {
+        "client": "npm run dev --prefix client",
+        "server": "server\\gradlew.bat bootRun",
+        "server:test": "server\\gradlew.bat test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AndresGutierrezHurtado/ac-computers.git"
+    },
+    "keywords": [
+        "ac-computers",
+        "inventory-management",
+        "hexagonal-architecture",
+        "atomic-design",
+        "ai-integration"
+    ],
+    "author": "Andrés Gutiérrez Hurtado",
+    "license": "MIT"
+}
