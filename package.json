@@ -8,6 +8,7 @@
         "documentation": "docs"
     },
     "scripts": {
+        "download": "npm install --prefix client",
         "client": "npm run dev --prefix client",
         "server": "server\\gradlew.bat bootRun",
         "server:test": "server\\gradlew.bat test"
