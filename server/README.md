@@ -119,7 +119,7 @@ Puente de comunicación con los clientes finales.
 
 ---
 
-## 🛠️ Guía de Instalación
+## Guía de Instalación
 
 Sigue estos pasos para configurar y ejecutar el servidor localmente:
 
@@ -183,3 +183,19 @@ Desde la raíz del proyecto `/server`, ejecuta el siguiente comando:
 ```
 
 Una vez iniciado, el backend estará disponible en: **`http://localhost:8081/api`**
+
+---
+
+## Ejecución de Pruebas (Testing)
+
+Para ejecutar los tests del sistema de manera segura sin afectar los datos de desarrollo:
+
+1. **Base de Datos de Pruebas**: Crea una base de datos independiente en XAMPP llamada `ac_computers_test_db`.
+2. **Variables de Entorno para Tests**: Asegúrate de tener configurado un archivo `.env` o las variables necesarias para el entorno de pruebas, apuntando a la nueva base de datos:
+    ```env
+    DB_URL=jdbc:mysql://localhost:3306/ac_computers_test_db
+    ```
+3. **Ejecutar Tests**:
+    ```bash
+    ./gradlew test
+    ```
