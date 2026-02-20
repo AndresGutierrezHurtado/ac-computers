@@ -116,3 +116,70 @@ Puente de comunicación con los clientes finales.
 - **Seguridad:** Spring Security + JWT
 - **IA:** Spring AI + Ollama
 - **Multitareas:** Cloudinary (Imágenes), iText (PDF), Java Mail.
+
+---
+
+## 🛠️ Guía de Instalación
+
+Sigue estos pasos para configurar y ejecutar el servidor localmente:
+
+### 1. Requisitos Previos
+
+- **Java 21** instalado.
+- **MySQL** (recomendado vía XAMPP).
+- **Ollama** (para las funcionalidades de IA).
+
+### 2. Configuración de la Base de Datos (XAMPP)
+
+1. Inicia el panel de control de **XAMPP** y activa los módulos **Apache** y **MySQL**.
+2. Accede a `phpMyAdmin` (usualmente en `http://localhost/phpmyadmin`).
+3. Crea una nueva base de datos llamada `ac_computers_db`.
+4. El sistema generará las tablas automáticamente al iniciar (consulte `DB_URL` en las variables de entorno).
+
+### 3. Configuración de Inteligencia Artificial (Ollama)
+
+1. Instala [Ollama](https://ollama.com/).
+2. Abre una terminal y descarga el modelo requerido por el sistema:
+    ```bash
+    ollama pull ministral-3:8b
+    ```
+3. Asegúrate de que Ollama se esté ejecutando en el puerto predeterminado (11434).
+
+### 4. Variables de Entorno
+
+Crea un archivo `.env` en la raíz del directorio `/server` (puedes basarte en `.env.example`) y configura los siguientes valores:
+
+```env
+# Servidor
+SERVER_PORT=8081
+
+# Base de Datos
+DB_URL=jdbc:mysql://localhost:3306/ac_computers_db
+DB_USER=root
+DB_PASSWORD=
+
+# Seguridad y JWT
+JWT_SECRET=tu_secreto_seguro_para_jwt
+JWT_EXPIRATION=3600000
+
+# Cloudinary (Almacenamiento de Imágenes)
+CLOUDINARY_CLOUD_NAME=tu_cloud_name
+CLOUDINARY_API_KEY=tu_api_key
+CLOUDINARY_API_SECRET=tu_api_secret
+
+# E-mail (Configuración de Java Mail - Opcional para dev)
+SPRING_MAIL_HOST=smtp.gmail.com
+SPRING_MAIL_PORT=587
+SPRING_MAIL_USERNAME=tu_email@gmail.com
+SPRING_MAIL_PASSWORD=tu_password_de_aplicacion
+```
+
+### 5. Ejecución del Servidor
+
+Desde la raíz del proyecto `/server`, ejecuta el siguiente comando:
+
+```bash
+./gradlew bootRun
+```
+
+Una vez iniciado, el backend estará disponible en: **`http://localhost:8081/api`**
