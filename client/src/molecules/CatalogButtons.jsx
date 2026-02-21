@@ -1,4 +1,4 @@
-import { DownloadIcon } from "@/components/icons";
+import { DownloadIcon } from "@/atoms/icons";
 import Link from "next/link";
 
 export default function CatalogButtons({ listHref, listLabel, pdfHref }) {

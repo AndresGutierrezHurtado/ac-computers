@@ -1,5 +1,5 @@
 "use client";
-import Modelo3D from "@/components/model";
+import Modelo3D from "@/organisms/Model";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { Children, cloneElement, useEffect, useRef, useState } from "react";

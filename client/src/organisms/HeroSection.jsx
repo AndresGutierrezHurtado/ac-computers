@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import Badge from "@/atoms/Badge";
-import { DownloadIcon, GearIcon, UsersIcon } from "@/components/icons";
+import { DownloadIcon, GearIcon, UsersIcon } from "@/atoms/icons";
 import Link from "next/link";
 
 const HeroSection = forwardRef(function HeroSection(_, ref) {

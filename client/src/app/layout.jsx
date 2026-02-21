@@ -1,5 +1,5 @@
-import Header from "@/layout/header";
-import Footer from "@/layout/footer";
+import Header from "@/organisms/Header";
+import Footer from "@/molecules/Footer";
 
 import "./globals.css";
 
