@@ -1,46 +1,4 @@
-"use client";
-
-import React, { useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-
-// Hooks
-import { useGetData, usePutData } from "@/hooks/useClientData";
-import { useValidateform } from "@/hooks/useValidateForm";
-import Loading from "@/components/loading";
-
-export default function Page() {
-    const { id } = useParams();
-    const router = useRouter();
-
-    const { data: recovery, loading } = useGetData(`/auth/forgot/${id}`);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const data = Object.fromEntries(new FormData(e.target));
-        const validation = useValidateform(data, "reset-form");
-
-        if (!validation.success) return;
-
-        const response = await usePutData(`/auth/forgot/${id}`, data);
-        if (!response.success) return;
-
-        e.target.reset();
-        router.push("/login");
-    };
-
-    useEffect(() => {
-        document.title = "Cambiar contraseña | AC Computers";
-    }, []);
-
-    if (loading) return <Loading />;
-    if (!recovery) {
-        return (
-            <p className="text-center py-10 mt-[100px] text-2xl font-bold">
-                No se encontró la recuperación, debe estar expirada o ya debio ser usada
-            </p>
-        );
-    }
+export default function ResetPage() {
     return (
         <>
             <section className="w-full px-4 mt-[100px]">
@@ -55,7 +13,7 @@ export default function Page() {
                                 Ingresa tu nueva contraseña para cambiarla.
                             </p>
                         </div>
-                        <form className="w-full" onSubmit={handleSubmit}>
+                        <form className="w-full">
                             <fieldset className="w-full fieldset">
                                 <label className="fieldset-label text-sm after:content-['*'] after:text-red-500">
                                     Nueva contraseña

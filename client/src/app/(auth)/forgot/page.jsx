@@ -1,30 +1,4 @@
-"use client";
-
-import React, { useEffect } from "react";
-
-// Hooks
-import { usePostData } from "@/hooks/useClientData";
-import { useValidateform } from "@/hooks/useValidateForm";
-
-export default function page() {
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const data = Object.fromEntries(new FormData(e.target));
-
-        const validation = useValidateform(data, "forgot-form");
-        if (!validation.success) return;
-
-        const response = await usePostData("/auth/forgot", data);
-        if (!response.success) return;
-
-        e.target.reset();
-    };
-
-    useEffect(() => {
-        document.title = "Recuperar contraseña | AC Computers";
-    }, []);
-
+export default function ForgotPage() {
     return (
         <>
             <section className="w-full px-4 mt-[100px]">
@@ -39,7 +13,7 @@ export default function page() {
                                 Ingresa tu correo electrónico para recuperar tu cuenta.
                             </p>
                         </div>
-                        <form className="w-full" onSubmit={handleSubmit}>
+                        <form className="w-full">
                             <fieldset className="w-full fieldset">
                                 <label className="fieldset-label text-sm after:content-['*'] after:text-red-500">
                                     Correo electrónico:

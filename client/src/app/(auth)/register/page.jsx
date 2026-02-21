@@ -1,53 +1,9 @@
-"use client";
-
-import { useValidateform } from "@/hooks/useValidateForm";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
-import Swal from "sweetalert2";
 
 export default function Register() {
-    const router = useRouter();
-
-    useEffect(() => {
-        document.title = "Registro | AC Computers";
-    }, []);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const user = Object.fromEntries(new FormData(e.target));
-        const validation = useValidateform(user, "register-form");
-
-        if (validation.success) {
-            const result = await fetch("/api/users", {
-                headers: {
-                    "content-type": "application/json",
-                    accept: "application/json",
-                },
-                method: "POST",
-                body: JSON.stringify({ user }),
-            });
-
-            const response = await result.json();
-
-            Swal.fire({
-                icon: response.success ? "success" : "error",
-                title: response.message,
-            });
-
-            if (response.success) {
-                e.target.reset();
-                router.push("/login");
-            }
-        }
-    };
-
     return (
         <>
-            <div className="hero bg-base-200 min-h-screen bg-[url('https://img.freepik.com/fotos-premium/computadora-teclado-teclado_866548-481.jpg')]">
-                <div className="hero-overlay bg-cover bg-black/70 backdrop-blur-sm"></div>
-
+            <div className="hero bg-base-200 min-h-screen">
                 <div className="hero-content flex-col lg:flex-row gap-[50px] z-[1]">
                     <div className="text-center lg:text-right flex flex-col items-center md:items-end gap-4">
                         <h1 className="text-4xl font-extrabold text-nowrap">
@@ -70,7 +26,7 @@ export default function Register() {
                                 </h1>
                                 <p className="text-center text-2xl font-medium">Regístrate</p>
                             </div>
-                            <form onSubmit={handleSubmit}>
+                            <form>
                                 <fieldset className="fieldset gap-4">
                                     <div className="fieldset">
                                         <label className="fieldset-label font-medium text-base">
