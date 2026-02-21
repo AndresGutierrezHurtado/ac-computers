@@ -4,10 +4,10 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
-const API_URL = process.env.NEXT_PUBLIC_APP_DOMAIN;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const FetchData = async (endpoint, options) => {
-    const request = await fetch(`${API_URL}/api${endpoint}`, {
+    const request = await fetch(`${API_URL}${endpoint}`, {
         headers: {
             "content-type": "application/json",
             accept: "application/json",
