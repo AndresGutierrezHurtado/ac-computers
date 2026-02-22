@@ -10,9 +10,9 @@ export default function ProductPrice({ price, discount = 0 }) {
     return (
         <>
             {discount > 0 && (
-                <p className="line-through text-gray-400">{formatter.format(price)}</p>
+                <p className="line-through text-base-content/60">{formatter.format(price)}</p>
             )}
-            <p className="font-bold text-lg">{formatter.format(finalPrice)}</p>
+            <p className="font-medium text-lg">{formatter.format(finalPrice)}</p>
         </>
     );
 }

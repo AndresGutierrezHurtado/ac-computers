@@ -23,7 +23,7 @@ export default function ComputersPage() {
 
     return (
         <ProductListTemplate
-            title="Lista computadores:"
+            title="Lista computadores"
             searchPlaceholder="Buscar computadores"
             searchValue={search}
             searchOnChange={setSearch}

@@ -24,7 +24,7 @@ export default function ComponentsPage() {
 
     return (
         <ProductListTemplate
-            title="Lista componentes:"
+            title="Lista componentes"
             searchPlaceholder="Buscar componentes"
             searchValue={search}
             searchOnChange={setSearch}

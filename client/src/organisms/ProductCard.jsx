@@ -18,12 +18,12 @@ export default function ProductCard({ product }) {
             </Link>
 
             <div className="card-body p-2 gap-0 text-center flex flex-col items-center">
-                <p className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
+                <p className="text-sm font-medium text-base-content/60 uppercase tracking-widest">
                     {product.brand?.name || "AC Computers"}
                 </p>
                 <Link
                     href={`/product/${product.id}`}
-                    className="font-bold text-lg leading-none tracking-tight hover:text-gray-400 hover:underline mt-1 mb-2"
+                    className="font-semibold text-lg leading-none tracking-tight scale-y-105 hover:text-base-content/60 hover:underline mt-1 mb-1"
                 >
                     {product.name}
                 </Link>
