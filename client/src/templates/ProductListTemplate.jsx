@@ -11,7 +11,7 @@ export default function ProductListTemplate({ title, searchPlaceholder, searchVa
                         searchValue={searchValue}
                         searchOnChange={searchOnChange}
                     />
-                    <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-14">
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8">
                         {children}
                     </div>
                 </div>
