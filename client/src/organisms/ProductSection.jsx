@@ -3,7 +3,7 @@ import SectionHeader from "@/molecules/SectionHeader";
 import CatalogButtons from "@/molecules/CatalogButtons";
 
 const ProductSection = forwardRef(function ProductSection(
-    { label, title, highlight, description, listHref, listLabel, pdfHref, align = "left" },
+    { label, title, highlight, description, listHref, listLabel, pdfEndpoint, align = "left" },
     ref,
 ) {
     return (
@@ -21,7 +21,11 @@ const ProductSection = forwardRef(function ProductSection(
                         linkHref={listHref}
                     />
                     <p className="text-pretty w-full text-gray-300 text-lg mb-4">{description}</p>
-                    <CatalogButtons listHref={listHref} listLabel={listLabel} pdfHref={pdfHref} />
+                    <CatalogButtons
+                        listHref={listHref}
+                        listLabel={listLabel}
+                        pdfEndpoint={pdfEndpoint}
+                    />
                 </article>
             </div>
         </section>
