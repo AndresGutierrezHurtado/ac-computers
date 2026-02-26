@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.accomputers.api.application.ports.output.PdfGeneratorInterface;
@@ -33,9 +34,20 @@ public class PdfController {
      * @return ResponseEntity containing the generated PDF
      */
     @PostMapping("/generate")
-    public ResponseEntity<byte[]> generateProductCatalog() {
+    public ResponseEntity<byte[]> generateProductCatalog(
+            @RequestParam(required = false) Integer type,
+            @RequestParam(required = false) Integer categoryId) {
         try {
-            ByteArrayOutputStream pdfStream = pdfGenerator.generateProductCatalog();
+            Integer resolvedCategoryId = categoryId;
+            if (resolvedCategoryId == null && type != null) {
+                if (type == 1) {
+                    resolvedCategoryId = 1;
+                } else if (type == 2) {
+                    resolvedCategoryId = 2;
+                }
+            }
+
+            ByteArrayOutputStream pdfStream = pdfGenerator.generateProductCatalog(resolvedCategoryId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);

@@ -15,5 +15,5 @@ public interface PdfGeneratorInterface {
      * @param productData the product data to include in the catalog
      * @return ByteArrayOutputStream containing the generated PDF
      */
-    ByteArrayOutputStream generateProductCatalog();
+    ByteArrayOutputStream generateProductCatalog(Integer categoryId);
 }

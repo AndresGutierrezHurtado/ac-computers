@@ -34,10 +34,10 @@ public class PdfGeneratorService implements PdfGeneratorInterface {
     }
 
     @Override
-    public ByteArrayOutputStream generateProductCatalog() {
+    public ByteArrayOutputStream generateProductCatalog(Integer categoryId) {
         try {
             PageDTO<Product> products = productRepository
-                    .findAll(new ProductCriteria(1, 1000, null, null, null, null, null, null, null, null, null));
+                    .findAll(new ProductCriteria(1, 1000, null, categoryId, null, null, null, null, null, null, null));
 
             String htmlContent = buildProductCatalogHtml(products);
             return generatePdfFromHtml(htmlContent);
