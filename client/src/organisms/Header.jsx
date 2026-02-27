@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 // Icons
 import {
     CloseIcon,
-    ComponentIcon,
     ComputerIcon,
     GearIcon,
     HomeIcon,
@@ -82,24 +81,13 @@ export default function Header() {
                                 {/* Navbar menu content here */}
                                 <li>
                                     <Link
-                                        href="/computers"
+                                        href="/products"
                                         className={`${
-                                            router.pathname === "/computers" &&
+                                            router.pathname === "/products" &&
                                             "text-primary font-semibold"
                                         }`}
                                     >
-                                        Computadores
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/components"
-                                        className={`${
-                                            router.pathname === "/components" &&
-                                            "text-primary font-semibold"
-                                        }`}
-                                    >
-                                        Componentes
+                                        Productos
                                     </Link>
                                 </li>
                                 <li>
@@ -176,25 +164,13 @@ export default function Header() {
                         </li>
                         <li>
                             <Link
-                                href="/computers"
+                                href="/products"
                                 className={`${
-                                    router.pathname === "/computers" && "text-primary font-semibold"
+                                    router.pathname === "/products" && "text-primary font-semibold"
                                 }`}
                             >
                                 <ComputerIcon />
-                                <p>Computadores</p>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                href="/components"
-                                className={`${
-                                    router.pathname === "/components" &&
-                                    "text-primary font-semibold"
-                                }`}
-                            >
-                                <ComponentIcon />
-                                <p>Componentes</p>
+                                <p>Productos</p>
                             </Link>
                         </li>
                         <li>
