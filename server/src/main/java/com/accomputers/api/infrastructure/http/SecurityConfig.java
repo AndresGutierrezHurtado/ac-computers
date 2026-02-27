@@ -79,6 +79,10 @@ public class SecurityConfig {
                         // Products (public catalog)
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/products/recommendations").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/brands/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/subcategories/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/pdf/**").permitAll()
 
                         // Products (management)
                         .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("SUPERUSER", "ADMINISTRATOR")
