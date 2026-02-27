@@ -53,10 +53,8 @@ export const usePaginateData = (endpoint) => {
             const response = await FetchData(endpoint);
             setLoading(false);
             setData({
-                data: response.data,
-                page: response.page,
-                limit: response.limit,
-                count: response.count,
+                data: response.data || [],
+                total: response.total ?? 0,
             });
         };
 
@@ -66,7 +64,7 @@ export const usePaginateData = (endpoint) => {
     const reload = () => setTrigger((prev) => prev + 1);
 
     return {
-        ...(data || {}), // data, page, limit, count
+        ...(data || {}), // data, total
         loading,
         reload,
     };
