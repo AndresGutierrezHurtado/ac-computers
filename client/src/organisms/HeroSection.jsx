@@ -1,9 +1,25 @@
-import { forwardRef } from "react";
+"use client";
+
+import { forwardRef, useState } from "react";
 import Badge from "@/atoms/Badge";
 import { DownloadIcon, GearIcon, UsersIcon } from "@/atoms/icons";
-import Link from "next/link";
+import { downloadCatalogPdf } from "@/utils/downloadCatalog";
 
 const HeroSection = forwardRef(function HeroSection(_, ref) {
+    const [downloading, setDownloading] = useState(false);
+
+    const handleDownload = async () => {
+        if (downloading) return;
+        setDownloading(true);
+        try {
+            await downloadCatalogPdf("/pdf/generate");
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setDownloading(false);
+        }
+    };
+
     return (
         <section className="w-full px-3 mt-[150px] lg:mt-0 snap-center">
             <div className="w-full h-auto lg:h-[90vh] max-w-[1200px] mx-auto flex items-center">
@@ -23,12 +39,15 @@ const HeroSection = forwardRef(function HeroSection(_, ref) {
                         Descubre nuestra collecion de computadoras y componentes a precios que se
                         adaptan a tu estilo de vida.
                     </p>
-                    <Link href="/api/products/pdf" target="_blank">
-                        <button className="btn bg-primary hover:bg-primary/80 w-fit text-black rounded-lg mb-3 font-medium">
-                            <DownloadIcon size={18} />
-                            Descargar Catalogo
-                        </button>
-                    </Link>
+                    <button
+                        className="btn bg-primary hover:bg-primary/80 w-fit text-black rounded-lg mb-3 font-medium"
+                        type="button"
+                        onClick={handleDownload}
+                        disabled={downloading}
+                    >
+                        <DownloadIcon size={18} />
+                        {downloading ? "Generando..." : "Descargar Catalogo"}
+                    </button>
                     <p className="flex items-center gap-1 font-medium text-gray-300">
                         <span className="text-primary flex items-center">
                             + <UsersIcon size={20} className="mr-2" /> 100
