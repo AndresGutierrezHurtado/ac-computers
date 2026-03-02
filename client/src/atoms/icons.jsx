@@ -12,6 +12,7 @@ import {
     FaBoxes as ProductsIcon,
     FaUsers as UsersIcon,
     FaUser as UserIcon,
+    FaRobot as RobotIcon,
 } from "react-icons/fa";
 import {
     MdFileUpload as UploadIcon,
@@ -57,4 +58,5 @@ export {
     CloseIcon,
     ComponentIcon,
     UserIcon,
+    RobotIcon,
 };
