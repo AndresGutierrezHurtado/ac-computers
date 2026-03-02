@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGetData, usePaginateData } from "@/hooks/useClientData";
 import ProductMarketplaceTemplate from "@/templates/ProductMarketplaceTemplate";
 import ProductFiltersPanel from "@/organisms/ProductFiltersPanel";
 import ProductResultsGrid from "@/organisms/ProductResultsGrid";
+import { useSearchParams } from "next/navigation";
 
 const CONDITION_OPTIONS = [
     { value: "new", label: "Nuevo" },
@@ -28,7 +29,13 @@ const DEFAULT_FILTERS = {
 };
 
 export default function ProductsMarketplace() {
-    const [filters, setFilters] = useState(DEFAULT_FILTERS);
+    const searchParams = useSearchParams();
+    const initialCategoryId = searchParams.get("categoryId");
+
+    const [filters, setFilters] = useState(() => ({
+        ...DEFAULT_FILTERS,
+        categoryId: initialCategoryId || "",
+    }));
 
     const { data: categories } = useGetData("/categories");
     const { data: brands } = useGetData("/brands");
@@ -78,6 +85,15 @@ export default function ProductsMarketplace() {
     const handleReset = () => {
         setFilters(DEFAULT_FILTERS);
     };
+
+    useEffect(() => {
+        setFilters({
+            ...DEFAULT_FILTERS,
+            categoryId: initialCategoryId || "",
+            subCategoryId: "",
+            page: 1,
+        });
+    }, [initialCategoryId]);
 
     return (
         <ProductMarketplaceTemplate
