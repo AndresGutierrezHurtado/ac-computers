@@ -48,6 +48,7 @@ const CameraController = ({ progress }) => {
             [-10, 1, 0],
             [0, 10, 1],
             [0, 2, 9],
+            [6, 1.2, 4],
         ];
 
         if (progress >= 1) {

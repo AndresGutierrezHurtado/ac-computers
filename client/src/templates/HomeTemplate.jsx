@@ -19,6 +19,7 @@ export default function HomeTemplate({ children }) {
         gsap.set(sectionRefs.current[1], { x: "150%", opacity: "-3.5" });
         gsap.set(sectionRefs.current[2], { x: "-150%", opacity: "-3.5" });
         gsap.set(sectionRefs.current[3], { x: "150%", opacity: "-3.5" });
+        gsap.set(sectionRefs.current[4], { x: "-150%", opacity: "-3.5" });
 
         gsap.timeline({
             scrollTrigger: {
@@ -31,7 +32,8 @@ export default function HomeTemplate({ children }) {
         })
             .to(sceneRef.current, { x: "-43%", opacity: 1, ease: "none" })
             .to(sceneRef.current, { x: "3%", ease: "none" })
-            .to(sceneRef.current, { x: "-43%", ease: "none" });
+            .to(sceneRef.current, { x: "-43%", ease: "none" })
+            .to(sceneRef.current, { x: "3%", ease: "none" });
 
         gsap.timeline({
             scrollTrigger: {
@@ -44,7 +46,8 @@ export default function HomeTemplate({ children }) {
         })
             .to(sectionRefs.current[1], { x: "0%", opacity: 1, ease: "none" })
             .to(sectionRefs.current[2], { x: "0%", opacity: 1, ease: "none" })
-            .to(sectionRefs.current[3], { x: "0%", opacity: 1, ease: "none" });
+            .to(sectionRefs.current[3], { x: "0%", opacity: 1, ease: "none" })
+            .to(sectionRefs.current[4], { x: "0%", opacity: 1, ease: "none" });
     }, []);
 
     return (

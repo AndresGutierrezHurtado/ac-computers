@@ -13,7 +13,6 @@ const AboutSection = forwardRef(function AboutSection(_, ref) {
     return (
         <section className="w-full px-3 snap-center">
             <div className="w-full h-auto lg:h-[90vh] max-w-[1200px] mx-auto flex items-center">
-                <article className="w-2/5 hidden lg:block"></article>
                 <article ref={ref} className="w-full lg:max-w-3/5 flex flex-col gap-5">
                     <div>
                         <SectionLabel>Sobre nosotros</SectionLabel>
@@ -30,6 +29,7 @@ const AboutSection = forwardRef(function AboutSection(_, ref) {
                         ))}
                     </div>
                 </article>
+                <article className="w-2/5 hidden lg:block"></article>
             </div>
         </section>
     );
