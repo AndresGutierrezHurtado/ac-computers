@@ -20,7 +20,7 @@ public class AssistantService {
     public AssistantService(ProductTools productTools, CompanyTools companyTools, OllamaChatModel chatModel) {
 
         OllamaChatOptions options = OllamaChatOptions.builder()
-                .model("ministral-3:8b")
+                .model("qwen3:4b")
                 .temperature(0.3)
                 .build();
 
