@@ -28,7 +28,7 @@ export const useValidateform = (data = {}, form = "") => {
                     user_password: pipe(
                         nonEmpty("Contraseña requerida"),
                         string("Contraseña requerida"),
-                        minLength(4, "La contraseña debe tener al menos 4 caracteres")
+                        minLength(6, "La contraseña debe tener al menos 6 caracteres")
                     ),
                 });
                 break;
@@ -49,15 +49,151 @@ export const useValidateform = (data = {}, form = "") => {
                         string("Correo requerido"),
                         email("El correo debe ser válido")
                     ),
-                    user_phone: pipe(
-                        nonEmpty("Telefono requerido"),
-                        string("Telefono requerido"),
-                        regex(/^\d{10}$/, "El telefono debe tener 10 digitos")
-                    ),
                     user_password: pipe(
                         nonEmpty("Contraseña requerida"),
                         string("Contraseña requerida"),
-                        minLength(4, "La contraseña debe tener al menos 4 caracteres")
+                        minLength(6, "La contraseña debe tener al menos 6 caracteres")
+                    ),
+                });
+                break;
+            case "admin-create-user-form":
+                schema = object({
+                    firstName: pipe(
+                        nonEmpty("Nombre requerido"),
+                        string("Nombre requerido"),
+                        minLength(3, "El nombre debe tener al menos 3 caracteres")
+                    ),
+                    lastName: pipe(
+                        nonEmpty("Apellido requerido"),
+                        string("Apellido requerido"),
+                        minLength(3, "El apellido debe tener al menos 3 caracteres")
+                    ),
+                    email: pipe(
+                        nonEmpty("Correo requerido"),
+                        string("Correo requerido"),
+                        email("El correo debe ser válido")
+                    ),
+                    password: pipe(
+                        nonEmpty("Contraseña requerida"),
+                        string("Contraseña requerida"),
+                        minLength(6, "La contraseña debe tener al menos 6 caracteres")
+                    ),
+                    roleId: pipe(
+                        nonEmpty("Rol requerido"),
+                        string("Rol requerido"),
+                        regex(/^[0-9]+$/, "El rol debe ser un número")
+                    ),
+                });
+                break;
+            case "admin-update-user-form":
+                schema = object({
+                    firstName: pipe(
+                        nonEmpty("Nombre requerido"),
+                        string("Nombre requerido"),
+                        minLength(3, "El nombre debe tener al menos 3 caracteres")
+                    ),
+                    lastName: pipe(
+                        nonEmpty("Apellido requerido"),
+                        string("Apellido requerido"),
+                        minLength(3, "El apellido debe tener al menos 3 caracteres")
+                    ),
+                    email: pipe(
+                        nonEmpty("Correo requerido"),
+                        string("Correo requerido"),
+                        email("El correo debe ser válido")
+                    ),
+                    roleId: pipe(
+                        nonEmpty("Rol requerido"),
+                        string("Rol requerido"),
+                        regex(/^[0-9]+$/, "El rol debe ser un número")
+                    ),
+                });
+                break;
+            case "admin-create-product-form":
+                schema = object({
+                    name: pipe(
+                        nonEmpty("Nombre requerido"),
+                        string("Nombre requerido"),
+                        minLength(3, "El nombre debe tener al menos 3 caracteres")
+                    ),
+                    description: pipe(
+                        nonEmpty("Descripción requerida"),
+                        string("Descripción requerida"),
+                        minLength(3, "La descripción debe tener al menos 3 caracteres")
+                    ),
+                    price: pipe(
+                        nonEmpty("Precio requerido"),
+                        string("Precio requerido"),
+                        minValue(1, "El precio debe ser mayor a 0"),
+                        regex(/^[0-9]+(\.[0-9]+)?$/, "El precio debe ser un número")
+                    ),
+                    discount: pipe(
+                        nonEmpty("Descuento requerido"),
+                        string("Descuento requerido"),
+                        minValue(0, "El descuento debe ser mayor o igual a 0"),
+                        regex(/^[0-9]+(\.[0-9]+)?$/, "El descuento debe ser un número")
+                    ),
+                    condition: pipe(
+                        nonEmpty("Condición requerida"),
+                        string("Condición requerida"),
+                        regex(
+                            /^(new|used|refurbished|for_parts)$/i,
+                            "Condición inválida"
+                        )
+                    ),
+                    brandId: pipe(
+                        nonEmpty("Marca requerida"),
+                        string("Marca requerida"),
+                        regex(/^[0-9]+$/, "La marca debe ser un número")
+                    ),
+                    subCategoryId: pipe(
+                        nonEmpty("Subcategoría requerida"),
+                        string("Subcategoría requerida"),
+                        regex(/^[0-9]+$/, "La subcategoría debe ser un número")
+                    ),
+                });
+                break;
+            case "admin-update-product-form":
+                schema = object({
+                    name: pipe(
+                        nonEmpty("Nombre requerido"),
+                        string("Nombre requerido"),
+                        minLength(3, "El nombre debe tener al menos 3 caracteres")
+                    ),
+                    description: pipe(
+                        nonEmpty("Descripción requerida"),
+                        string("Descripción requerida"),
+                        minLength(3, "La descripción debe tener al menos 3 caracteres")
+                    ),
+                    price: pipe(
+                        nonEmpty("Precio requerido"),
+                        string("Precio requerido"),
+                        minValue(1, "El precio debe ser mayor a 0"),
+                        regex(/^[0-9]+(\.[0-9]+)?$/, "El precio debe ser un número")
+                    ),
+                    discount: pipe(
+                        nonEmpty("Descuento requerido"),
+                        string("Descuento requerido"),
+                        minValue(0, "El descuento debe ser mayor o igual a 0"),
+                        regex(/^[0-9]+(\.[0-9]+)?$/, "El descuento debe ser un número")
+                    ),
+                    condition: pipe(
+                        nonEmpty("Condición requerida"),
+                        string("Condición requerida"),
+                        regex(
+                            /^(new|used|refurbished|for_parts)$/i,
+                            "Condición inválida"
+                        )
+                    ),
+                    brandId: pipe(
+                        nonEmpty("Marca requerida"),
+                        string("Marca requerida"),
+                        regex(/^[0-9]+$/, "La marca debe ser un número")
+                    ),
+                    subCategoryId: pipe(
+                        nonEmpty("Subcategoría requerida"),
+                        string("Subcategoría requerida"),
+                        regex(/^[0-9]+$/, "La subcategoría debe ser un número")
                     ),
                 });
                 break;
