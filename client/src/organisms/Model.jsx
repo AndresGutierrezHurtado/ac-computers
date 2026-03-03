@@ -54,9 +54,9 @@ const CameraController = ({ progress }) => {
         if (progress >= 1) {
             gsap.to(camera.position, {
                 duration: 0.1,
-                x: 0,
-                y: 1,
-                z: 9,
+                x: positions.at(-1)[0],
+                y: positions.at(-1)[1],
+                z: positions.at(-1)[2],
             });
             return;
         }
