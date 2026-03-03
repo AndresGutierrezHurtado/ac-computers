@@ -2,11 +2,18 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 
-export default function Pagination({ page, count, limit, url }) {
+export default function Pagination({ page, count, limit, url, query = "", onPageChange }) {
     const router = useRouter();
 
     const handleChangePage = (page) => {
-        router.push(`${url}?page=${page}`);
+        if (onPageChange) {
+            onPageChange(page);
+            return;
+        }
+
+        const params = new URLSearchParams(query);
+        params.set("page", page);
+        router.push(`${url}?${params.toString()}`);
     };
 
     return (
