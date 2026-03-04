@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuthSession, clearAuthSession } from "@/hooks/useAuthSession";
+import { usePostData } from "@/hooks/useClientData";
 
 // Icons
 import {
@@ -17,6 +19,12 @@ import { useEffect, useRef } from "react";
 export default function Header() {
     const router = useRouter();
     const headerRef = useRef(null);
+    const { isAuthenticated, user } = useAuthSession();
+    const roleName = user?.role?.name?.toLowerCase();
+    const isAdmin = roleName === "superuser" || roleName === "administrator";
+    const accountLabel = isAuthenticated
+        ? user?.firstName || "Mi cuenta"
+        : "Cuenta";
 
     useEffect(() => {
         const classes = ["bg-black/20", "px-5"];
@@ -31,6 +39,15 @@ export default function Header() {
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
+
+    const handleLogout = async () => {
+        try {
+            await usePostData("/auth/logout");
+        } finally {
+            clearAuthSession();
+            router.push("/");
+        }
+    };
 
     return (
         <div className="fixed w-full top-0 z-50">
@@ -82,10 +99,9 @@ export default function Header() {
                                 <li>
                                     <Link
                                         href="/products"
-                                        className={`${
-                                            router.pathname === "/products" &&
+                                        className={`${router.pathname === "/products" &&
                                             "text-primary font-semibold"
-                                        }`}
+                                            }`}
                                     >
                                         Productos
                                     </Link>
@@ -93,10 +109,9 @@ export default function Header() {
                                 <li>
                                     <Link
                                         href="/contact"
-                                        className={`${
-                                            router.pathname === "/contact" &&
+                                        className={`${router.pathname === "/contact" &&
                                             "text-primary font-semibold"
-                                        }`}
+                                            }`}
                                     >
                                         Contáctanos
                                     </Link>
@@ -106,42 +121,63 @@ export default function Header() {
                         <div className="navbar-end">
                             <div className="dropdown dropdown-end">
                                 <div tabIndex="0" role="button" className="btn btn-ghost avatar">
-                                    "Cuenta"
+                                    {accountLabel}
                                 </div>
                                 <ul
                                     tabIndex="0"
                                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                                 >
-                                    <li>
-                                        <Link href="/profile">
-                                            <UserIcon />
-                                            Mi perfil
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link href="/admin/users" className="text-blue-400">
-                                            <GearIcon />
-                                            Usuarios
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link href="/admin/products" className="text-blue-400">
-                                            <GearIcon />
-                                            Productos
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <a onClick={() => signOut()} className="text-red-400">
-                                            <TrashIcon />
-                                            Cerrar sesión
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <Link href="/login">Iniciar sesión</Link>
-                                    </li>
-                                    <li>
-                                        <Link href="/register">Registrarme</Link>
-                                    </li>
+                                    {isAuthenticated ? (
+                                        <>
+                                            <li>
+                                                <Link href="/profile">
+                                                    <UserIcon />
+                                                    Mi cuenta
+                                                </Link>
+                                            </li>
+                                            {isAdmin && (
+                                                <>
+                                                    <li>
+                                                        <Link
+                                                            href="/admin/users"
+                                                            className="text-blue-400"
+                                                        >
+                                                            <GearIcon />
+                                                            Usuarios
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link
+                                                            href="/admin/products"
+                                                            className="text-blue-400"
+                                                        >
+                                                            <GearIcon />
+                                                            Productos
+                                                        </Link>
+                                                    </li>
+                                                </>
+                                            )}
+                                            <li>
+                                                <button
+                                                    type="button"
+                                                    onClick={handleLogout}
+                                                    className="text-red-400 flex items-center gap-2 w-full"
+                                                >
+                                                    <TrashIcon />
+                                                    Cerrar sesión
+                                                </button>
+                                            </li>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <li>
+                                                <Link href="/login">Iniciar sesión</Link>
+                                            </li>
+                                            <li>
+                                                <Link href="/register">Registrarme</Link>
+                                            </li>
+                                        </>
+                                    )}
                                 </ul>
                             </div>
                         </div>
@@ -154,9 +190,8 @@ export default function Header() {
                         <li>
                             <Link
                                 href="/"
-                                className={`${
-                                    router.pathname === "/" && "text-primary font-semibold"
-                                }`}
+                                className={`${router.pathname === "/" && "text-primary font-semibold"
+                                    }`}
                             >
                                 <HomeIcon />
                                 <p>Inicio</p>
@@ -165,9 +200,8 @@ export default function Header() {
                         <li>
                             <Link
                                 href="/products"
-                                className={`${
-                                    router.pathname === "/products" && "text-primary font-semibold"
-                                }`}
+                                className={`${router.pathname === "/products" && "text-primary font-semibold"
+                                    }`}
                             >
                                 <ComputerIcon />
                                 <p>Productos</p>
@@ -176,9 +210,8 @@ export default function Header() {
                         <li>
                             <Link
                                 href="/contact"
-                                className={`${
-                                    router.pathname === "/contact" && "text-primary font-semibold"
-                                }`}
+                                className={`${router.pathname === "/contact" && "text-primary font-semibold"
+                                    }`}
                             >
                                 <PhoneIcon />
                                 <p>Contáctanos</p>
