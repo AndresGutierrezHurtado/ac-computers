@@ -1,73 +1,107 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Swal from "sweetalert2";
+
+import AuthField from "@/molecules/AuthField";
+import AuthCard from "@/organisms/AuthCard";
+import AuthPromo from "@/organisms/AuthPromo";
+import AuthSplitTemplate from "@/templates/AuthSplitTemplate";
+
+import { usePostData } from "@/hooks/useClientData";
+import { useValidateform } from "@/hooks/useValidateForm";
+import { setAuthSession } from "@/hooks/useAuthSession";
 
 export default function Login() {
+    const router = useRouter();
+    const [submitting, setSubmitting] = useState(false);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (submitting) return;
+        setSubmitting(true);
+
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData);
+        const validation = useValidateform(data, "login-form");
+
+        if (!validation.success) {
+            setSubmitting(false);
+            return;
+        }
+
+        const response = await usePostData("/auth/login", {
+            email: data.user_email,
+            password: data.user_password,
+        });
+
+        if (response?.success) {
+            // get the token from the response headers
+            const rawToken = response.authToken || "";
+            const token = rawToken.startsWith("Bearer ") ? rawToken.slice(7) : rawToken;
+
+            if (!token) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No se recibió el token de autenticación",
+                    timer: 8000,
+                });
+            } else {
+                setAuthSession({ token, user: response.data });
+                router.push("/profile");
+            }
+        }
+
+        setSubmitting(false);
+    };
+
     return (
-        <>
-            <div className="hero bg-base-200 min-h-screen">
-                <div className="hero-content flex-col lg:flex-row-reverse gap-[50px] z-[1]">
-                    <div className="text-center lg:text-left flex flex-col items-center lg:items-start gap-4">
-                        <h1 className="text-4xl font-extrabold text-nowrap">
-                            ¿No has creado una cuenta?
-                        </h1>
-                        <p className="pb-3 text-balance text-lg max-w-lg">
-                            Si aún no tienes una cuenta, puedes crearla en el siguiente botón
-                        </p>
-                        <Link href="/register">
-                            <button className="btn btn-primary btn-outline btn-wide font-medium">
-                                Registrarse
-                            </button>
-                        </Link>
-                    </div>
-                    <div className="card bg-base-100 w-full max-w-[500px] shrink-0 shadow-2xl">
-                        <div className="card-body flex flex-col gap-2 p-10 px-7">
+        <AuthSplitTemplate
+            reverse
+            left={
+                <AuthPromo
+                    title="¿No has creado una cuenta?"
+                    description="Si aún no tienes una cuenta, puedes crearla en el siguiente botón"
+                    linkHref="/register"
+                    linkLabel="Registrarse"
+                />
+            }
+            right={
+                <AuthCard title="AC COMPUTERS" subtitle="Iniciar Sesión" brandHref="/">
+                    <form onSubmit={handleSubmit}>
+                        <fieldset className="fieldset gap-4">
+                            <AuthField
+                                label="Correo electrónico:"
+                                name="user_email"
+                                placeholder="Ingresa tu correo electrónico"
+                                type="email"
+                                autoComplete="email"
+                            />
+                            <AuthField
+                                label="Contraseña:"
+                                name="user_password"
+                                placeholder="Ingresa tu contraseña"
+                                type="password"
+                                autoComplete="current-password"
+                            />
                             <div>
-                                <Link href="/">
-                                    <h1 className="text-4xl font-extrabold text-center text-primary">
-                                        AC COMPUTERS
-                                    </h1>
+                                <Link
+                                    href="/forgot"
+                                    className="link link-hover text-primary font-medium text-base"
+                                >
+                                    Olvidaste tu contraseña?
                                 </Link>
-                                <p className="text-center text-2xl font-medium">Iniciar Sesión</p>
                             </div>
-                            <form>
-                                <fieldset className="fieldset gap-4">
-                                    <div className="fieldset">
-                                        <label className="fieldset-label font-medium text-base">
-                                            Correo electrónico:
-                                        </label>
-                                        <input
-                                            className="input w-full focus:outline-0 focus:border-primary"
-                                            placeholder="Ingresa tu correo electrónico"
-                                            name="user_email"
-                                        />
-                                    </div>
-                                    <div className="fieldset">
-                                        <label className="fieldset-label font-medium text-base">
-                                            Contraseña:
-                                        </label>
-                                        <input
-                                            type="password"
-                                            className="input w-full focus:outline-0 focus:border-primary"
-                                            placeholder="Ingresa tu contraseña"
-                                            name="user_password"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Link
-                                            href="/forgot"
-                                            className="link link-hover text-primary font-medium text-base"
-                                        >
-                                            Olvidaste tu contraseña?
-                                        </Link>
-                                    </div>
-                                    <button className="btn btn-primary font-medium mt-4">
-                                        Iniciar Sesión
-                                    </button>
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
+                            <button className="btn btn-primary font-medium mt-4" disabled={submitting}>
+                                {submitting ? "Ingresando..." : "Iniciar Sesión"}
+                            </button>
+                        </fieldset>
+                    </form>
+                </AuthCard>
+            }
+        />
     );
 }
