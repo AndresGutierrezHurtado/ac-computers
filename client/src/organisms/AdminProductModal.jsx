@@ -35,6 +35,8 @@ export default function AdminProductModal({
     product,
     onClose,
     onSaved,
+    onEdit,
+    onDelete,
 }) {
     const [form, setForm] = useState(emptyForm);
     const [imageFile, setImageFile] = useState(null);
@@ -253,6 +255,32 @@ export default function AdminProductModal({
         );
     }
 
+    const footer =
+        readOnly && product ? (
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2">
+                <button
+                    type="button"
+                    className="btn btn-ghost text-red-400"
+                    onClick={async () => {
+                        if (!onDelete) return;
+                        const removed = await onDelete(product.id);
+                        if (removed) {
+                            onClose();
+                        }
+                    }}
+                >
+                    Eliminar
+                </button>
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => onEdit?.(product.id)}
+                >
+                    Editar
+                </button>
+            </div>
+        ) : null;
+
     return (
         <Modal
             title={
@@ -264,6 +292,7 @@ export default function AdminProductModal({
             }
             open={open}
             onClose={onClose}
+            footer={footer}
         >
             <form onSubmit={handleSubmit} className="space-y-4">
                 <AdminFormField
