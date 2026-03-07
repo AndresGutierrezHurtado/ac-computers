@@ -70,8 +70,6 @@ export default function CreateProduct({ reloadProducts }) {
             showDenyButton: true,
             confirmButtonText: "Crear",
             denyButtonText: "Cancelar",
-            confirmButtonColor: "#3085d6",
-            denyButtonColor: "#d33",
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const response = await usePostData("/products", data);
