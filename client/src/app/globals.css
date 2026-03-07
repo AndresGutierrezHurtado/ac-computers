@@ -12,3 +12,31 @@
     --color-base-300: #334155;
     --color-base-content: #f8fafc;
 }
+
+.swal2-popup {
+    background: var(--color-base-100) !important;
+    color: var(--color-base-content) !important;
+    border: 1px solid var(--color-base-200);
+}
+
+.swal2-title,
+.swal2-html-container {
+    color: var(--color-base-content) !important;
+}
+
+.swal2-actions .swal2-confirm,
+.swal2-actions .swal2-cancel,
+.swal2-actions .swal2-deny {
+    border-radius: 0.5rem;
+}
+
+.swal2-actions .swal2-confirm {
+    background: var(--color-primary) !important;
+    color: var(--color-primary-content) !important;
+}
+
+.swal2-actions .swal2-cancel,
+.swal2-actions .swal2-deny {
+    background: var(--color-base-200) !important;
+    color: var(--color-base-content) !important;
+}
