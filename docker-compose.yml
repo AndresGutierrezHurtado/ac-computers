@@ -1,0 +1,16 @@
+services:
+    database:
+        image: mysql:8.0
+        container_name: ac-computers-database
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: ac_computers_db
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: admin
+        ports:
+            - 3306:3306
+        volumes:
+            - ac-computers-database-volume:/var/lib/mysql
+
+volumes:
+    ac-computers-database-volume:
