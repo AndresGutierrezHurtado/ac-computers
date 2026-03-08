@@ -1,5 +1,7 @@
 "use client";
 
+import FormattedNumberInput from "@/atoms/FormattedNumberInput";
+
 export default function AdminFormField({
     label,
     name,
@@ -30,6 +32,15 @@ export default function AdminFormField({
                     value={value}
                     onChange={onChange}
                 ></textarea>
+            ) : type === "number" ? (
+                <FormattedNumberInput
+                    name={name}
+                    placeholder={placeholder}
+                    value={value}
+                    disabled={disabled}
+                    dense={false}
+                    onChange={(raw) => onChange?.({ target: { name, value: raw } })}
+                />
             ) : (
                 <input
                     className="input input-bordered focus:outline-0 focus:input-primary disabled:input-bordered"
