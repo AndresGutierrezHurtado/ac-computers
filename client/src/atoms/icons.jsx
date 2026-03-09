@@ -31,6 +31,7 @@ import {
 } from "react-icons/io";
 import { FaGear as GearIcon, FaComputer as ComputerIcon } from "react-icons/fa6";
 import { RxComponent1 as ComponentIcon } from "react-icons/rx";
+import { HiChevronLeft as ChevronLeftIcon, HiChevronRight as ChevronRightIcon } from "react-icons/hi";
 
 export {
     StarIcon,
@@ -59,4 +60,6 @@ export {
     ComponentIcon,
     UserIcon,
     RobotIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
 };
