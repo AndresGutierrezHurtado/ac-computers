@@ -13,6 +13,10 @@
     --color-base-content: #f8fafc;
 }
 
+@utility btn {
+    @apply h-auto py-1.5;
+}
+
 .swal2-popup {
     background: var(--color-base-100) !important;
     color: var(--color-base-content) !important;

@@ -32,6 +32,7 @@ import {
 import { FaGear as GearIcon, FaComputer as ComputerIcon } from "react-icons/fa6";
 import { RxComponent1 as ComponentIcon } from "react-icons/rx";
 import { HiChevronLeft as ChevronLeftIcon, HiChevronRight as ChevronRightIcon } from "react-icons/hi";
+import { PlusIcon } from "lucide-react";
 
 export {
     StarIcon,
@@ -62,4 +63,5 @@ export {
     RobotIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    PlusIcon,
 };

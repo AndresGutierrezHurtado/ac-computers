@@ -10,6 +10,7 @@ import AdminUserModal from "@/organisms/AdminUserModal";
 
 import Pagination from "@/molecules/Pagination";
 import { FetchData, useDeleteData, usePaginateData } from "@/hooks/useClientData";
+import { PlusIcon } from "@/atoms/icons";
 
 export default function AdminUsersPage() {
     const [search, setSearch] = useState("");
@@ -102,7 +103,7 @@ export default function AdminUsersPage() {
                             className="btn btn-primary btn-outline"
                             onClick={() => openModal("create")}
                         >
-                            + Crear Usuario
+                            <PlusIcon size={16} /> Crear Usuario
                         </button>
                     }
                 />
