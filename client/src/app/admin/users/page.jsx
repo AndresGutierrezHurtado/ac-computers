@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
 import AdminPageHeader from "@/organisms/AdminPageHeader";
@@ -11,11 +11,10 @@ import AdminUserModal from "@/organisms/AdminUserModal";
 import Pagination from "@/molecules/Pagination";
 import { FetchData, useDeleteData, usePaginateData } from "@/hooks/useClientData";
 
-const PER_PAGE = 10;
-
 export default function AdminUsersPage() {
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState("view");
     const [selectedUser, setSelectedUser] = useState(null);
@@ -23,19 +22,24 @@ export default function AdminUsersPage() {
     const endpoint = useMemo(() => {
         const params = new URLSearchParams();
         params.set("page", page.toString());
-        params.set("perPage", PER_PAGE.toString());
+        params.set("perPage", limit.toString());
         if (search) params.set("search", search);
         return `/users?${params.toString()}`;
-    }, [page, search]);
+    }, [page, limit, search]);
 
     const { data: users, total, loading, reload } = usePaginateData(endpoint);
 
-    const handleSearch = (value) => {
+    const handleSearch = useCallback((value) => {
         setSearch(value);
         setPage(1);
-    };
+    }, []);
 
-    const openModal = async (mode, userId = null) => {
+    const handleLimitChange = useCallback((next) => {
+        setLimit(next);
+        setPage(1);
+    }, []);
+
+    const openModal = useCallback(async (mode, userId = null) => {
         setModalMode(mode);
         if (mode === "create") {
             setSelectedUser(null);
@@ -48,57 +52,45 @@ export default function AdminUsersPage() {
             setSelectedUser(response.data);
             setModalOpen(true);
         }
-    };
+    }, []);
 
-    const handleDelete = async (userId) => {
-        Swal.fire({
+    const handleDelete = useCallback(async (userId) => {
+        const result = await Swal.fire({
             icon: "warning",
             title: "¿Eliminar usuario?",
             text: "Esta acción no se puede deshacer",
             showCancelButton: true,
             confirmButtonText: "Eliminar",
             cancelButtonText: "Cancelar",
-            confirmButtonColor: "#d33",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const response = await useDeleteData(`/users/${userId}`);
-                if (response?.success) {
-                    reload();
-                }
-            }
         });
-    };
 
-    const rows = users?.length
-        ? users.map((user) => (
-              <tr key={user.id} className="text-sm">
-                  <td>{user.id}</td>
-                  <td>{`${user.firstName} ${user.lastName}`}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role?.name || "—"}</td>
-                  <td className="flex flex-col gap-2">
-                      <button
-                          className="btn btn-xs btn-outline"
-                          onClick={() => openModal("view", user.id)}
-                      >
-                          Ver
-                      </button>
-                      <button
-                          className="btn btn-xs btn-primary"
-                          onClick={() => openModal("edit", user.id)}
-                      >
-                          Editar
-                      </button>
-                      <button
-                          className="btn btn-xs btn-ghost text-red-400"
-                          onClick={() => handleDelete(user.id)}
-                      >
-                          Eliminar
-                      </button>
-                  </td>
-              </tr>
-          ))
-        : null;
+        if (!result.isConfirmed) return false;
+
+        const response = await useDeleteData(`/users/${userId}`);
+        if (response?.success) {
+            reload();
+            return true;
+        }
+
+        return false;
+    }, []);
+
+    const rows = useMemo(() => {
+        if (!users?.length) return null;
+
+        return users.map((user) => (
+            <tr
+                key={user.id}
+                className="text-sm cursor-pointer transition-colors hover:bg-zinc-950/40"
+                onDoubleClick={() => openModal("view", user.id)}
+            >
+                <td>{user.id}</td>
+                <td>{`${user.firstName} ${user.lastName}`}</td>
+                <td>{user.email}</td>
+                <td>{user.role?.name || "—"}</td>
+            </tr>
+        ))
+    }, [users, openModal]);
 
     return (
         <AdminPageTemplate>
@@ -119,7 +111,7 @@ export default function AdminUsersPage() {
                     searchPlaceholder="Buscar usuarios"
                     searchValue={search}
                     onSearchChange={handleSearch}
-                    columns={["ID", "Nombres", "Correo Electrónico", "Rol", "Acciones"]}
+                    columns={["ID", "Nombres", "Correo Electrónico", "Rol"]}
                     emptyMessage="No hay usuarios..."
                     loading={loading}
                 >
@@ -129,8 +121,9 @@ export default function AdminUsersPage() {
                     <Pagination
                         page={page}
                         count={total}
-                        limit={PER_PAGE}
+                        limit={limit}
                         onPageChange={setPage}
+                        onLimitChange={handleLimitChange}
                     />
                 ) : null}
             </div>
@@ -140,6 +133,8 @@ export default function AdminUsersPage() {
                 user={selectedUser}
                 onClose={() => setModalOpen(false)}
                 onSaved={reload}
+                onEdit={(userId) => openModal("edit", userId)}
+                onDelete={handleDelete}
             />
         </AdminPageTemplate>
     );

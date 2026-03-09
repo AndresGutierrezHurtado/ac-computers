@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
 import AdminPageHeader from "@/organisms/AdminPageHeader";
@@ -11,11 +11,10 @@ import AdminProductModal from "@/organisms/AdminProductModal";
 import Pagination from "@/molecules/Pagination";
 import { FetchData, useDeleteData, usePaginateData } from "@/hooks/useClientData";
 
-const PER_PAGE = 10;
-
 export default function AdminProductsPage() {
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState("view");
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -23,19 +22,24 @@ export default function AdminProductsPage() {
     const endpoint = useMemo(() => {
         const params = new URLSearchParams();
         params.set("page", page.toString());
-        params.set("perPage", PER_PAGE.toString());
+        params.set("perPage", limit.toString());
         if (search) params.set("search", search);
         return `/products?${params.toString()}`;
-    }, [page, search]);
+    }, [page, limit, search]);
 
     const { data: products, total, loading, reload } = usePaginateData(endpoint);
 
-    const handleSearch = (value) => {
+    const handleSearch = useCallback((value) => {
         setSearch(value);
         setPage(1);
-    };
+    }, []);
 
-    const openModal = async (mode, productId = null) => {
+    const handleLimitChange = useCallback((next) => {
+        setLimit(next);
+        setPage(1);
+    }, []);
+
+    const openModal = useCallback(async (mode, productId = null) => {
         setModalMode(mode);
         if (mode === "create") {
             setSelectedProduct(null);
@@ -48,59 +52,62 @@ export default function AdminProductsPage() {
             setSelectedProduct(response.data);
             setModalOpen(true);
         }
-    };
+    }, []);
 
-    const handleDelete = async (productId) => {
-        Swal.fire({
+    const handleDelete = useCallback(async (productId) => {
+        const result = await Swal.fire({
             icon: "warning",
             title: "¿Eliminar producto?",
             text: "Esta acción no se puede deshacer",
             showCancelButton: true,
             confirmButtonText: "Eliminar",
             cancelButtonText: "Cancelar",
-            confirmButtonColor: "#d33",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const response = await useDeleteData(`/products/${productId}`);
-                if (response?.success) {
-                    reload();
-                }
-            }
         });
-    };
 
-    const rows = products?.length
-        ? products.map((product) => (
-              <tr key={product.id} className="text-sm">
-                  <td>{product.id}</td>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-                  <td>{product.discount}%</td>
-                  <td>{product.condition}</td>
-                  <td>{product.createdAt ? new Date(product.createdAt).toLocaleDateString() : "—"}</td>
-                  <td className="flex flex-col gap-2">
-                      <button
-                          className="btn btn-xs btn-outline"
-                          onClick={() => openModal("view", product.id)}
-                      >
-                          Ver
-                      </button>
-                      <button
-                          className="btn btn-xs btn-primary"
-                          onClick={() => openModal("edit", product.id)}
-                      >
-                          Editar
-                      </button>
-                      <button
-                          className="btn btn-xs btn-ghost text-red-400"
-                          onClick={() => handleDelete(product.id)}
-                      >
-                          Eliminar
-                      </button>
-                  </td>
-              </tr>
-          ))
-        : null;
+        if (!result.isConfirmed) return false;
+
+        const response = await useDeleteData(`/products/${productId}`);
+        if (response?.success) {
+            reload();
+            return true;
+        }
+
+        return false;
+    }, []);
+
+    const getConditionLabel = useCallback((condition) => {
+        switch (condition) {
+            case "new":
+                return "Nuevo";
+            case "used":
+                return "Usado";
+            case "refurbished":
+                return "Reacondicionado";
+            case "for_parts":
+                return "Para repuestos";
+            default:
+                return "—";
+        }
+    }, []);
+
+    const rows = useMemo(() => {
+        if (!products?.length) return null;
+
+        return products.map((product) => (
+            <tr
+                key={product.id}
+                className="text-sm cursor-pointer transition-colors hover:bg-zinc-950/40"
+                onDoubleClick={() => openModal("view", product.id)}
+            >
+                <td>{product.id}</td>
+                <td>{product.name}</td>
+                <td>COP {product.price.toLocaleString()}</td>
+                <td>{product.discount}%</td>
+                <td>{getConditionLabel(product.condition)}</td>
+                <td>{product.createdAt ? new Date(product.createdAt).toLocaleDateString() : "—"}</td>
+            </tr>
+        ));
+    }, [products, openModal]);
 
     return (
         <AdminPageTemplate>
@@ -128,7 +135,6 @@ export default function AdminProductsPage() {
                         "Descuento",
                         "Tipo",
                         "Fecha",
-                        "Acciones",
                     ]}
                     emptyMessage="No hay productos..."
                     loading={loading}
@@ -139,8 +145,9 @@ export default function AdminProductsPage() {
                     <Pagination
                         page={page}
                         count={total}
-                        limit={PER_PAGE}
+                        limit={limit}
                         onPageChange={setPage}
+                        onLimitChange={handleLimitChange}
                     />
                 ) : null}
             </div>
@@ -150,6 +157,8 @@ export default function AdminProductsPage() {
                 product={selectedProduct}
                 onClose={() => setModalOpen(false)}
                 onSaved={reload}
+                onEdit={(productId) => openModal("edit", productId)}
+                onDelete={handleDelete}
             />
         </AdminPageTemplate>
     );
