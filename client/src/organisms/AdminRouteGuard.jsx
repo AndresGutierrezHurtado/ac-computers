@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { FetchData } from "@/hooks/useClientData";
-import { clearAuthSession, getAuthToken, setAuthSession } from "@/hooks/useAuthSession";
+import {
+    clearAuthSession,
+    getAuthToken,
+    hydrateAuthSession,
+    setAuthSession,
+} from "@/hooks/useAuthSession";
 
 const ALLOWED_ROLES = new Set(["SUPERUSER", "ADMINISTRATOR"]);
 
@@ -18,6 +23,7 @@ export default function AdminRouteGuard({ children }) {
         let active = true;
 
         const verifySession = async () => {
+            hydrateAuthSession();
             const token = getAuthToken();
             if (!token) {
                 clearAuthSession();

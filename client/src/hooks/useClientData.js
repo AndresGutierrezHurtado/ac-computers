@@ -32,11 +32,7 @@ export const FetchData = async (endpoint, options) => {
     const data = await response.json();
     const authToken = response.headers.get("authorization");
 
-    console.log(authToken, Object.fromEntries(response.headers.entries()));
-
-    if (authToken) {
-        return { ...data, authToken };
-    }
+    if (authToken) return { ...data, authToken };
 
     return data;
 };
