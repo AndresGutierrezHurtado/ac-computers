@@ -44,6 +44,12 @@ export const useGetData = (endpoint) => {
     const router = useRouter();
 
     useEffect(() => {
+        if (!endpoint) {
+            setLoading(false);
+            setData(null);
+            return;
+        }
+        setLoading(true);
         const getData = async () => {
             const response = await FetchData(endpoint);
             setLoading(false);

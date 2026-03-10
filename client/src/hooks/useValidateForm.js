@@ -73,11 +73,6 @@ export const useValidateform = (data = {}, form = "") => {
                         string("Correo requerido"),
                         email("El correo debe ser válido")
                     ),
-                    password: pipe(
-                        nonEmpty("Contraseña requerida"),
-                        string("Contraseña requerida"),
-                        minLength(6, "La contraseña debe tener al menos 6 caracteres")
-                    ),
                     roleId: pipe(
                         nonEmpty("Rol requerido"),
                         string("Rol requerido"),
