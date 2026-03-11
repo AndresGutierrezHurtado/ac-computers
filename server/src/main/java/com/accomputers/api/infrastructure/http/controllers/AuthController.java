@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 // Application
 import com.accomputers.api.application.dtos.auth.LoginDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
+import com.accomputers.api.application.dtos.auth.SetPasswordDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
 
@@ -63,6 +64,15 @@ public class AuthController {
         authServiceInterface.logout();
 
         ResponseDTO<Void> responseDTO = new ResponseDTO<Void>("Logout successful", true);
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/set-password")
+    public ResponseEntity<ResponseDTO<Void>> setPassword(@RequestBody @Valid SetPasswordDTO setPasswordDTO) {
+        authServiceInterface.setPassword(setPasswordDTO);
+
+        ResponseDTO<Void> responseDTO = new ResponseDTO<Void>("Password updated successfully", true);
 
         return ResponseEntity.ok(responseDTO);
     }
