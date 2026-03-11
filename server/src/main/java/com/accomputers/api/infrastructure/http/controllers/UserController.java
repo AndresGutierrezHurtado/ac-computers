@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import jakarta.validation.Valid;
 
 // Application
 import com.accomputers.api.application.dtos.auth.UpdateUserDTO;
+import com.accomputers.api.application.dtos.auth.InviteUserDTO;
 import com.accomputers.api.application.ports.input.UserServiceInterface;
 import com.accomputers.api.infrastructure.http.responses.PaginatedResponseDTO;
 
@@ -64,6 +66,19 @@ public class UserController {
 
         ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<>(
                 "User retrieved successfully",
+                true,
+                user);
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/invite")
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> inviteUser(
+            @RequestBody @Valid InviteUserDTO inviteUserDTO) {
+        UserResponseDTO user = userServiceInterface.inviteUser(inviteUserDTO);
+
+        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<>(
+                "User invited successfully",
                 true,
                 user);
 
