@@ -2,6 +2,7 @@ package com.accomputers.api.application.services;
 
 import jakarta.transaction.Transactional;
 
+import com.accomputers.api.domain.entities.PasswordResetToken;
 import com.accomputers.api.domain.entities.Role;
 // Domain
 import com.accomputers.api.domain.entities.User;
@@ -16,16 +17,20 @@ import com.accomputers.api.application.ports.input.AuthServiceInterface;
 import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.application.ports.output.PasswordHasherInterface;
 import com.accomputers.api.application.ports.output.UserAuthServiceInterface;
+import com.accomputers.api.application.ports.output.repositories.PasswordResetTokenRepositoryInterface;
 import com.accomputers.api.application.ports.output.repositories.RoleRepositoryInterface;
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 
 // DTOs
 import com.accomputers.api.application.dtos.auth.LoginDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
+import com.accomputers.api.application.dtos.auth.SetPasswordDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class AuthService implements AuthServiceInterface {
@@ -33,15 +38,18 @@ public class AuthService implements AuthServiceInterface {
     private final PasswordHasherInterface passwordHasher;
     private final RoleRepositoryInterface roleRepository;
     private final UserAuthServiceInterface userAuthService;
+    private final PasswordResetTokenRepositoryInterface passwordResetTokenRepository;
     private final LoggerPort loggerPort;
 
     @Autowired
     public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher,
-            RoleRepositoryInterface roleRepository, UserAuthServiceInterface userAuthService, LoggerPort loggerPort) {
+            RoleRepositoryInterface roleRepository, UserAuthServiceInterface userAuthService,
+            PasswordResetTokenRepositoryInterface passwordResetTokenRepository, LoggerPort loggerPort) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
         this.roleRepository = roleRepository;
         this.userAuthService = userAuthService;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.loggerPort = loggerPort;
     }
 
@@ -120,5 +128,35 @@ public class AuthService implements AuthServiceInterface {
                 user.getId(), user.getEmail().getValue()));
 
         userAuthService.logoutUser(user);
+    }
+
+    @Override
+    @Transactional
+    public void setPassword(SetPasswordDTO setPasswordDTO) {
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(setPasswordDTO.token());
+        if (resetToken == null) {
+            throw new InvalidValueObjectException("Password reset token", setPasswordDTO.token(), "is invalid");
+        }
+        if (resetToken.isUsed()) {
+            throw new InvalidValueObjectException("Password reset token", setPasswordDTO.token(), "is already used");
+        }
+        if (resetToken.isExpired(LocalDateTime.now())) {
+            throw new InvalidValueObjectException("Password reset token", setPasswordDTO.token(), "has expired");
+        }
+
+        User user = userRepository.findById(resetToken.getUserId());
+        if (user == null) {
+            throw new EntityNotFoundException("User", resetToken.getUserId());
+        }
+
+        Password hashedPassword = passwordHasher.hashPassword(new Password(setPasswordDTO.password()));
+        user.setPassword(hashedPassword);
+        userRepository.save(user);
+
+        resetToken.setUsedAt(LocalDateTime.now());
+        passwordResetTokenRepository.save(resetToken);
+
+        loggerPort.info(String.format("User password updated via token - ID: %d, Email: %s",
+                user.getId(), user.getEmail().getValue()));
     }
 }
