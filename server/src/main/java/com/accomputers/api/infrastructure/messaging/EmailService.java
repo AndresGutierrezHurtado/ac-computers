@@ -41,4 +41,24 @@ public class EmailService implements MessagingService {
         }
     }
 
+    @Override
+    public void sendPasswordSetup(String name, String email, String setupLink) {
+        try {
+            if (mailFrom == null || mailFrom.isBlank()) {
+                throw new MessagingException("Missing spring.mail.username for From address");
+            }
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setFrom(mailFrom);
+            helper.setTo(email);
+            helper.setSubject("[AC Computers] Configura tu contraseña");
+            helper.setText(EmailTemplates.buildPasswordSetupEmail(name, setupLink), true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error sending password setup email", e);
+        }
+    }
+
 }
