@@ -5,6 +5,9 @@ export default function AuthField({
     placeholder,
     autoComplete,
     required = true,
+    value,
+    onChange,
+    disabled = false,
 }) {
     return (
         <fieldset className="fieldset">
@@ -16,6 +19,9 @@ export default function AuthField({
                 placeholder={placeholder}
                 autoComplete={autoComplete}
                 required={required}
+                value={value}
+                onChange={onChange}
+                disabled={disabled}
             />
         </fieldset>
     );

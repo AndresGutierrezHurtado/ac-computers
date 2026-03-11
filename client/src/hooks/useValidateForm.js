@@ -314,6 +314,20 @@ export const useValidateform = (data = {}, form = "") => {
                     ),
                 });
                 break;
+            case "set-password-form":
+                schema = object({
+                    password: pipe(
+                        nonEmpty("Contraseña requerida"),
+                        string("Contraseña requerida"),
+                        minLength(6, "La contraseña debe tener al menos 6 caracteres")
+                    ),
+                    confirmPassword: pipe(
+                        nonEmpty("Confirmación requerida"),
+                        string("Confirmación requerida"),
+                        minLength(6, "La contraseña debe tener al menos 6 caracteres")
+                    ),
+                });
+                break;
             default:
                 return { success: false, message: "Formulario no encontrado", data: null };
                 break;

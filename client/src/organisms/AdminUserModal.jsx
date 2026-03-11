@@ -20,7 +20,6 @@ const emptyForm = {
     lastName: "",
     email: "",
     roleId: "3",
-    password: "",
 };
 
 export default function AdminUserModal({
@@ -47,7 +46,6 @@ export default function AdminUserModal({
             lastName: user.lastName || "",
             email: user.email || "",
             roleId: user.role?.id?.toString() || "3",
-            password: "",
         });
     }, [open, user]);
 
@@ -68,7 +66,6 @@ export default function AdminUserModal({
                 lastName: form.lastName,
                 email: form.email,
                 roleId: form.roleId,
-                ...(mode === "create" ? { password: form.password } : {}),
             },
             mode === "create" ? "admin-create-user-form" : "admin-update-user-form",
         );
@@ -80,11 +77,10 @@ export default function AdminUserModal({
 
         const response =
             mode === "create"
-                ? await usePostData("/auth/register", {
+                ? await usePostData("/users/invite", {
                       firstName: form.firstName,
                       lastName: form.lastName,
                       email: form.email,
-                      password: form.password,
                       roleId: Number(form.roleId),
                   })
                 : await usePutData(`/users/${user.id}`, {
@@ -181,15 +177,9 @@ export default function AdminUserModal({
                     disabled={readOnly}
                 />
                 {mode === "create" ? (
-                    <AdminFormField
-                        label="Contraseña"
-                        name="password"
-                        type="password"
-                        placeholder="Contraseña"
-                        value={form.password}
-                        onChange={handleChange("password")}
-                        disabled={readOnly}
-                    />
+                    <div className="text-sm text-base-content/70">
+                        Se enviará un correo al usuario para que configure su contraseña.
+                    </div>
                 ) : null}
                 {!readOnly ? (
                     <button className="btn btn-primary w-full" disabled={submitting}>
