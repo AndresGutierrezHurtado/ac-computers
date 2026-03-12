@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { DownloadIcon } from "@/atoms/icons";
+import { DownloadIcon } from "@/atoms/Icons";
 import Link from "next/link";
 import { downloadCatalogPdf } from "@/utils/downloadCatalog";
 

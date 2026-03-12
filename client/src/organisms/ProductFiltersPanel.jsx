@@ -1,5 +1,5 @@
 import FormattedNumberInput from "@/atoms/FormattedNumberInput";
-import { CloseIcon } from "@/atoms/icons";
+import { CloseIcon } from "@/atoms/Icons";
 
 export default function ProductFiltersPanel({
     filters,

@@ -5,7 +5,7 @@ import {
     InstagramIcon,
     LocationIcon,
     WhatsappIcon,
-} from "@/atoms/icons";
+} from "@/atoms/Icons";
 
 const SOCIAL_MEDIAS = [
     {

@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@/atoms/icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/atoms/Icons";
 import FormSelectField from "@/molecules/FormSelectField";
 
 const DEFAULT_LIMIT_OPTIONS = [5, 10, 15, 20, 25, 30, 50];

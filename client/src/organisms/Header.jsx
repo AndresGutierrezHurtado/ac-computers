@@ -13,7 +13,7 @@ import {
     PhoneIcon,
     TrashIcon,
     UserIcon,
-} from "@/atoms/icons";
+} from "@/atoms/Icons";
 import { useEffect, useRef } from "react";
 
 export default function Header() {

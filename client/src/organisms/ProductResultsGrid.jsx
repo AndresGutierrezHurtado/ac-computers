@@ -1,5 +1,5 @@
 import ProductCard from "@/organisms/ProductCard";
-import { BackIcon } from "@/atoms/icons";
+import { BackIcon } from "@/atoms/Icons";
 
 export default function ProductResultsGrid({
     products = [],

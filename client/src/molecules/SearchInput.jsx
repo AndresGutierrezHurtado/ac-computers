@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SearchIcon } from "../atoms/icons";
+import { SearchIcon } from "../atoms/Icons";
+import Input from "@/atoms/Input";
 
 export default function SearchInput({ placeholder, value, onChange }) {
     const [inputValue, setInputValue] = useState(value);

@@ -10,7 +10,7 @@ import AdminUserModal from "@/organisms/AdminUserModal";
 
 import Pagination from "@/molecules/Pagination";
 import { FetchData, useDeleteData, usePaginateData } from "@/hooks/useClientData";
-import { PlusIcon } from "@/atoms/icons";
+import { PlusIcon } from "@/atoms/Icons";
 
 export default function AdminUsersPage() {
     const [search, setSearch] = useState("");

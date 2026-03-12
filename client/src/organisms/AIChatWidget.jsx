@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { CloseIcon, RobotIcon } from "@/atoms/icons";
+import { CloseIcon, RobotIcon } from "@/atoms/Icons";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const STORAGE_KEY_MESSAGES = "ac_ai_chat_messages_v1";

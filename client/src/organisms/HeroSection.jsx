@@ -2,7 +2,7 @@
 
 import { forwardRef, useState } from "react";
 import Badge from "@/atoms/Badge";
-import { DownloadIcon, GearIcon, UsersIcon } from "@/atoms/icons";
+import { DownloadIcon, GearIcon, UsersIcon } from "@/atoms/Icons";
 import { downloadCatalogPdf } from "@/utils/downloadCatalog";
 
 const HeroSection = forwardRef(function HeroSection(_, ref) {

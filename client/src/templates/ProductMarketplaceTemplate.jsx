@@ -1,5 +1,5 @@
 import SearchInput from "@/molecules/SearchInput";
-import { PriceTagsIcon } from "@/atoms/icons";
+import { PriceTagsIcon } from "@/atoms/Icons";
 
 export default function ProductMarketplaceTemplate({
     title,
