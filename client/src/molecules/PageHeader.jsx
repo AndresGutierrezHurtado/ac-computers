@@ -1,4 +1,4 @@
-import SearchInput from "@/atoms/SearchInput";
+import SearchInput from "@/molecules/SearchInput";
 
 export default function PageHeader({ title, searchPlaceholder, searchValue, searchOnChange }) {
     return (
