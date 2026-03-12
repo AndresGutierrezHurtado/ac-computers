@@ -83,6 +83,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/brands/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/subcategories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/specifications/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/specification-values/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pdf/**").permitAll()
 
                         // Products (management)

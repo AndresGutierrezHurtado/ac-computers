@@ -46,6 +46,15 @@ export default function AdminProductModal({
     const { data: brands } = useGetData("/brands");
     const { data: categories } = useGetData("/categories");
 
+    const specsEndpoint = useMemo(() => {
+        if (form.subCategoryId) {
+            return `/specifications?subCategoryId=${form.subCategoryId}`;
+        }
+        return null;
+    }, [form.subCategoryId]);
+
+    const { data: specifications } = useGetData(specsEndpoint);
+
     const subCategoryEndpoint = useMemo(() => {
         if (form.categoryId) {
             return `/subcategories?categoryId=${form.categoryId}`;
@@ -406,6 +415,7 @@ export default function AdminProductModal({
                                 key={`${spec.id || index}`}
                                 index={index}
                                 spec={spec}
+                                specifications={specifications || []}
                                 onChange={handleSpecChange}
                                 onRemove={handleSpecRemove}
                                 disabled={readOnly}
