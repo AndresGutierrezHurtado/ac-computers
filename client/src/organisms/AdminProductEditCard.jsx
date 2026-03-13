@@ -1,4 +1,5 @@
-import AdminFormField from "@/molecules/AdminFormField";
+import TextField from "@/molecules/TextField";
+import TextareaField from "@/molecules/TextareaField";
 
 export default function AdminProductEditCard() {
     return (
@@ -6,19 +7,20 @@ export default function AdminProductEditCard() {
             <div className="card-body">
                 <h2 className="card-title font-extrabold text-3xl">Edición</h2>
                 <form className="space-y-2">
-                    <AdminFormField label="Nombre" name="product_name" />
-                    <AdminFormField
+                    <TextField label="Nombre" name="product_name" className="input-sm input-bordered" />
+                    <TextareaField
                         label="Descripción:"
                         name="product_description"
                         placeholder="Ingresa una descripción"
-                        as="textarea"
+                        className="textarea-sm textarea-bordered min-h-24"
+                        resizable={false}
                     />
                     <div className="flex flex-col sm:flex-row w-full gap-4">
                         <div className="grow">
-                            <AdminFormField label="Precio" name="product_price" />
+                            <TextField label="Precio" name="product_price" className="input-sm input-bordered" />
                         </div>
                         <div className="grow">
-                            <AdminFormField label="Descuento" name="product_discount" />
+                            <TextField label="Descuento" name="product_discount" className="input-sm input-bordered" />
                         </div>
                     </div>
                 </form>

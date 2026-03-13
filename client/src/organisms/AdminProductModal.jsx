@@ -4,8 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
 import Modal from "@/molecules/Modal";
-import AdminFormField from "@/molecules/AdminFormField";
-import AdminSelectField from "@/molecules/AdminSelectField";
+import TextField from "@/molecules/TextField";
+import TextareaField from "@/molecules/TextareaField";
+import SelectField from "@/molecules/SelectField";
 import AdminSpecRow from "@/molecules/AdminSpecRow";
 
 import { useGetData, usePostFormData, usePutFormData } from "@/hooks/useClientData";
@@ -304,25 +305,27 @@ export default function AdminProductModal({
             footer={footer}
         >
             <form onSubmit={handleSubmit} className="space-y-4">
-                <AdminFormField
+                <TextField
                     label="Nombre"
                     name="name"
                     placeholder="Nombre del producto"
                     value={form.name}
                     onChange={handleChange("name")}
                     disabled={readOnly}
+                    className="input-sm input-bordered"
                 />
-                <AdminFormField
+                <TextareaField
                     label="Descripción"
                     name="description"
                     placeholder="Descripción del producto"
-                    as="textarea"
                     value={form.description}
                     onChange={handleChange("description")}
                     disabled={readOnly}
+                    resizable={false}
+                    className="textarea-sm textarea-bordered min-h-24"
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <AdminFormField
+                    <TextField
                         label="Precio"
                         name="price"
                         type="number"
@@ -330,8 +333,9 @@ export default function AdminProductModal({
                         value={form.price}
                         onChange={handleChange("price")}
                         disabled={readOnly}
+                        className="input-sm input-bordered"
                     />
-                    <AdminFormField
+                    <TextField
                         label="Descuento"
                         name="discount"
                         type="number"
@@ -339,18 +343,20 @@ export default function AdminProductModal({
                         value={form.discount}
                         onChange={handleChange("discount")}
                         disabled={readOnly}
+                        className="input-sm input-bordered"
                     />
                 </div>
-                <AdminSelectField
+                <SelectField
                     label="Condición"
                     name="condition"
                     value={form.condition}
                     onChange={handleChange("condition")}
                     options={CONDITION_OPTIONS}
                     disabled={readOnly}
+                    className="select-sm select-bordered"
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <AdminSelectField
+                    <SelectField
                         label="Categoría"
                         name="categoryId"
                         value={form.categoryId}
@@ -363,24 +369,26 @@ export default function AdminProductModal({
                         }}
                         options={categoryOptions}
                         disabled={readOnly}
-                        required={false}
+                        className="select-sm select-bordered"
                     />
-                    <AdminSelectField
+                    <SelectField
                         label="Subcategoría"
                         name="subCategoryId"
                         value={form.subCategoryId}
                         onChange={handleChange("subCategoryId")}
                         options={subCategoryOptions}
                         disabled={readOnly}
+                        className="select-sm select-bordered"
                     />
                 </div>
-                <AdminSelectField
+                <SelectField
                     label="Marca"
                     name="brandId"
                     value={form.brandId}
                     onChange={handleChange("brandId")}
                     options={brandOptions}
                     disabled={readOnly}
+                    className="select-sm select-bordered"
                 />
                 <fieldset className="fieldset">
                     <label className="label">

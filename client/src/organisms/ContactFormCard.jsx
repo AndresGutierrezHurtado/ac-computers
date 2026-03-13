@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { UploadIcon } from "@/atoms/icons";
+import { UploadIcon } from "@/atoms/Icons";
+import TextField from "@/molecules/TextField";
+import TextareaField from "@/molecules/TextareaField";
 import { usePostData } from "@/hooks/useClientData";
 
 export default function ContactFormCard() {
@@ -37,6 +39,8 @@ export default function ContactFormCard() {
         setSubmitting(false);
     };
 
+    const contactInputClass = "bg-transparent focus-within:border-primary";
+
     return (
         <div className="card bg-black/20 h-fit w-full">
             <div className="card-body [&_p]:grow-0 px-8 py-10">
@@ -48,56 +52,48 @@ export default function ContactFormCard() {
                         </p>
                     </div>
 
-                    <fieldset className="fieldset">
-                        <label className="fieldset-label font-medium text-base">Nombre:</label>
-                        <input
-                            className="input w-full focus:outline-0 focus:border-primary bg-transparent"
-                            placeholder="Ingresa tu nombre"
-                            name="name"
-                            value={form.name}
-                            onChange={handleChange}
-                            required
-                        />
-                    </fieldset>
+                    <TextField
+                        label="Nombre:"
+                        name="name"
+                        placeholder="Ingresa tu nombre"
+                        value={form.name}
+                        onChange={handleChange}
+                        required
+                        className={contactInputClass}
+                    />
 
-                    <fieldset className="fieldset">
-                        <label className="fieldset-label font-medium text-base">Asunto:</label>
-                        <input
-                            className="input w-full focus:outline-0 focus:border-primary bg-transparent"
-                            placeholder="Ingresa el asunto de tu mensaje"
-                            name="subject"
-                            value={form.subject}
-                            onChange={handleChange}
-                            required
-                        />
-                    </fieldset>
+                    <TextField
+                        label="Asunto:"
+                        name="subject"
+                        placeholder="Ingresa el asunto de tu mensaje"
+                        value={form.subject}
+                        onChange={handleChange}
+                        required
+                        className={contactInputClass}
+                    />
 
-                    <fieldset className="fieldset">
-                        <label className="fieldset-label font-medium text-base">
-                            Correo electrónico:
-                        </label>
-                        <input
-                            type="email"
-                            className="input w-full focus:outline-0 focus:border-primary bg-transparent"
-                            placeholder="Ingresa tu correo electrónico"
-                            name="email"
-                            value={form.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </fieldset>
+                    <TextField
+                        label="Correo electrónico:"
+                        name="email"
+                        type="email"
+                        placeholder="Ingresa tu correo electrónico"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                        className={contactInputClass}
+                    />
 
-                    <fieldset className="fieldset">
-                        <label className="fieldset-label font-medium text-base">Mensaje:</label>
-                        <textarea
-                            className="textarea w-full focus:outline-0 focus:border-primary bg-transparent resize-none h-32"
-                            placeholder="Ingresa tu mensaje"
-                            name="message"
-                            value={form.message}
-                            onChange={handleChange}
-                            required
-                        ></textarea>
-                    </fieldset>
+                    <TextareaField
+                        label="Mensaje:"
+                        name="message"
+                        placeholder="Ingresa tu mensaje"
+                        value={form.message}
+                        onChange={handleChange}
+                        required
+                        resizable={false}
+                        rows={6}
+                        className="w-full bg-transparent focus:border-primary resize-none"
+                    />
 
                     <div className="form-control flex flex-col gap-1 w-full pt-5">
                         <button

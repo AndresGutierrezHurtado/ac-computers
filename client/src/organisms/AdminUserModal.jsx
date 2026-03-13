@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 import Modal from "@/molecules/Modal";
-import AdminFormField from "@/molecules/AdminFormField";
-import AdminSelectField from "@/molecules/AdminSelectField";
+import TextField from "@/molecules/TextField";
+import SelectField from "@/molecules/SelectField";
 
 import { usePostData, usePutData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
@@ -143,38 +143,42 @@ export default function AdminUserModal({
         >
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <AdminFormField
+                    <TextField
                         label="Nombre"
                         name="firstName"
                         placeholder="Nombre"
                         value={form.firstName}
                         onChange={handleChange("firstName")}
                         disabled={readOnly}
+                        className="input-sm input-bordered"
                     />
-                    <AdminFormField
+                    <TextField
                         label="Apellido"
                         name="lastName"
                         placeholder="Apellido"
                         value={form.lastName}
                         onChange={handleChange("lastName")}
                         disabled={readOnly}
+                        className="input-sm input-bordered"
                     />
                 </div>
-                <AdminFormField
+                <TextField
                     label="Correo electrónico"
                     name="email"
                     placeholder="correo@ejemplo.com"
                     value={form.email}
                     onChange={handleChange("email")}
                     disabled={readOnly}
+                    className="input-sm input-bordered"
                 />
-                <AdminSelectField
+                <SelectField
                     label="Rol"
                     name="roleId"
                     value={form.roleId}
                     onChange={handleChange("roleId")}
                     options={ROLE_OPTIONS}
                     disabled={readOnly}
+                    className="select-sm select-bordered"
                 />
                 {mode === "create" ? (
                     <div className="text-sm text-base-content/70">

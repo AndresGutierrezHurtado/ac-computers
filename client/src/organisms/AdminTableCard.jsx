@@ -1,6 +1,6 @@
 "use client";
 
-import AdminSearchInput from "@/molecules/AdminSearchInput";
+import SearchInput from "@/molecules/SearchInput";
 
 export default function AdminTableCard({
     title,
@@ -18,7 +18,7 @@ export default function AdminTableCard({
                 <div className="flex flex-col sm:flex-row gap-4 justify-between items-center w-full">
                     <h2 className="text-3xl font-bold">{title}</h2>
                     {searchPlaceholder && onSearchChange ? (
-                        <AdminSearchInput
+                        <SearchInput
                             placeholder={searchPlaceholder}
                             value={searchValue}
                             onChange={onSearchChange}
