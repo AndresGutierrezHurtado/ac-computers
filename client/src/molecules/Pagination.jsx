@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/atoms/Icons";
-import FormSelectField from "@/molecules/FormSelectField";
+import Select from "@/atoms/Select";
 
 const DEFAULT_LIMIT_OPTIONS = [5, 10, 15, 20, 25, 30, 50];
 
@@ -78,12 +78,15 @@ export default function Pagination({
     return (
         <div className="w-full flex justify-between flex-wrap items-center gap-3">
             {showLimitSelect ? (
-                <FormSelectField
+                <Select
                     name="perPage"
                     value={String(limit)}
                     onChange={handleLimitChange}
-                    options={resolvedLimitOptions.map((n) => ({ value: n, label: String(n) + " Por página" }))}
-                    inline
+                    options={resolvedLimitOptions.map((n) => ({
+                        value: String(n),
+                        label: `${n} Por página`,
+                    }))}
+                    className="select-sm select-bordered w-auto max-w-[14rem]"
                 />
             ) : null}
 
