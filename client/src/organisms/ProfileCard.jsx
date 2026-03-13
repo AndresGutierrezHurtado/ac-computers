@@ -1,4 +1,4 @@
-import ProfileField from "@/molecules/ProfileField";
+import TextField from "@/molecules/TextField";
 
 export default function ProfileCard({ user, loading }) {
     const fullName = user ? `${user.firstName || ""} ${user.lastName || ""}`.trim() : "";
@@ -9,20 +9,28 @@ export default function ProfileCard({ user, loading }) {
                 <h2 className="text-2xl font-bold">Información personal</h2>
             </div>
             <div className="flex flex-col md:flex-row gap-6">
-                <ProfileField
-                    label="Nombre completo"
-                    value={loading ? "Cargando..." : fullName}
-                    required
-                />
-                <ProfileField
-                    label="Correo electrónico"
-                    value={loading ? "Cargando..." : user?.email}
-                    required
-                />
-                <ProfileField
-                    label="Rol"
-                    value={loading ? "Cargando..." : user?.role?.name}
-                />
+                <div className="flex-1 min-w-0">
+                    <TextField
+                        label="Nombre completo"
+                        value={loading ? "Cargando..." : fullName}
+                        disabled
+                    />
+                </div>
+                <div className="flex-1 min-w-0">
+                    <TextField
+                        label="Correo electrónico"
+                        value={loading ? "Cargando..." : user?.email}
+                        type="email"
+                        disabled
+                    />
+                </div>
+                <div className="flex-1 min-w-0">
+                    <TextField
+                        label="Rol"
+                        value={loading ? "Cargando..." : user?.role?.name}
+                        disabled
+                    />
+                </div>
             </div>
         </div>
     );

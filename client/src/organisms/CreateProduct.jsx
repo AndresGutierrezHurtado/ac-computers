@@ -3,12 +3,20 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 
 // Components
-import { UploadIcon } from "@/atoms/icons";
+import { UploadIcon } from "@/atoms/Icons";
+import TextField from "@/molecules/TextField";
+import TextareaField from "@/molecules/TextareaField";
+import SelectField from "@/molecules/SelectField";
 
 // Hooks
 import { usePostData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
 import { useBase64 } from "@/hooks/uesBase64";
+
+const CATEGORY_OPTIONS = [
+    { value: "1", label: "Computador" },
+    { value: "2", label: "Componente" },
+];
 
 export default function CreateProduct({ reloadProducts }) {
     const [specs, setSpecs] = useState([{ name: "", value: "" }]);
@@ -98,69 +106,43 @@ export default function CreateProduct({ reloadProducts }) {
                         de la ventana modal.
                     </p>
                     <form onSubmit={handleFormSubmit} className="space-y-2">
-                        {/* Campos del producto */}
-                        <fieldset className="fieldset">
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Nombre:
-                                </span>
-                            </label>
-                            <input
-                                name="product_name"
-                                placeholder="Ingresa el nombre"
-                                className="input input-sm input-bordered focus:input-primary focus:outline-0 w-full"
-                            />
-                        </fieldset>
-                        <fieldset className="fieldset">
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Descripción:
-                                </span>
-                            </label>
-                            <textarea
-                                name="product_description"
-                                placeholder="Ingresa una descripción"
-                                className="textarea textarea-sm textarea-bordered focus:textarea-primary focus:outline-0 w-full h-32 resize-none leading-[1.3]"
-                            ></textarea>
-                        </fieldset>
-                        <fieldset className="fieldset">
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Precio:
-                                </span>
-                            </label>
-                            <input
-                                name="product_price"
-                                placeholder="Ingresa el precio del producto"
-                                className="input input-sm input-bordered focus:input-primary focus:outline-0 w-full"
-                            />
-                        </fieldset>
-                        <fieldset className="fieldset">
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Descuento:
-                                </span>
-                            </label>
-                            <input
-                                name="product_discount"
-                                placeholder="Ingresa un porcentaje de descuento 0-100%"
-                                className="input input-sm input-bordered focus:input-primary focus:outline-0 w-full"
-                            />
-                        </fieldset>
-                        <fieldset className="fieldset">
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Categoría:
-                                </span>
-                            </label>
-                            <select
-                                name="category_id"
-                                className="select select-sm select-bordered focus:select-primary focus:outline-0 w-full"
-                            >
-                                <option value="1">Computador</option>
-                                <option value="2">Componente</option>
-                            </select>
-                        </fieldset>
+                        <TextField
+                            label="Nombre:"
+                            name="product_name"
+                            placeholder="Ingresa el nombre"
+                            required
+                            className="input-sm input-bordered focus:input-primary focus:outline-0 w-full"
+                        />
+                        <TextareaField
+                            label="Descripción:"
+                            name="product_description"
+                            placeholder="Ingresa una descripción"
+                            required
+                            resizable={false}
+                            className="textarea-sm textarea-bordered focus:textarea-primary focus:outline-0 w-full h-32 leading-[1.3]"
+                        />
+                        <TextField
+                            label="Precio:"
+                            name="product_price"
+                            placeholder="Ingresa el precio del producto"
+                            required
+                            className="input-sm input-bordered focus:input-primary focus:outline-0 w-full"
+                        />
+                        <TextField
+                            label="Descuento:"
+                            name="product_discount"
+                            placeholder="Ingresa un porcentaje de descuento 0-100%"
+                            required
+                            className="input-sm input-bordered focus:input-primary focus:outline-0 w-full"
+                        />
+                        <SelectField
+                            label="Categoría:"
+                            name="category_id"
+                            options={CATEGORY_OPTIONS}
+                            defaultValue="1"
+                            required
+                            className="select-sm select-bordered focus:select-primary focus:outline-0 w-full"
+                        />
                         <fieldset className="fieldset">
                             <label className="label">
                                 <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">

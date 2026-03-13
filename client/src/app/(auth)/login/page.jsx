@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Swal from "sweetalert2";
 
-import AuthField from "@/molecules/AuthField";
+import TextField from "@/molecules/TextField";
 import AuthCard from "@/organisms/AuthCard";
 import AuthPromo from "@/organisms/AuthPromo";
 import AuthSplitTemplate from "@/templates/AuthSplitTemplate";
@@ -73,19 +73,21 @@ export default function Login() {
                 <AuthCard title="AC COMPUTERS" subtitle="Iniciar Sesión" brandHref="/">
                     <form onSubmit={handleSubmit}>
                         <fieldset className="fieldset gap-4">
-                            <AuthField
+                            <TextField
                                 label="Correo electrónico:"
                                 name="user_email"
                                 placeholder="Ingresa tu correo electrónico"
                                 type="email"
                                 autoComplete="email"
+                                required
                             />
-                            <AuthField
+                            <TextField
                                 label="Contraseña:"
                                 name="user_password"
                                 placeholder="Ingresa tu contraseña"
                                 type="password"
                                 autoComplete="current-password"
+                                required
                             />
                             <div>
                                 <Link

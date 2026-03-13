@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import AuthField from "@/molecules/AuthField";
+import TextField from "@/molecules/TextField";
 import AuthCard from "@/organisms/AuthCard";
 import AuthPromo from "@/organisms/AuthPromo";
 import AuthSplitTemplate from "@/templates/AuthSplitTemplate";
@@ -59,31 +59,35 @@ export default function Register() {
                 <AuthCard title="AC COMPUTERS" subtitle="Regístrate">
                     <form onSubmit={handleSubmit}>
                         <fieldset className="fieldset gap-4">
-                            <AuthField
+                            <TextField
                                 label="Nombre:"
                                 name="user_name"
                                 placeholder="Ingresa tu nombre"
                                 autoComplete="given-name"
+                                required
                             />
-                            <AuthField
+                            <TextField
                                 label="Apellidos:"
                                 name="user_lastname"
                                 placeholder="Ingresa tus apellidos"
                                 autoComplete="family-name"
+                                required
                             />
-                            <AuthField
+                            <TextField
                                 label="Correo electrónico:"
                                 name="user_email"
                                 type="email"
                                 placeholder="Ingresa tu correo electrónico"
                                 autoComplete="email"
+                                required
                             />
-                            <AuthField
+                            <TextField
                                 label="Contraseña:"
                                 name="user_password"
                                 type="password"
                                 placeholder="Ingresa tu contraseña"
                                 autoComplete="new-password"
+                                required
                             />
                             <button className="btn btn-primary font-medium mt-4" disabled={submitting}>
                                 {submitting ? "Creando cuenta..." : "Crear cuenta"}

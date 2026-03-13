@@ -5,7 +5,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 
 import AuthCard from "@/organisms/AuthCard";
-import AuthField from "@/molecules/AuthField";
+import TextField from "@/molecules/TextField";
 
 import { usePostData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
@@ -75,21 +75,23 @@ export default function SetPasswordPage() {
         <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-base-200">
             <AuthCard title="AC COMPUTERS" subtitle="Configura tu contraseña" brandHref="/">
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <AuthField
+                    <TextField
                         label="Nueva contraseña:"
                         name="password"
                         placeholder="Ingresa tu contraseña"
                         type="password"
                         value={form.password}
                         onChange={handleChange("password")}
+                        required
                     />
-                    <AuthField
+                    <TextField
                         label="Confirmar contraseña:"
                         name="confirmPassword"
                         placeholder="Repite tu contraseña"
                         type="password"
                         value={form.confirmPassword}
                         onChange={handleChange("confirmPassword")}
+                        required
                     />
                     <button className="btn btn-primary w-full" disabled={submitting || !token}>
                         {submitting ? "Guardando..." : "Guardar contraseña"}

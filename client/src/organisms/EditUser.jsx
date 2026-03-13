@@ -6,7 +6,14 @@ import { usePutData } from "@/hooks/useClientData.js";
 import { useValidateform } from "@/hooks/useValidateForm.js";
 
 // Components
-import { UploadIcon } from "@/atoms/icons";
+import { UploadIcon } from "@/atoms/Icons";
+import TextField from "@/molecules/TextField";
+import SelectField from "@/molecules/SelectField";
+
+const ROLE_OPTIONS = [
+    { value: "1", label: "Usuario" },
+    { value: "2", label: "Administrador" },
+];
 
 export default function EditUser({ user, userSession, reloadUsers }) {
     const handleFormSubmit = async (e) => {
@@ -28,6 +35,10 @@ export default function EditUser({ user, userSession, reloadUsers }) {
         }
     };
 
+    const inputClass = "input-sm input-bordered focus:input-primary focus:outline-0 w-full";
+    const selectClass = "select-sm select-bordered focus:select-primary focus:outline-0 w-full";
+    const roleDisabled = userSession.user_id === user.user_id;
+
     return (
         <>
             <dialog id={`edit-user-${user.user_id}`} className="modal pr-0 mr-0">
@@ -48,76 +59,46 @@ export default function EditUser({ user, userSession, reloadUsers }) {
                         de la ventana modal.
                     </p>
                     <form onSubmit={handleFormSubmit} className="space-y-2">
-                        <fieldset className="fieldset">
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Nombre:
-                                </span>
-                            </label>
-                            <input
-                                name="user_name"
-                                placeholder="Ingresa tu nombre"
-                                defaultValue={user.user_name}
-                                className="input input-sm input-bordered focus:input-primary focus:outline-0 w-full"
-                            />
-                        </fieldset>
-                        <fieldset className="fieldset">
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Apellidos:
-                                </span>
-                            </label>
-                            <input
-                                name="user_lastname"
-                                placeholder="Ingresa tus apellidos"
-                                defaultValue={user.user_lastname}
-                                className="input input-sm input-bordered focus:input-primary focus:outline-0 w-full"
-                            />
-                        </fieldset>
-                        <fieldset className="fieldset">
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Correo Electrónico:
-                                </span>
-                            </label>
-                            <input
-                                placeholder="correo@ejemplo.com"
-                                defaultValue={user.user_email}
-                                className="input input-sm input-bordered focus:input-primary focus:outline-0 w-full"
-                                disabled
-                            />
-                        </fieldset>
-                        <fieldset className="fieldset">
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Teléfono:
-                                </span>
-                            </label>
-                            <input
-                                name="user_phone"
-                                placeholder="Ingresa tu numero de teléfono"
-                                defaultValue={user.user_phone}
-                                className="input input-sm input-bordered focus:input-primary focus:outline-0 w-full"
-                            />
-                        </fieldset>
-                        <fieldset
-                            className="fieldset"
-                            disabled={userSession.user_id === user.user_id}
-                        >
-                            <label className="label">
-                                <span className="label-text font-semibold after:content-['*'] after:text-red-500 after:ml-0.5">
-                                    Rol:
-                                </span>
-                            </label>
-                            <select
-                                name="role_id"
-                                defaultValue={user.role_id}
-                                className="select select-sm select-bordered focus:select-primary focus:outline-0 w-full"
-                            >
-                                <option value="1">Usuario</option>
-                                <option value="2">Administrador</option>
-                            </select>
-                        </fieldset>
+                        <TextField
+                            label="Nombre:"
+                            name="user_name"
+                            placeholder="Ingresa tu nombre"
+                            defaultValue={user.user_name}
+                            required
+                            className={inputClass}
+                        />
+                        <TextField
+                            label="Apellidos:"
+                            name="user_lastname"
+                            placeholder="Ingresa tus apellidos"
+                            defaultValue={user.user_lastname}
+                            required
+                            className={inputClass}
+                        />
+                        <TextField
+                            label="Correo Electrónico:"
+                            placeholder="correo@ejemplo.com"
+                            defaultValue={user.user_email}
+                            disabled
+                            className={inputClass}
+                        />
+                        <TextField
+                            label="Teléfono:"
+                            name="user_phone"
+                            placeholder="Ingresa tu numero de teléfono"
+                            defaultValue={user.user_phone}
+                            required
+                            className={inputClass}
+                        />
+                        <SelectField
+                            label="Rol:"
+                            name="role_id"
+                            defaultValue={String(user.role_id)}
+                            options={ROLE_OPTIONS}
+                            disabled={roleDisabled}
+                            required
+                            className={selectClass}
+                        />
                         <div className="form-control pt-5">
                             <button className="btn btn-primary btn-sm w-full">
                                 <UploadIcon size={20} />
