@@ -15,6 +15,7 @@ import com.accomputers.api.domain.valueobjects.Password;
 // Ports
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
 import com.accomputers.api.application.ports.output.LoggerPort;
+import com.accomputers.api.application.ports.output.MessagingService;
 import com.accomputers.api.application.ports.output.PasswordHasherInterface;
 import com.accomputers.api.application.ports.output.UserAuthServiceInterface;
 import com.accomputers.api.application.ports.output.repositories.PasswordResetTokenRepositoryInterface;
@@ -22,15 +23,18 @@ import com.accomputers.api.application.ports.output.repositories.RoleRepositoryI
 import com.accomputers.api.application.ports.output.repositories.UserRepositoryInterface;
 
 // DTOs
+import com.accomputers.api.application.dtos.auth.ForgotPasswordDTO;
 import com.accomputers.api.application.dtos.auth.LoginDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.auth.SetPasswordDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class AuthService implements AuthServiceInterface {
@@ -39,17 +43,23 @@ public class AuthService implements AuthServiceInterface {
     private final RoleRepositoryInterface roleRepository;
     private final UserAuthServiceInterface userAuthService;
     private final PasswordResetTokenRepositoryInterface passwordResetTokenRepository;
+    private final MessagingService messagingService;
     private final LoggerPort loggerPort;
+
+    @Value("${app.frontend-url:http://localhost:3000}")
+    private String frontendUrl;
 
     @Autowired
     public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher,
             RoleRepositoryInterface roleRepository, UserAuthServiceInterface userAuthService,
-            PasswordResetTokenRepositoryInterface passwordResetTokenRepository, LoggerPort loggerPort) {
+            PasswordResetTokenRepositoryInterface passwordResetTokenRepository,
+            MessagingService messagingService, LoggerPort loggerPort) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
         this.roleRepository = roleRepository;
         this.userAuthService = userAuthService;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
+        this.messagingService = messagingService;
         this.loggerPort = loggerPort;
     }
 
@@ -158,5 +168,38 @@ public class AuthService implements AuthServiceInterface {
 
         loggerPort.info(String.format("User password updated via token - ID: %d, Email: %s",
                 user.getId(), user.getEmail().getValue()));
+    }
+
+    @Override
+    @Transactional
+    public void requestPasswordReset(ForgotPasswordDTO forgotPasswordDTO) {
+        User user = userRepository.findByEmail(new Email(forgotPasswordDTO.email()));
+
+        if (user == null) {
+            return;
+        }
+
+        PasswordResetToken resetToken = new PasswordResetToken(
+                null,
+                user.getId(),
+                generateToken(),
+                LocalDateTime.now().plusHours(24),
+                null);
+
+        PasswordResetToken savedToken = passwordResetTokenRepository.save(resetToken);
+
+        String link = frontendUrl.replaceAll("/$", "") + "/set-password?token=" + savedToken.getToken();
+        String displayName = user.getFirstName() + " " + user.getLastName();
+        messagingService.sendPasswordReset(
+                displayName.trim().isEmpty() ? user.getEmail().getValue() : displayName,
+                user.getEmail().getValue(),
+                link);
+
+        loggerPort.info(String.format("Password reset requested - User ID: %d, Email: %s",
+                user.getId(), user.getEmail().getValue()));
+    }
+
+    private String generateToken() {
+        return UUID.randomUUID().toString().replace("-", "") + UUID.randomUUID().toString().replace("-", "");
     }
 }
