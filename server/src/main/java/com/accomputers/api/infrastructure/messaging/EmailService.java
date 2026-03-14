@@ -81,4 +81,24 @@ public class EmailService implements MessagingService {
         }
     }
 
+    @Override
+    public void sendPasswordChangedNotification(String name, String email, String contactPageUrl) {
+        try {
+            if (mailFrom == null || mailFrom.isBlank()) {
+                throw new MessagingException("Missing spring.mail.username for From address");
+            }
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setFrom(mailFrom);
+            helper.setTo(email);
+            helper.setSubject("[AC Computers] Tu contraseña se actualizó");
+            helper.setText(EmailTemplates.buildPasswordChangedEmail(name, contactPageUrl), true);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error sending password changed notification email", e);
+        }
+    }
+
 }

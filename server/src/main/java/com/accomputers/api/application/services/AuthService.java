@@ -168,6 +168,16 @@ public class AuthService implements AuthServiceInterface {
 
         loggerPort.info(String.format("User password updated via token - ID: %d, Email: %s",
                 user.getId(), user.getEmail().getValue()));
+
+        String displayName = user.getFirstName() + " " + user.getLastName();
+        String nameForEmail = displayName.trim().isEmpty() ? user.getEmail().getValue() : displayName;
+        String contactPageUrl = frontendUrl.replaceAll("/$", "") + "/contact";
+        try {
+            messagingService.sendPasswordChangedNotification(
+                    nameForEmail, user.getEmail().getValue(), contactPageUrl);
+        } catch (RuntimeException e) {
+            loggerPort.error("Failed to send password changed notification email", e);
+        }
     }
 
     @Override
