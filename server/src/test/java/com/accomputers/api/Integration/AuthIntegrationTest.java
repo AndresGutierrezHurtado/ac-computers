@@ -1,19 +1,26 @@
 package com.accomputers.api.Integration;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.accomputers.api.application.dtos.auth.ForgotPasswordDTO;
 import com.accomputers.api.application.dtos.auth.LoginDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
+import com.accomputers.api.application.ports.output.MessagingService;
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
 import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 
@@ -26,6 +33,9 @@ import jakarta.transaction.Transactional;
 public class AuthIntegrationTest {
 
     private final AuthServiceInterface authService;
+
+    @MockBean
+    private MessagingService messagingService;
 
     private String uniqueEmail() {
         return "test.user" + System.currentTimeMillis() + "@example.com";
@@ -84,5 +94,23 @@ public class AuthIntegrationTest {
         LoginDTO loginDTO = new LoginDTO("invalid-email", "password123");
         
         assertThrows(InvalidValueObjectException.class, () -> authService.login(loginDTO));
+    }
+
+    @Test
+    public void request_password_reset_unknown_email_does_not_throw() {
+        ForgotPasswordDTO dto = new ForgotPasswordDTO("nobody-" + System.currentTimeMillis() + "@example.com");
+        assertDoesNotThrow(() -> authService.requestPasswordReset(dto));
+    }
+
+    @Test
+    public void request_password_reset_sends_email_when_user_exists() {
+        String email = uniqueEmail();
+        RegisterDTO registerDTO = new RegisterDTO("John", "Doe", email, "password123", 1);
+        authService.register(registerDTO);
+
+        ForgotPasswordDTO forgotDTO = new ForgotPasswordDTO(email);
+        assertDoesNotThrow(() -> authService.requestPasswordReset(forgotDTO));
+
+        verify(messagingService).sendPasswordReset(anyString(), eq(email), anyString());
     }
 }

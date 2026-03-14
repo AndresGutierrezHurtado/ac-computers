@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
 // Application
+import com.accomputers.api.application.dtos.auth.ForgotPasswordDTO;
 import com.accomputers.api.application.dtos.auth.LoginDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.auth.SetPasswordDTO;
@@ -23,6 +24,9 @@ import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    private static final String FORGOT_PASSWORD_MESSAGE =
+            "Si el correo está registrado, recibirás instrucciones en breve.";
+
     private final AuthServiceInterface authServiceInterface;
 
     @Autowired
@@ -73,6 +77,15 @@ public class AuthController {
         authServiceInterface.setPassword(setPasswordDTO);
 
         ResponseDTO<Void> responseDTO = new ResponseDTO<Void>("Password updated successfully", true);
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ResponseDTO<Void>> forgotPassword(@RequestBody @Valid ForgotPasswordDTO forgotPasswordDTO) {
+        authServiceInterface.requestPasswordReset(forgotPasswordDTO);
+
+        ResponseDTO<Void> responseDTO = new ResponseDTO<Void>(FORGOT_PASSWORD_MESSAGE, true);
 
         return ResponseEntity.ok(responseDTO);
     }

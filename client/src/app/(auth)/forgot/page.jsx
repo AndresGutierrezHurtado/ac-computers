@@ -1,6 +1,30 @@
+"use client";
+
+import { useState } from "react";
+
 import TextField from "@/molecules/TextField";
+import { usePostData } from "@/hooks/useClientData";
+import { useValidateform } from "@/hooks/useValidateForm";
 
 export default function ForgotPage() {
+    const [submitting, setSubmitting] = useState(false);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (submitting) return;
+
+        const formData = Object.fromEntries(new FormData(event.target));
+        const validation = useValidateform(formData, "forgot-form");
+
+        if (!validation.success) return;
+
+        setSubmitting(true);
+        await usePostData("/auth/forgot-password", {
+            email: validation.data.user_email,
+        });
+        setSubmitting(false);
+    };
+
     return (
         <>
             <section className="w-full px-4 mt-[100px]">
@@ -15,7 +39,7 @@ export default function ForgotPage() {
                                 Ingresa tu correo electrónico para recuperar tu cuenta.
                             </p>
                         </div>
-                        <form className="w-full space-y-4">
+                        <form className="w-full space-y-4" onSubmit={handleSubmit}>
                             <TextField
                                 label="Correo electrónico:"
                                 name="user_email"
@@ -28,8 +52,9 @@ export default function ForgotPage() {
                                 <button
                                     type="submit"
                                     className="btn btn-primary btn-wide font-medium"
+                                    disabled={submitting}
                                 >
-                                    Recuperar contraseña
+                                    {submitting ? "Enviando..." : "Recuperar contraseña"}
                                 </button>
                             </div>
                         </form>
