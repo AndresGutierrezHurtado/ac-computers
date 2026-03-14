@@ -15,7 +15,7 @@ export default function SelectField({
 }) {
     return (
         <div className="fieldset">
-            <label className="fieldset-label">
+            <label className="fieldset-label text-sm">
                 {label}
                 {required ? (
                     <span className="text-red-500 ml-0.5" aria-hidden>

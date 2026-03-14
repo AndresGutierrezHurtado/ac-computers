@@ -1,3 +1,5 @@
+import TextField from "@/molecules/TextField";
+
 export default function ForgotPage() {
     return (
         <>
@@ -13,25 +15,23 @@ export default function ForgotPage() {
                                 Ingresa tu correo electrónico para recuperar tu cuenta.
                             </p>
                         </div>
-                        <form className="w-full">
-                            <fieldset className="w-full fieldset">
-                                <label className="fieldset-label text-sm after:content-['*'] after:text-red-500">
-                                    Correo electrónico:
-                                </label>
-                                <input
-                                    name="user_email"
-                                    className="w-full input focus:outline-0 focus:border-primary"
-                                    placeholder="Ingresa tu correo electrónico"
-                                />
-                            </fieldset>
-                            <fieldset className="w-full fieldset">
+                        <form className="w-full space-y-4">
+                            <TextField
+                                label="Correo electrónico:"
+                                name="user_email"
+                                type="email"
+                                placeholder="Ingresa tu correo electrónico"
+                                required
+                                className="input-bordered w-full"
+                            />
+                            <div className="w-full">
                                 <button
                                     type="submit"
                                     className="btn btn-primary btn-wide font-medium"
                                 >
                                     Recuperar contraseña
                                 </button>
-                            </fieldset>
+                            </div>
                         </form>
                     </div>
                 </div>

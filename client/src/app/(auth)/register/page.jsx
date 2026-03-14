@@ -58,13 +58,14 @@ export default function Register() {
             right={
                 <AuthCard title="AC COMPUTERS" subtitle="Regístrate">
                     <form onSubmit={handleSubmit}>
-                        <fieldset className="fieldset gap-4">
+                        <div className="space-y-4">
                             <TextField
                                 label="Nombre:"
                                 name="user_name"
                                 placeholder="Ingresa tu nombre"
                                 autoComplete="given-name"
                                 required
+                                className="input-bordered w-full"
                             />
                             <TextField
                                 label="Apellidos:"
@@ -72,6 +73,7 @@ export default function Register() {
                                 placeholder="Ingresa tus apellidos"
                                 autoComplete="family-name"
                                 required
+                                className="input-bordered w-full"
                             />
                             <TextField
                                 label="Correo electrónico:"
@@ -80,6 +82,7 @@ export default function Register() {
                                 placeholder="Ingresa tu correo electrónico"
                                 autoComplete="email"
                                 required
+                                className="input-bordered w-full"
                             />
                             <TextField
                                 label="Contraseña:"
@@ -88,11 +91,12 @@ export default function Register() {
                                 placeholder="Ingresa tu contraseña"
                                 autoComplete="new-password"
                                 required
+                                className="input-bordered w-full"
                             />
                             <button className="btn btn-primary font-medium mt-4" disabled={submitting}>
                                 {submitting ? "Creando cuenta..." : "Crear cuenta"}
                             </button>
-                        </fieldset>
+                        </div>
                     </form>
                 </AuthCard>
             }

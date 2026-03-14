@@ -14,7 +14,7 @@
 }
 
 @utility btn {
-    @apply h-auto py-1.5;
+    @apply h-auto py-1.5 shadow-none;
 }
 
 .swal2-popup {

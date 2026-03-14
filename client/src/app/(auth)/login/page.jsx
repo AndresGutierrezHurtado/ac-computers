@@ -72,7 +72,7 @@ export default function Login() {
             right={
                 <AuthCard title="AC COMPUTERS" subtitle="Iniciar Sesión" brandHref="/">
                     <form onSubmit={handleSubmit}>
-                        <fieldset className="fieldset gap-4">
+                        <div className="space-y-4">
                             <TextField
                                 label="Correo electrónico:"
                                 name="user_email"
@@ -80,6 +80,7 @@ export default function Login() {
                                 type="email"
                                 autoComplete="email"
                                 required
+                                className="input-bordered w-full"
                             />
                             <TextField
                                 label="Contraseña:"
@@ -88,6 +89,7 @@ export default function Login() {
                                 type="password"
                                 autoComplete="current-password"
                                 required
+                                className="input-bordered w-full"
                             />
                             <div>
                                 <Link
@@ -100,7 +102,7 @@ export default function Login() {
                             <button className="btn btn-primary font-medium mt-4" disabled={submitting}>
                                 {submitting ? "Ingresando..." : "Iniciar Sesión"}
                             </button>
-                        </fieldset>
+                        </div>
                     </form>
                 </AuthCard>
             }

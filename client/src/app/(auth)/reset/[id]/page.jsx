@@ -1,3 +1,5 @@
+import TextField from "@/molecules/TextField";
+
 export default function ResetPage() {
     return (
         <>
@@ -13,26 +15,23 @@ export default function ResetPage() {
                                 Ingresa tu nueva contraseña para cambiarla.
                             </p>
                         </div>
-                        <form className="w-full">
-                            <fieldset className="w-full fieldset">
-                                <label className="fieldset-label text-sm after:content-['*'] after:text-red-500">
-                                    Nueva contraseña
-                                </label>
-                                <input
-                                    name="user_password"
-                                    className="w-full input focus:outline-0 focus:border-primary"
-                                    placeholder="Ingresa tu nueva contraseña"
-                                    type="password"
-                                />
-                            </fieldset>
-                            <fieldset className="w-full fieldset">
+                        <form className="w-full space-y-4">
+                            <TextField
+                                label="Nueva contraseña"
+                                name="user_password"
+                                type="password"
+                                placeholder="Ingresa tu nueva contraseña"
+                                required
+                                className="input-bordered w-full"
+                            />
+                            <div className="w-full">
                                 <button
                                     type="submit"
                                     className="btn btn-primary btn-wide font-medium"
                                 >
                                     Cambiar contraseña
                                 </button>
-                            </fieldset>
+                            </div>
                         </form>
                     </div>
                 </div>

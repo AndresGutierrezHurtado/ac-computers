@@ -83,6 +83,7 @@ export default function SetPasswordPage() {
                         value={form.password}
                         onChange={handleChange("password")}
                         required
+                        className="input-bordered w-full"
                     />
                     <TextField
                         label="Confirmar contraseña:"
@@ -92,6 +93,7 @@ export default function SetPasswordPage() {
                         value={form.confirmPassword}
                         onChange={handleChange("confirmPassword")}
                         required
+                        className="input-bordered w-full"
                     />
                     <button className="btn btn-primary w-full" disabled={submitting || !token}>
                         {submitting ? "Guardando..." : "Guardar contraseña"}
