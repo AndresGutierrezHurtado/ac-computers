@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartException;
 
 // Domain
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
+import com.accomputers.api.domain.exceptions.InvalidCredentialsException;
 import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.domain.exceptions.DomainException;
@@ -31,6 +32,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ResponseDTO<Void>> handleEntityNotFoundException(EntityNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO<Void>(e.getMessage(), false));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ResponseDTO<Void>> handleInvalidCredentialsException(InvalidCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseDTO<Void>(e.getMessage(), false));
     }
 
     @ExceptionHandler(InvalidValueObjectException.class)
