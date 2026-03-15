@@ -8,6 +8,7 @@ import com.accomputers.api.domain.entities.Role;
 import com.accomputers.api.domain.entities.User;
 import com.accomputers.api.domain.exceptions.EmailAlreadyExistsException;
 import com.accomputers.api.domain.exceptions.EntityNotFoundException;
+import com.accomputers.api.domain.exceptions.InvalidCredentialsException;
 import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 import com.accomputers.api.domain.valueobjects.Email;
 import com.accomputers.api.domain.valueobjects.Password;
@@ -67,12 +68,9 @@ public class AuthService implements AuthServiceInterface {
     public UserResponseDTO login(LoginDTO loginDTO) {
         User user = userRepository.findByEmail(new Email(loginDTO.email()));
 
-        if (user == null) {
-            throw new EntityNotFoundException("User", loginDTO.email());
-        }
-
-        if (!passwordHasher.verifyPassword(new Password(loginDTO.password()), user.getPassword())) {
-            throw new InvalidValueObjectException("Password", loginDTO.password(), "is incorrect");
+        if (user == null
+                || !passwordHasher.verifyPassword(new Password(loginDTO.password()), user.getPassword())) {
+            throw InvalidCredentialsException.invalidCredentials();
         }
 
         userAuthService.authenticateUser(user);

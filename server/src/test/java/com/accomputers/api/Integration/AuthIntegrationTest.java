@@ -21,7 +21,7 @@ import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.response.UserResponseDTO;
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
 import com.accomputers.api.application.ports.output.MessagingService;
-import com.accomputers.api.domain.exceptions.EntityNotFoundException;
+import com.accomputers.api.domain.exceptions.InvalidCredentialsException;
 import com.accomputers.api.domain.exceptions.InvalidValueObjectException;
 
 import jakarta.transaction.Transactional;
@@ -79,14 +79,14 @@ public class AuthIntegrationTest {
         // Try to login with wrong password
         LoginDTO loginDTO = new LoginDTO(uniqueEmail, incorrectPassword);
         
-        assertThrows(InvalidValueObjectException.class, () -> authService.login(loginDTO));
+        assertThrows(InvalidCredentialsException.class, () -> authService.login(loginDTO));
     }
 
     @Test
     public void login_with_nonexistent_user() {
         LoginDTO loginDTO = new LoginDTO("nonexistent@example.com", "password123");
         
-        assertThrows(EntityNotFoundException.class, () -> authService.login(loginDTO));
+        assertThrows(InvalidCredentialsException.class, () -> authService.login(loginDTO));
     }
 
     @Test
