@@ -15,7 +15,6 @@ export default function ProductFiltersPanel({
     onMaxPriceChange,
     onMinDiscountChange,
     onMaxDiscountChange,
-    onPerPageChange,
     onReset,
 }) {
     return (
@@ -117,19 +116,6 @@ export default function ProductFiltersPanel({
                             onChange={onMaxDiscountChange}
                         />
                     </div>
-                </div>
-
-                <div className="space-y-2">
-                    <p className="text-sm font-semibold">Resultados por pagina</p>
-                    <select
-                        className="select select-sm select-bordered w-full"
-                        value={filters.perPage}
-                        onChange={(e) => onPerPageChange(Number(e.target.value))}
-                    >
-                        <option value={12}>12</option>
-                        <option value={24}>24</option>
-                        <option value={48}>48</option>
-                    </select>
                 </div>
 
                 <button type="button" className="btn btn-outline" onClick={onReset}>

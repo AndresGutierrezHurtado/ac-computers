@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useGetData, usePaginateData } from "@/hooks/useClientData";
 import ProductMarketplaceTemplate from "@/templates/ProductMarketplaceTemplate";
 import ProductFiltersPanel from "@/organisms/ProductFiltersPanel";
 import ProductResultsGrid from "@/organisms/ProductResultsGrid";
+import Pagination from "@/molecules/Pagination";
 import { useSearchParams } from "next/navigation";
 
 const CONDITION_OPTIONS = [
@@ -82,6 +83,14 @@ export default function ProductsMarketplace() {
         }));
     };
 
+    const handleLimitChange = useCallback((next) => {
+        setFilters((prev) => ({
+            ...prev,
+            perPage: next,
+            page: 1,
+        }));
+    }, []);
+
     const handleReset = () => {
         setFilters(DEFAULT_FILTERS);
     };
@@ -117,9 +126,6 @@ export default function ProductsMarketplace() {
                     onMaxPriceChange={(value) => updateFilters({ maxPrice: value })}
                     onMinDiscountChange={(value) => updateFilters({ minDiscount: value })}
                     onMaxDiscountChange={(value) => updateFilters({ maxDiscount: value })}
-                    onPerPageChange={(value) =>
-                        updatePaging({ perPage: value, page: 1 })
-                    }
                     onReset={handleReset}
                 />
             }
@@ -128,12 +134,18 @@ export default function ProductsMarketplace() {
                 products={products || []}
                 loading={loading}
                 total={total}
-                page={filters.page}
-                perPage={filters.perPage}
-                onPageChange={(nextPage) =>
-                    updatePaging({ page: Math.max(1, nextPage) })
-                }
             />
+            {total ? (
+                <Pagination
+                    page={filters.page}
+                    count={total}
+                    limit={filters.perPage}
+                    onPageChange={(nextPage) =>
+                        updatePaging({ page: Math.max(1, nextPage) })
+                    }
+                    onLimitChange={handleLimitChange}
+                />
+            ) : null}
         </ProductMarketplaceTemplate>
     );
 }
