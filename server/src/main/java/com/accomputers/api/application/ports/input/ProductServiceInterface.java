@@ -13,6 +13,5 @@ public interface ProductServiceInterface {
     PageDTO<ProductResponseDTO> getAllProducts(ProductFiltersDTO queryParams);
     ProductResponseDTO updateProduct(Integer id, createProductDTO productDTO);
     void deleteProduct(Integer id);
-    String getProductRecommendations(String request);
 }
 

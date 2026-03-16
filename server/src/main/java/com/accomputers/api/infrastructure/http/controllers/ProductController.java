@@ -2,6 +2,7 @@ package com.accomputers.api.infrastructure.http.controllers;
 
 // Spring
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 
@@ -31,6 +33,10 @@ import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
+    private static final String RECOMMENDATIONS_PLACEHOLDER =
+            "El asistente de recomendaciones no está disponible en este momento. Vuelve a intentarlo más tarde.";
+
     private final ProductServiceInterface productServiceInterface;
 
     @Autowired
@@ -143,13 +149,16 @@ public class ProductController {
 
     @PostMapping("/recommendations")
     public ResponseEntity<ResponseDTO<String>> getProductRecommendations(@RequestBody String request) {
-        String recommendations = productServiceInterface.getProductRecommendations(request);
+        if (!StringUtils.hasText(request != null ? request.trim() : null)) {
+            return ResponseEntity.badRequest()
+                    .body(new ResponseDTO<>("La petición no puede estar vacía", false, null));
+        }
 
         ResponseDTO<String> responseDTO = new ResponseDTO<>(
-                "Product recommendations retrieved successfully",
+                "Product recommendations placeholder",
                 true,
-                recommendations);
+                RECOMMENDATIONS_PLACEHOLDER);
 
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 }

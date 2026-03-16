@@ -22,7 +22,6 @@ import com.accomputers.api.domain.valueobjects.Url;
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
 import com.accomputers.api.application.ports.output.FileManagerInterface;
 import com.accomputers.api.application.ports.output.LoggerPort;
-import com.accomputers.api.application.ports.output.ProductRecommendationInterface;
 import com.accomputers.api.application.ports.output.repositories.*;
 
 // DTOs
@@ -36,7 +35,6 @@ import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 @Service
 public class ProductService implements ProductServiceInterface {
     private final ProductRepositoryInterface productRepository;
-    private final ProductRecommendationInterface productRecommendationInterface;
     private final FileManagerInterface fileManagerInterface;
     private final ImageRepositoryInterface imageRepository;
     private final ProductSpecificationRepositoryInterface productSpecificationRepository;
@@ -49,7 +47,6 @@ public class ProductService implements ProductServiceInterface {
     @Autowired
     public ProductService(
             ProductRepositoryInterface productRepository,
-            ProductRecommendationInterface productRecommendationInterface,
             ImageRepositoryInterface imageRepository,
             ProductSpecificationRepositoryInterface productSpecificationRepository,
             BrandRepositoryInterface brandRepository,
@@ -59,7 +56,6 @@ public class ProductService implements ProductServiceInterface {
             FileManagerInterface fileManagerInterface,
             LoggerPort loggerPort) {
         this.productRepository = productRepository;
-        this.productRecommendationInterface = productRecommendationInterface;
         this.imageRepository = imageRepository;
         this.productSpecificationRepository = productSpecificationRepository;
         this.brandRepository = brandRepository;
@@ -277,10 +273,5 @@ public class ProductService implements ProductServiceInterface {
                 product.getId(), product.getName()));
 
         productRepository.delete(id);
-    }
-
-    @Override
-    public String getProductRecommendations(String request) {
-        return productRecommendationInterface.getRecommendations(request);
     }
 }
