@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import ChatMessage from "@/atoms/ChatMessage";
+import ChatComposer from "@/molecules/ChatComposer";
 import { CloseIcon, RobotIcon } from "@/atoms/Icons";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const STORAGE_KEY_MESSAGES = "ac_ai_chat_messages_v1";
-const STORAGE_KEY_OPEN = "ac_ai_chat_open_v1";
 
 const DEFAULT_MESSAGES = [
     {
@@ -17,7 +16,6 @@ const DEFAULT_MESSAGES = [
 ];
 
 export default function AIChatWidget() {
-    const [open, setOpen] = useState(false);
     const [messages, setMessages] = useState(DEFAULT_MESSAGES);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
@@ -29,10 +27,8 @@ export default function AIChatWidget() {
     };
 
     useEffect(() => {
-        if (open) {
-            scrollToBottom();
-        }
-    }, [open, messages]);
+        scrollToBottom();
+    }, [messages, loading]);
 
     useEffect(() => {
         try {
@@ -42,11 +38,6 @@ export default function AIChatWidget() {
                 if (Array.isArray(parsedMessages) && parsedMessages.length > 0) {
                     setMessages(parsedMessages);
                 }
-            }
-
-            const storedOpen = localStorage.getItem(STORAGE_KEY_OPEN);
-            if (storedOpen != null) {
-                setOpen(storedOpen === "true");
             }
         } catch (error) {
             // If storage is corrupted, fall back to defaults.
@@ -62,15 +53,6 @@ export default function AIChatWidget() {
             // ignore storage errors
         }
     }, [hydrated, messages]);
-
-    useEffect(() => {
-        if (!hydrated) return;
-        try {
-            localStorage.setItem(STORAGE_KEY_OPEN, String(open));
-        } catch (error) {
-            // ignore storage errors
-        }
-    }, [hydrated, open]);
 
     const appendMessage = (message) => {
         setMessages((prev) => [...prev, message]);
@@ -121,91 +103,68 @@ export default function AIChatWidget() {
         if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
             if (!loading && input.trim()) {
-                // Reutilizamos la lógica de submit para mantener validaciones consistentes
                 handleSubmit(event);
             }
         }
     };
 
+    const closeDropdown = () => {
+        if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+        }
+    };
+
     return (
         <div className="dropdown dropdown-top dropdown-end fixed bottom-12 right-12 z-[999]">
-            <button
-                type="button"
-                className="btn btn-primary btn-circle shadow-lg mt-5"
+            <div
                 tabIndex={0}
+                role="button"
+                className="btn btn-primary btn-circle shadow-lg mt-5"
                 aria-label="Abrir asistente IA"
-                onClick={() => setOpen((prev) => !prev)}
             >
                 <RobotIcon size={20} />
-            </button>
-            <ul tabIndex="-1" className="dropdown-content p-5 flex flex-col bg-base-100/95 border border-base-200 shadow-xl backdrop-blur w-[min(92vw,380px)] h-[min(70vh,520px)] rounded-lg">
-                {open ? (
-                    <>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-base font-semibold">
-                                <RobotIcon size={18} />
-                                Asistente IA
-                            </div>
-                            <button
-                                type="button"
-                                className="btn btn-ghost btn-sm btn-circle"
-                                onClick={() => setOpen(false)}
-                            >
-                                <CloseIcon size={18} />
-                            </button>
+            </div>
+            <ul
+                tabIndex={-1}
+                className="dropdown-content m-0 flex list-none flex-col bg-base-100/95 border border-base-200 shadow-xl backdrop-blur w-[min(92vw,380px)] h-[min(70vh,520px)] rounded-lg p-0 z-[1]"
+            >
+                <li className="list-none flex min-h-0 flex-1 flex-col gap-3 p-5">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-base font-semibold">
+                            <RobotIcon size={18} />
+                            Asistente IA
                         </div>
+                        <button
+                            type="button"
+                            className="btn btn-ghost btn-sm btn-circle"
+                            onClick={closeDropdown}
+                        >
+                            <CloseIcon size={18} />
+                        </button>
+                    </div>
 
-                        <div className="flex-1 overflow-y-auto space-y-3 pr-1">
-                            {messages.map((message, index) => (
-                                <div
-                                    key={`${message.role}-${index}`}
-                                    className={`chat ${message.role === "user" ? "chat-end" : "chat-start"
-                                        }`}
-                                >
-                                    <div
-                                        className={`chat-bubble text-sm ${message.role === "user"
-                                            ? "chat-bubble-primary"
-                                            : "chat-bubble-secondary"
-                                            }`}
-                                    >
-                                        {message.role === "assistant" ? (
-                                            <div className="prose prose-sm max-w-none prose-headings:mb-2 prose-p:mb-1 prose-ul:mb-1 prose-ol:mb-1 prose-li:marker:text-current">
-                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                                    {String(message.content ?? "")}
-                                                </ReactMarkdown>
-                                            </div>
-                                        ) : (
-                                            message.content
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                            {loading && (
-                                <div className="text-xs text-base-content/60">
-                                    Pensando...
-                                </div>
-                            )}
-                            <div ref={endRef} />
-                        </div>
-                        <form onSubmit={handleSubmit} className="flex items-end gap-2">
-                            <textarea
-                                className="textarea textarea-bordered w-full resize-none h-20 focus:outline-0 focus:border-primary bg-transparent"
-                                placeholder="Escribe tu pregunta..."
-                                value={input}
-                                onChange={(event) => setInput(event.target.value)}
-                                onKeyDown={handleKeyDown}
-                                disabled={loading}
+                    <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+                        {messages.map((message, index) => (
+                            <ChatMessage
+                                key={`${message.role}-${index}`}
+                                role={message.role}
+                                content={message.content}
                             />
-                            <button
-                                type="submit"
-                                className="btn btn-primary"
-                                disabled={loading || !input.trim()}
-                            >
-                                Enviar
-                            </button>
-                        </form>
-                    </>
-                ) : null}
+                        ))}
+                        {loading && (
+                            <div className="text-xs text-base-content/60">Pensando...</div>
+                        )}
+                        <div ref={endRef} />
+                    </div>
+
+                    <ChatComposer
+                        value={input}
+                        onChange={(event) => setInput(event.target.value)}
+                        onSubmit={handleSubmit}
+                        onKeyDown={handleKeyDown}
+                        loading={loading}
+                    />
+                </li>
             </ul>
         </div>
     );
