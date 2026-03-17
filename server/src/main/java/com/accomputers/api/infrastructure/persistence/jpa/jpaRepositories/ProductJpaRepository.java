@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -45,4 +47,26 @@ public interface ProductJpaRepository
         @Transactional
         @Query("UPDATE ProductEntity p SET p.deletedAt = :deletedAt WHERE p.id = :id")
         void softDelete(@Param("id") Integer id, @Param("deletedAt") LocalDateTime deletedAt);
+
+        @Query("SELECT p.id FROM ProductEntity p WHERE p.deletedAt IS NULL AND p.embedding IS NULL ORDER BY p.id")
+        List<Integer> findActiveIdsWithMissingEmbedding();
+
+        @Modifying(clearAutomatically = true, flushAutomatically = true)
+        @Transactional
+        @Query(value = """
+                        UPDATE products
+                        SET embedding = CAST(:vec AS vector), updated_at = NOW()
+                        WHERE id = :id AND deleted_at IS NULL
+                        """, nativeQuery = true)
+        void updateEmbeddingVectorById(@Param("id") Integer id, @Param("vec") String vec);
+
+        @Query("""
+                        SELECT DISTINCT p FROM ProductEntity p
+                        LEFT JOIN FETCH p.brand
+                        LEFT JOIN FETCH p.productSpecifications ps
+                        LEFT JOIN FETCH ps.specification
+                        LEFT JOIN FETCH ps.specificationValue
+                        WHERE p.id IN :ids AND p.deletedAt IS NULL
+                        """)
+        List<ProductEntity> findAllByIdInWithAssociations(@Param("ids") Collection<Integer> ids);
 }
