@@ -1,6 +1,10 @@
 package com.accomputers.api.infrastructure.persistence.jpa.entities;
 
 import jakarta.persistence.*;
+
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnTransformer;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +48,10 @@ public class ProductEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "embedding", columnDefinition = "vector(2560)", nullable = true)
+    @ColumnTransformer(read = "CAST(embedding AS text)", write = "CAST(? AS vector)")
+    private String embedding;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sub_category_id", insertable = false, updatable = false)
     private SubCategoryEntity subCategory;
@@ -52,9 +60,11 @@ public class ProductEntity {
     @JoinColumn(name = "brand_id", insertable = false, updatable = false)
     private BrandEntity brand;
 
+    @BatchSize(size = 32)
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImageEntity> images = new ArrayList<>();
 
+    @BatchSize(size = 32)
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductSpecificationEntity> productSpecifications = new ArrayList<>();
 
@@ -148,6 +158,10 @@ public class ProductEntity {
         return updatedAt;
     }
 
+    public String getEmbedding() {
+        return embedding;
+    }
+
     public List<ImageEntity> getImages() {
         return images;
     }
@@ -215,6 +229,10 @@ public class ProductEntity {
 
     public void setProductSpecifications(List<ProductSpecificationEntity> productSpecifications) {
         this.productSpecifications = productSpecifications;
+    }
+
+    public void setEmbedding(String embedding) {
+        this.embedding = embedding;
     }
 
     // Equals and HashCode
