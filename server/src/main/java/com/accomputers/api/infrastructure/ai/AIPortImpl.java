@@ -1,6 +1,14 @@
 package com.accomputers.api.infrastructure.ai;
 
+import com.accomputers.api.application.dtos.ChatMessageDto;
+import com.accomputers.api.application.dtos.SalesChatResponse;
 import com.accomputers.api.application.ports.output.AIPort;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,9 +18,16 @@ import java.util.List;
 public class AIPortImpl implements AIPort {
 
     private final SpringAiEmbeddingSupport embeddingSupport;
+    private final ChatClient salesChatClient;
+    private final SalesChatToolTraceHolder traceHolder;
 
-    public AIPortImpl(SpringAiEmbeddingSupport embeddingSupport) {
+    public AIPortImpl(
+            SpringAiEmbeddingSupport embeddingSupport,
+            @Qualifier("salesChatClient") ChatClient salesChatClient,
+            SalesChatToolTraceHolder traceHolder) {
         this.embeddingSupport = embeddingSupport;
+        this.salesChatClient = salesChatClient;
+        this.traceHolder = traceHolder;
     }
 
     @Override
@@ -26,7 +41,25 @@ public class AIPortImpl implements AIPort {
     }
 
     @Override
-    public String ask(String context, String question) {
-        return "";
+    public SalesChatResponse chat(List<ChatMessageDto> messages) {
+        traceHolder.clear();
+        try {
+            List<Message> springMessages = new ArrayList<>(messages.size());
+            for (ChatMessageDto m : messages) {
+                switch (m.role()) {
+                    case USER -> springMessages.add(new UserMessage(m.content()));
+                    case ASSISTANT -> springMessages.add(new AssistantMessage(m.content()));
+                    case SYSTEM -> springMessages.add(new SystemMessage(m.content()));
+                }
+            }
+            String content = salesChatClient.prompt()
+                    .messages(springMessages)
+                    .call()
+                    .content();
+            return new SalesChatResponse(content, traceHolder.drain());
+        } catch (RuntimeException e) {
+            traceHolder.drain();
+            throw e;
+        }
     }
 }

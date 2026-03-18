@@ -1,11 +1,12 @@
 package com.accomputers.api.application.ports.output;
 
-import com.accomputers.api.domain.entities.Product;
+import com.accomputers.api.application.dtos.ChatMessageDto;
+import com.accomputers.api.application.dtos.SalesChatResponse;
 
 import java.util.List;
 
 /**
- * Output port for AI capabilities: embeddings, semantic product search, and grounded chat.
+ * Output port for AI: embeddings and sales chat (see infrastructure for models/tools).
  */
 public interface AIPort {
 
@@ -16,9 +17,10 @@ public interface AIPort {
     List<Float> embed(String text);
 
     /**
-     * @param context grounded information for the model (must not be null)
-     * @param question user question (must not be null)
-     * @return assistant reply text
+     * Multi-turn chat with the sales assistant (model + tools configured in infrastructure).
+     *
+     * @param messages conversation history and current user turn; must not be null or empty
+     * @return assistant reply and optional products consulted via tools during the call
      */
-    String ask(String context, String question);
+    SalesChatResponse chat(List<ChatMessageDto> messages);
 }
