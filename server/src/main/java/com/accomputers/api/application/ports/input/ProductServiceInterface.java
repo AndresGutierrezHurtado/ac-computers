@@ -2,9 +2,7 @@ package com.accomputers.api.application.ports.input;
 
 
 // DTOs
-import com.accomputers.api.application.dtos.PageDTO;
-import com.accomputers.api.application.dtos.ProductFiltersDTO;
-import com.accomputers.api.application.dtos.createProductDTO;
+import com.accomputers.api.application.dtos.*;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 
 public interface ProductServiceInterface {
@@ -13,5 +11,6 @@ public interface ProductServiceInterface {
     PageDTO<ProductResponseDTO> getAllProducts(ProductFiltersDTO queryParams);
     ProductResponseDTO updateProduct(Integer id, createProductDTO productDTO);
     void deleteProduct(Integer id);
+    SalesChatResponse chat(SalesChatRequest request);
 }
 

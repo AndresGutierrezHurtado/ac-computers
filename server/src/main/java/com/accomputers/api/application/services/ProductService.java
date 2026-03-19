@@ -1,5 +1,7 @@
 package com.accomputers.api.application.services;
 
+import com.accomputers.api.application.dtos.*;
+import com.accomputers.api.application.ports.output.AIPort;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,6 @@ import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.application.ports.output.repositories.*;
 
 // DTOs
-import com.accomputers.api.application.dtos.PageDTO;
-import com.accomputers.api.application.dtos.ProductCriteria;
-import com.accomputers.api.application.dtos.ProductFiltersDTO;
-import com.accomputers.api.application.dtos.createProductDTO;
 import com.accomputers.api.application.dtos.createProductDTO.ProductSpecificationDTO;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 
@@ -42,6 +40,7 @@ public class ProductService implements ProductServiceInterface {
     private final SubCategoryRepositoryInterface subCategoryRepository;
     private final SpecificationRepositoryInterface specificationRepository;
     private final SpecificationValueRepositoryInterface specificationValueRepository;
+    private final AIPort aiPort;
     private final LoggerPort loggerPort;
 
     @Autowired
@@ -54,6 +53,7 @@ public class ProductService implements ProductServiceInterface {
             SpecificationRepositoryInterface specificationRepository,
             SpecificationValueRepositoryInterface specificationValueRepository,
             FileManagerInterface fileManagerInterface,
+            AIPort aiPort,
             LoggerPort loggerPort) {
         this.productRepository = productRepository;
         this.imageRepository = imageRepository;
@@ -63,6 +63,7 @@ public class ProductService implements ProductServiceInterface {
         this.specificationRepository = specificationRepository;
         this.specificationValueRepository = specificationValueRepository;
         this.fileManagerInterface = fileManagerInterface;
+        this.aiPort = aiPort;
         this.loggerPort = loggerPort;
     }
 
@@ -273,5 +274,10 @@ public class ProductService implements ProductServiceInterface {
                 product.getId(), product.getName()));
 
         productRepository.delete(id);
+    }
+
+    @Override
+    public SalesChatResponse chat(SalesChatRequest request) {
+        return aiPort.chat(request.messages());
     }
 }
