@@ -1,6 +1,7 @@
 package com.accomputers.api.infrastructure.http.controllers;
 
 // Spring
+import com.accomputers.api.application.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 
 // Application
-import com.accomputers.api.application.dtos.ProductFiltersDTO;
-import com.accomputers.api.application.dtos.createProductDTO;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
-import com.accomputers.api.application.dtos.PageDTO;
 import com.accomputers.api.infrastructure.http.responses.PaginatedResponseDTO;
 
 // Infrastructure
@@ -145,6 +143,15 @@ public class ProductController {
                 true);
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/sales-chat")
+    public ResponseEntity<ResponseDTO<SalesChatResponse>> salesChat(@Valid @RequestBody SalesChatRequest request) {
+        SalesChatResponse response = productServiceInterface.chat(request);
+        return ResponseEntity.ok(new ResponseDTO<>(
+                "Assistant reply",
+                true,
+                response));
     }
 
     @PostMapping("/recommendations")
