@@ -23,4 +23,11 @@ public interface AIPort {
      * @return assistant reply and optional products consulted via tools during the call
      */
     SalesChatResponse chat(List<ChatMessageDto> messages);
+
+    /**
+     * One-shot summary from structured product facts (no tools). Used for product page overview.
+     *
+     * @param productContextText facts about one product; must not be null
+     */
+    String generateProductOverview(String productContextText);
 }

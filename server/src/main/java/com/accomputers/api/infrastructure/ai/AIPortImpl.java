@@ -19,14 +19,17 @@ public class AIPortImpl implements AIPort {
 
     private final SpringAiEmbeddingSupport embeddingSupport;
     private final ChatClient salesChatClient;
+    private final ChatClient productOverviewChatClient;
     private final SalesChatToolTraceHolder traceHolder;
 
     public AIPortImpl(
             SpringAiEmbeddingSupport embeddingSupport,
             @Qualifier("salesChatClient") ChatClient salesChatClient,
+            @Qualifier("productOverviewChatClient") ChatClient productOverviewChatClient,
             SalesChatToolTraceHolder traceHolder) {
         this.embeddingSupport = embeddingSupport;
         this.salesChatClient = salesChatClient;
+        this.productOverviewChatClient = productOverviewChatClient;
         this.traceHolder = traceHolder;
     }
 
@@ -61,5 +64,13 @@ public class AIPortImpl implements AIPort {
             traceHolder.drain();
             throw e;
         }
+    }
+
+    @Override
+    public String generateProductOverview(String productContextText) {
+        return productOverviewChatClient.prompt()
+                .user(productContextText)
+                .call()
+                .content();
     }
 }
