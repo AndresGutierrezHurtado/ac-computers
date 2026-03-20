@@ -39,6 +39,10 @@ dependencies {
 	// Monitoring
     implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
 
+	// Cache (product AI overview)
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'com.github.ben-manes.caffeine:caffeine'
+
 	// Database
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
