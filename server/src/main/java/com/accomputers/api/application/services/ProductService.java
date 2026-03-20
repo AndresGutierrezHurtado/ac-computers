@@ -5,6 +5,8 @@ import com.accomputers.api.application.ports.output.AIPort;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -28,6 +30,7 @@ import com.accomputers.api.application.ports.output.repositories.*;
 
 // DTOs
 import com.accomputers.api.application.dtos.createProductDTO.ProductSpecificationDTO;
+import com.accomputers.api.application.dtos.response.ProductAiOverviewResponse;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 
 @Service
@@ -177,6 +180,53 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
+    @Cacheable(cacheNames = "productAiOverviews", key = "#id")
+    public ProductAiOverviewResponse getProductAiOverview(Integer id) {
+        ProductResponseDTO product = getProductById(id);
+        String context = buildProductOverviewContext(product);
+        String overview = aiPort.generateProductOverview(context);
+        return new ProductAiOverviewResponse(overview != null ? overview.trim() : "");
+    }
+
+    private static String buildProductOverviewContext(ProductResponseDTO p) {
+        StringBuilder sb = new StringBuilder(768);
+        sb.append("Datos del producto:\n");
+        sb.append("- Nombre: ").append(p.name()).append('\n');
+        if (StringUtils.hasText(p.description())) {
+            sb.append("- Descripción: ").append(p.description()).append('\n');
+        }
+        if (p.brand() != null && StringUtils.hasText(p.brand().name())) {
+            sb.append("- Marca: ").append(p.brand().name()).append('\n');
+        }
+        if (p.subCategory() != null && StringUtils.hasText(p.subCategory().name())) {
+            sb.append("- Subcategoría: ").append(p.subCategory().name()).append('\n');
+        }
+        if (p.price() != null) {
+            sb.append("- Precio (COP): ").append(p.price()).append('\n');
+        }
+        if (p.discount() != null && p.discount() > 0) {
+            sb.append("- Descuento %: ").append(p.discount()).append('\n');
+        }
+        if (StringUtils.hasText(p.condition())) {
+            sb.append("- Condición: ").append(p.condition()).append('\n');
+        }
+        if (p.productSpecifications() != null && !p.productSpecifications().isEmpty()) {
+            sb.append("- Especificaciones:\n");
+            for (var ps : p.productSpecifications()) {
+                if (ps == null) {
+                    continue;
+                }
+                String specName = ps.specification() != null && StringUtils.hasText(ps.specification().name())
+                        ? ps.specification().name()
+                        : "Especificación";
+                String val = StringUtils.hasText(ps.value()) ? ps.value() : "";
+                sb.append("  · ").append(specName).append(": ").append(val).append('\n');
+            }
+        }
+        return sb.toString();
+    }
+
+    @Override
     public PageDTO<ProductResponseDTO> getAllProducts(ProductFiltersDTO queryParams) {
         ProductCriteria productCriteria = queryParams.toProductCriteria();
         PageDTO<Product> pageDTO = productRepository.findAll(productCriteria);
@@ -187,6 +237,7 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
+    @CacheEvict(cacheNames = "productAiOverviews", key = "#id")
     @Transactional
     public ProductResponseDTO updateProduct(Integer id, createProductDTO productDTO) {
         Product product = productRepository.findById(id);
@@ -262,6 +313,7 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
+    @CacheEvict(cacheNames = "productAiOverviews", key = "#id")
     @Transactional
     public void deleteProduct(Integer id) {
         Product product = productRepository.findById(id);
