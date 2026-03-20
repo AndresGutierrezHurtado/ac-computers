@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -21,47 +22,52 @@ export default function ChatMessage({ role, content, consultedProducts }) {
     const hasHits = Array.isArray(consultedProducts) && consultedProducts.length > 0;
 
     return (
-        <div className={`chat ${isUser ? "chat-end" : "chat-start"}`}>
-            <div
-                className={`chat-bubble text-sm ${isUser ? "chat-bubble-primary" : "chat-bubble-secondary"}`}
-            >
-                {isUser ? (
-                    content
-                ) : (
-                    <>
+        <>
+            <div className={`chat ${isUser ? "chat-end" : "chat-start"}`}>
+                <div
+                    className={`chat-bubble text-sm ${isUser ? "chat-bubble-primary" : "chat-bubble-secondary"}`}
+                >
+                    {isUser ? (
+                        <span>{content}</span>
+                    ) : (
                         <div className="prose prose-sm max-w-none prose-headings:mb-2 prose-p:mb-1 prose-ul:mb-1 prose-ol:mb-1 prose-li:marker:text-current">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                {String(content ?? "")}
+                                {typeof content === "string" ? content : ""}
                             </ReactMarkdown>
                         </div>
-                        {hasHits && (
-                            <div className="mt-3 border-t border-base-content/10 pt-2 text-left">
-                                <p className="mb-1.5 text-[0.7rem] font-semibold uppercase tracking-wide text-base-content/70">
-                                    Productos consultados en el catálogo
-                                </p>
-                                <ul className="space-y-2">
-                                    {consultedProducts.map((p) => (
-                                        <li
-                                            key={p.id}
-                                            className="rounded-md bg-base-200/90 px-2 py-1.5 text-[0.75rem] leading-snug"
-                                        >
-                                            <span className="font-medium text-base-content">{p.name}</span>
-                                            <span className="mx-1 text-base-content/40">·</span>
-                                            <span className="text-primary">{formatCop(p.price)}</span>
-                                            {p.brand ? (
-                                                <span className="mt-0.5 block text-[0.7rem] text-base-content/70">
-                                                    {p.brand}
-                                                    {p.condition ? ` · ${p.condition}` : ""}
-                                                </span>
-                                            ) : null}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-                    </>
-                )}
+                    )}
+                </div>
             </div>
-        </div>
+            {hasHits && (
+                <div className="chat chat-start">
+                    <div className="w-full grid grid-cols-2 gap-2">
+                        {consultedProducts.map((p) => (
+                            <Link
+                                key={p.id}
+                                className="rounded-md bg-white/10 hover:bg-white/30 duration-200 px-2 py-1.5 text-[0.75rem] leading-snug"
+                                href={`/products/${p.id}`}
+                            >
+                                <p className="font-medium text-base-content">{p.name}</p>
+                                <div className="flex items-center justify-between">
+                                    {p.brand ? (
+                                        <span className="mt-0.5 block text-[0.7rem] text-base-content/70">
+                                            {p.brand}
+                                            {p.condition ? ` · ${p.condition}` : ""}
+                                        </span>
+                                    ) : (
+                                        <span />
+                                    )}
+                                    {"price" in p && p.price != null && (
+                                        <span className="ml-2 font-semibold text-xs text-primary">
+                                            {formatCop(p.price)}
+                                        </span>
+                                    )}
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </>
     );
 }

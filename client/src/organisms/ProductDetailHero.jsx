@@ -64,7 +64,7 @@ export default function ProductDetailHero({ product }) {
                         )}
                         <p className="text-lg grow">{product.description}</p>
                         <div className="flex items-center gap-3">
-                            <ProductPrice price={product.price} discount={product.discount} />
+                            <ProductPrice price={product.price} discount={product.discount} size={2} />
                             {product.discount > 0 && (
                                 <Badge>{product.discount}% OFF</Badge>
                             )}

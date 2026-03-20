@@ -1,4 +1,4 @@
-export default function ProductPrice({ price, discount = 0 }) {
+export default function ProductPrice({ price, discount = 0, size = 1.25 }) {
     const formatter = new Intl.NumberFormat("es-CO", {
         style: "currency",
         currency: "COP",
@@ -12,7 +12,9 @@ export default function ProductPrice({ price, discount = 0 }) {
             {discount > 0 && (
                 <p className="line-through text-base-content/60">{formatter.format(price)}</p>
             )}
-            <p className="font-medium text-lg">{formatter.format(finalPrice)}</p>
+            <p className="font-medium" style={{ fontSize: `${size}rem` }}>
+                {formatter.format(finalPrice)}
+            </p>
         </>
     );
 }

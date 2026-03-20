@@ -18,27 +18,28 @@ const DEFAULT_MESSAGES = [
 
 function toApiMessages(list) {
     return list.map((m) => ({
-        role:
-            m.role === "user"
-                ? "USER"
-                : m.role === "assistant"
-                  ? "ASSISTANT"
-                  : "SYSTEM",
+        role: m.role === "user" ? "USER" : m.role === "assistant" ? "ASSISTANT" : "SYSTEM",
         content: m.content,
     }));
 }
 
 export default function AIChatWidget() {
+    // Refs
+    const endRef = useRef(null);
+    const phaseTimerRef = useRef(null);
+    const messagesContainerRef = useRef(null);
+
+    // States
     const [messages, setMessages] = useState(DEFAULT_MESSAGES);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [loadingPhase, setLoadingPhase] = useState("thinking");
     const [hydrated, setHydrated] = useState(false);
-    const endRef = useRef(null);
-    const phaseTimerRef = useRef(null);
 
     const scrollToBottom = () => {
-        endRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
     };
 
     useEffect(() => {
@@ -138,8 +139,7 @@ export default function AIChatWidget() {
                 {
                     role: "assistant",
                     content: reply,
-                    consultedProducts:
-                        consultedProducts.length > 0 ? consultedProducts : undefined,
+                    consultedProducts: consultedProducts.length > 0 ? consultedProducts : undefined,
                 },
             ]);
         } catch (error) {
@@ -172,19 +172,11 @@ export default function AIChatWidget() {
     };
 
     return (
-        <div className="dropdown dropdown-top dropdown-end fixed bottom-12 right-12 z-[999]">
-            <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-primary btn-circle shadow-lg mt-5"
-                aria-label="Abrir asistente IA"
-            >
+        <details className="dropdown dropdown-top dropdown-end fixed bottom-12 right-12 z-[999]">
+            <summary className="btn btn-primary btn-circle shadow-lg mt-5">
                 <RobotIcon size={20} />
-            </div>
-            <ul
-                tabIndex={-1}
-                className="dropdown-content m-0 flex list-none flex-col bg-base-100/95 border border-base-200 shadow-xl backdrop-blur w-[min(92vw,380px)] h-[min(70vh,520px)] rounded-lg p-0 z-[1]"
-            >
+            </summary>
+            <ul className="dropdown-content bg-base-100/95 border border-base-200 shadow-xl backdrop-blur w-[min(92vw,380px)] h-[min(70vh,520px)] rounded-lg p-0 flex flex-col">
                 <li className="list-none flex min-h-0 flex-1 flex-col gap-3 p-5">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-base font-semibold">
@@ -200,7 +192,10 @@ export default function AIChatWidget() {
                         </button>
                     </div>
 
-                    <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+                    <div
+                        className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1"
+                        ref={messagesContainerRef}
+                    >
                         {messages.map((message, index) => (
                             <ChatMessage
                                 key={`${message.role}-${index}-${message.content?.slice?.(0, 12) ?? ""}`}
@@ -240,6 +235,6 @@ export default function AIChatWidget() {
                     />
                 </li>
             </ul>
-        </div>
+        </details>
     );
 }
