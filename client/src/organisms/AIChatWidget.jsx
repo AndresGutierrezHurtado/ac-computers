@@ -6,21 +6,36 @@ import ChatComposer from "@/molecules/ChatComposer";
 import { CloseIcon, RobotIcon } from "@/atoms/Icons";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const STORAGE_KEY_MESSAGES = "ac_ai_chat_messages_v1";
+const STORAGE_KEY_MESSAGES = "ac_ai_chat_messages_v2";
 
 const DEFAULT_MESSAGES = [
     {
         role: "assistant",
-        content: "Hola, soy el asistente de AC Computers. ¿Qué estás buscando?",
+        content: "Hola, soy el asesor de AC Computers. ¿Qué estás buscando?",
+        consultedProducts: undefined,
     },
 ];
+
+function toApiMessages(list) {
+    return list.map((m) => ({
+        role:
+            m.role === "user"
+                ? "USER"
+                : m.role === "assistant"
+                  ? "ASSISTANT"
+                  : "SYSTEM",
+        content: m.content,
+    }));
+}
 
 export default function AIChatWidget() {
     const [messages, setMessages] = useState(DEFAULT_MESSAGES);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
+    const [loadingPhase, setLoadingPhase] = useState("thinking");
     const [hydrated, setHydrated] = useState(false);
     const endRef = useRef(null);
+    const phaseTimerRef = useRef(null);
 
     const scrollToBottom = () => {
         endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -29,6 +44,26 @@ export default function AIChatWidget() {
     useEffect(() => {
         scrollToBottom();
     }, [messages, loading]);
+
+    useEffect(() => {
+        if (!loading) {
+            if (phaseTimerRef.current) {
+                clearInterval(phaseTimerRef.current);
+                phaseTimerRef.current = null;
+            }
+            return;
+        }
+        setLoadingPhase("thinking");
+        phaseTimerRef.current = setInterval(() => {
+            setLoadingPhase((p) => (p === "thinking" ? "catalog" : "thinking"));
+        }, 2200);
+        return () => {
+            if (phaseTimerRef.current) {
+                clearInterval(phaseTimerRef.current);
+                phaseTimerRef.current = null;
+            }
+        };
+    }, [loading]);
 
     useEffect(() => {
         try {
@@ -54,46 +89,68 @@ export default function AIChatWidget() {
         }
     }, [hydrated, messages]);
 
-    const appendMessage = (message) => {
-        setMessages((prev) => [...prev, message]);
-    };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!input.trim() || loading) return;
 
         const userMessage = input.trim();
         setInput("");
-        appendMessage({ role: "user", content: userMessage });
+
+        const historyForApi = [...messages, { role: "user", content: userMessage }];
+        setMessages(historyForApi);
 
         if (!API_URL) {
-            appendMessage({
-                role: "assistant",
-                content: "La API no está configurada en este entorno.",
-            });
+            setMessages((prev) => [
+                ...prev,
+                {
+                    role: "assistant",
+                    content: "La API no está configurada en este entorno.",
+                    consultedProducts: undefined,
+                },
+            ]);
             return;
         }
 
         setLoading(true);
         try {
-            const response = await fetch(`${API_URL}/products/recommendations`, {
+            const response = await fetch(`${API_URL}/products/sales-chat`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
                     accept: "application/json",
                 },
-                body: JSON.stringify(userMessage),
+                body: JSON.stringify({
+                    messages: toApiMessages(historyForApi),
+                }),
             });
             const json = await response.json();
+            const data = json?.data;
             const reply =
-                json?.data || json?.message || "No pude generar una respuesta en este momento.";
+                (typeof data?.message === "string" && data.message) ||
+                json?.message ||
+                "No pude generar una respuesta en este momento.";
+            const consultedProducts = Array.isArray(data?.consultedProducts)
+                ? data.consultedProducts
+                : [];
 
-            appendMessage({ role: "assistant", content: reply });
+            setMessages((prev) => [
+                ...prev,
+                {
+                    role: "assistant",
+                    content: reply,
+                    consultedProducts:
+                        consultedProducts.length > 0 ? consultedProducts : undefined,
+                },
+            ]);
         } catch (error) {
-            appendMessage({
-                role: "assistant",
-                content: "Ocurrió un error al consultar la IA. Intenta de nuevo.",
-            });
+            setMessages((prev) => [
+                ...prev,
+                {
+                    role: "assistant",
+                    content: "Ocurrió un error al consultar la IA. Intenta de nuevo.",
+                    consultedProducts: undefined,
+                },
+            ]);
         } finally {
             setLoading(false);
         }
@@ -132,7 +189,7 @@ export default function AIChatWidget() {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-base font-semibold">
                             <RobotIcon size={18} />
-                            Asistente IA
+                            Asesor IA
                         </div>
                         <button
                             type="button"
@@ -146,13 +203,30 @@ export default function AIChatWidget() {
                     <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
                         {messages.map((message, index) => (
                             <ChatMessage
-                                key={`${message.role}-${index}`}
+                                key={`${message.role}-${index}-${message.content?.slice?.(0, 12) ?? ""}`}
                                 role={message.role}
                                 content={message.content}
+                                consultedProducts={message.consultedProducts}
                             />
                         ))}
                         {loading && (
-                            <div className="text-xs text-base-content/60">Pensando...</div>
+                            <div className="chat chat-start">
+                                <div className="chat-bubble chat-bubble-secondary text-sm">
+                                    <div className="flex flex-col gap-0.5">
+                                        <span className="inline-flex items-center gap-2">
+                                            <span className="loading loading-dots loading-xs" />
+                                            {loadingPhase === "thinking"
+                                                ? "Pensando…"
+                                                : "Buscando en el catálogo…"}
+                                        </span>
+                                        <span className="text-[0.7rem] text-base-content/60">
+                                            {loadingPhase === "thinking"
+                                                ? "Preparando la mejor respuesta."
+                                                : "Consultando productos por similitud (embeddings)."}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         )}
                         <div ref={endRef} />
                     </div>
