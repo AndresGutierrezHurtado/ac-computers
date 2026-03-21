@@ -1,11 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import ProductImage from "@/atoms/ProductImage";
 import ProductPrice from "@/atoms/ProductPrice";
 import Badge from "@/atoms/Badge";
 
-export default function ProductDetailHero({ product }) {
+export default function ProductDetailHero({
+    product,
+    aiOverview = null,
+    aiOverviewLoading = false,
+    aiOverviewError = false,
+}) {
     const images = product?.images || [];
     const defaultImage = useMemo(() => {
         const main = images.find((img) => img.isMain) || images[0];
@@ -63,6 +70,31 @@ export default function ProductDetailHero({ product }) {
                             </p>
                         )}
                         <p className="text-lg grow">{product.description}</p>
+                        {(aiOverviewLoading || aiOverviewError || (aiOverview && aiOverview.trim())) && (
+                            <div className="rounded-xl border border-primary/25 bg-gradient-to-br from-primary/8 to-base-200/40 p-4 shadow-sm">
+                                <p className="mb-2 text-[0.65rem] font-bold uppercase tracking-wider text-primary">
+                                    Vista general (IA)
+                                </p>
+                                {aiOverviewLoading ? (
+                                    <div className="flex items-center gap-2 text-sm text-base-content/70">
+                                        <span className="loading loading-dots loading-sm text-primary" />
+                                        Generando resumen del producto…
+                                    </div>
+                                ) : null}
+                                {aiOverviewError ? (
+                                    <p className="text-sm text-base-content/60">
+                                        No se pudo generar el resumen en este momento.
+                                    </p>
+                                ) : null}
+                                {!aiOverviewLoading && !aiOverviewError && aiOverview?.trim() ? (
+                                    <div className="prose prose-sm max-w-none text-base-content prose-p:mb-2 prose-ul:mb-1 prose-li:marker:text-primary">
+                                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                            {aiOverview}
+                                        </ReactMarkdown>
+                                    </div>
+                                ) : null}
+                            </div>
+                        )}
                         <div className="flex items-center gap-3">
                             <ProductPrice price={product.price} discount={product.discount} size={2} />
                             {product.discount > 0 && (

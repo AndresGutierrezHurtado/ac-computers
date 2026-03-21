@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useGetData } from "@/hooks/useClientData";
+import { FetchData, useGetData } from "@/hooks/useClientData";
 import ProductDetailTemplate from "@/templates/ProductDetailTemplate";
 import ProductDetailHero from "@/organisms/ProductDetailHero";
 import ProductSpecificationsSection from "@/organisms/ProductSpecificationsSection";
@@ -11,6 +12,36 @@ export default function ProductDetailPage() {
     const params = useParams();
     const productId = Array.isArray(params?.id) ? params.id[0] : params?.id;
     const { data: product, loading } = useGetData(`/products/${productId}`);
+
+    const [aiOverview, setAiOverview] = useState(null);
+    const [aiOverviewLoading, setAiOverviewLoading] = useState(false);
+    const [aiOverviewError, setAiOverviewError] = useState(false);
+
+    useEffect(() => {
+        if (!productId) return undefined;
+        let cancelled = false;
+        setAiOverview(null);
+        setAiOverviewError(false);
+        setAiOverviewLoading(true);
+        FetchData(`/products/${productId}/overview`)
+            .then((res) => {
+                if (cancelled) return;
+                if (res?.success && typeof res?.data?.overview === "string") {
+                    setAiOverview(res.data.overview);
+                } else {
+                    setAiOverviewError(true);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) setAiOverviewError(true);
+            })
+            .finally(() => {
+                if (!cancelled) setAiOverviewLoading(false);
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, [productId]);
 
     if (loading) {
         return (
@@ -39,7 +70,12 @@ export default function ProductDetailPage() {
     return (
         <>
             <ProductDetailTemplate>
-                <ProductDetailHero product={product} />
+                <ProductDetailHero
+                    product={product}
+                    aiOverview={aiOverview}
+                    aiOverviewLoading={aiOverviewLoading}
+                    aiOverviewError={aiOverviewError}
+                />
                 <ProductSpecificationsSection
                     specifications={product.productSpecifications || []}
                 />
