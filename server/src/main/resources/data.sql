@@ -273,3 +273,16 @@ INSERT INTO product_specifications (id, product_id, specification_id, value, id_
 (58, 12, 21, '20000', NULL),
 (59, 12, 22, NULL, 25),
 (60, 12, 23, '8', NULL);
+
+-- PostgreSQL: INSERT ... (id, ...) does not advance SERIAL/IDENTITY sequences. Without this, the next
+-- JPA INSERT reuses e.g. id=1 and hits duplicate key (e.g. on images after product update).
+SELECT setval(pg_get_serial_sequence('roles', 'id'), COALESCE((SELECT MAX(id) FROM roles), 0));
+SELECT setval(pg_get_serial_sequence('users', 'id'), COALESCE((SELECT MAX(id) FROM users), 0));
+SELECT setval(pg_get_serial_sequence('brands', 'id'), COALESCE((SELECT MAX(id) FROM brands), 0));
+SELECT setval(pg_get_serial_sequence('categories', 'id'), COALESCE((SELECT MAX(id) FROM categories), 0));
+SELECT setval(pg_get_serial_sequence('sub_categories', 'id'), COALESCE((SELECT MAX(id) FROM sub_categories), 0));
+SELECT setval(pg_get_serial_sequence('specifications', 'id'), COALESCE((SELECT MAX(id) FROM specifications), 0));
+SELECT setval(pg_get_serial_sequence('specification_values', 'id'), COALESCE((SELECT MAX(id) FROM specification_values), 0));
+SELECT setval(pg_get_serial_sequence('products', 'id'), COALESCE((SELECT MAX(id) FROM products), 0));
+SELECT setval(pg_get_serial_sequence('images', 'id'), COALESCE((SELECT MAX(id) FROM images), 0));
+SELECT setval(pg_get_serial_sequence('product_specifications', 'id'), COALESCE((SELECT MAX(id) FROM product_specifications), 0));
