@@ -72,12 +72,11 @@ export default function ProductDetailHero({
                         <p className="text-lg grow">{product.description}</p>
                         {(aiOverviewLoading || aiOverviewError || (aiOverview && aiOverview.trim())) && (
                             <div className="rounded-xl border border-primary/25 bg-gradient-to-br from-primary/8 to-base-200/40 p-4 shadow-sm">
-                                <p className="mb-2 text-[0.65rem] font-bold uppercase tracking-wider text-primary">
+                                <p className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">
                                     Vista general (IA)
                                 </p>
                                 {aiOverviewLoading ? (
                                     <div className="flex items-center gap-2 text-sm text-base-content/70">
-                                        <span className="loading loading-dots loading-sm text-primary" />
                                         Generando resumen del producto…
                                     </div>
                                 ) : null}
@@ -87,7 +86,7 @@ export default function ProductDetailHero({
                                     </p>
                                 ) : null}
                                 {!aiOverviewLoading && !aiOverviewError && aiOverview?.trim() ? (
-                                    <div className="prose prose-sm max-w-none text-base-content prose-p:mb-2 prose-ul:mb-1 prose-li:marker:text-primary">
+                                    <div className="prose text-sm max-w-none text-base-content prose-p:mb-2 prose-ul:mb-1 prose-li:marker:text-primary">
                                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                             {aiOverview}
                                         </ReactMarkdown>
