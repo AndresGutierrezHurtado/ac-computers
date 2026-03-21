@@ -43,6 +43,11 @@ export default function ProductDetailPage() {
         };
     }, [productId]);
 
+    useEffect(() => {
+        if (!product || !product.name) return;
+        document.title = `${product.name} - AC Computers`;
+    }, [product]);
+
     if (loading) {
         return (
             <ProductDetailTemplate>
