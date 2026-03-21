@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 
 // Application
+import com.accomputers.api.application.dtos.response.ProductAiOverviewResponse;
 import com.accomputers.api.application.dtos.response.ProductResponseDTO;
 import com.accomputers.api.application.ports.input.ProductServiceInterface;
 import com.accomputers.api.infrastructure.http.responses.PaginatedResponseDTO;
@@ -79,6 +80,15 @@ public class ProductController {
                 product);
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/{id}/overview")
+    public ResponseEntity<ResponseDTO<ProductAiOverviewResponse>> getProductAiOverview(@PathVariable Integer id) {
+        ProductAiOverviewResponse overview = productServiceInterface.getProductAiOverview(id);
+        return ResponseEntity.ok(new ResponseDTO<>(
+                "Product overview generated",
+                true,
+                overview));
     }
 
     @GetMapping
