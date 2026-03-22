@@ -17,6 +17,39 @@ function formatCop(value) {
     }
 }
 
+/** Tablas GFM: líneas visibles + scroll horizontal si sobrepasan el bubble del chat */
+const markdownComponents = {
+    table({ children }) {
+        return (
+            <div className="my-3 w-full max-w-full overflow-x-auto overscroll-x-contain rounded border border-base-200/10">
+                <table className="table table-xs">
+                    {children}
+                </table>
+            </div>
+        );
+    },
+    thead({ children }) {
+        return <thead className="bg-base-200/10">{children}</thead>;
+    },
+    th({ children, ...props }) {
+        return (
+            <th
+                className="px-2 py-1.5 text-left font-semibold align-top"
+                {...props}
+            >
+                {children}
+            </th>
+        );
+    },
+    td({ children, ...props }) {
+        return (
+            <td className="px-2 py-1.5 align-top" {...props}>
+                {children}
+            </td>
+        );
+    },
+};
+
 export default function ChatMessage({ role, content, consultedProducts }) {
     const isUser = role === "user";
     const hasHits = Array.isArray(consultedProducts) && consultedProducts.length > 0;
@@ -30,8 +63,8 @@ export default function ChatMessage({ role, content, consultedProducts }) {
                     {isUser ? (
                         <span>{content}</span>
                     ) : (
-                        <div className="prose prose-sm max-w-none prose-headings:mb-2 prose-p:mb-1 prose-ul:mb-1 prose-ol:mb-1 prose-li:marker:text-current">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        <div className="prose prose-sm max-w-none min-w-0 prose-headings:mb-2 prose-p:mb-1 prose-ul:mb-1 prose-ol:mb-1 prose-li:marker:text-current">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                                 {typeof content === "string" ? content : ""}
                             </ReactMarkdown>
                         </div>
