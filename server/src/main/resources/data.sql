@@ -157,21 +157,18 @@ INSERT INTO products (id, name, description, price, product_condition, discount,
 
 -- IMAGES
 INSERT INTO images (id, url, is_main, product_id) VALUES
-(1, 'https://example.com/images/hp-pavilion-15-main.jpg', true, 1),
-(2, 'https://example.com/images/hp-pavilion-15-2.jpg', false, 1),
-(3, 'https://example.com/images/dell-xps-13-main.jpg', true, 2),
-(4, 'https://example.com/images/dell-xps-13-2.jpg', false, 2),
-(5, 'https://example.com/images/lenovo-thinkpad-e14-main.jpg', true, 3),
-(6, 'https://example.com/images/asus-rog-strix-g15-main.jpg', true, 4),
-(7, 'https://example.com/images/asus-rog-strix-g15-2.jpg', false, 4),
-(8, 'https://example.com/images/hp-pavilion-desktop-main.jpg', true, 5),
-(9, 'https://example.com/images/dell-optiplex-7090-main.jpg', true, 6),
-(10, 'https://example.com/images/samsung-odyssey-g7-main.jpg', true, 7),
-(11, 'https://example.com/images/lg-ultrawide-34-main.jpg', true, 8),
-(12, 'https://example.com/images/logitech-mx-keys-main.jpg', true, 9),
-(13, 'https://example.com/images/razer-blackwidow-v3-main.jpg', true, 10),
-(14, 'https://example.com/images/logitech-mx-master-3-main.jpg', true, 11),
-(15, 'https://example.com/images/razer-deathadder-v2-main.jpg', true, 12);
+(1, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528048/ac-computers/medias/t3ewp0ezfrl99egnuwgv.png', true, 1),
+(3, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528210/ac-computers/medias/sbrtgtrk3pjgcqarzctb.png', true, 2),
+(5, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528244/ac-computers/medias/vfjz5zrnfeq89hepvycf.avif', true, 3),
+(6, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528318/ac-computers/medias/nhtrbu6rzvgfanv5eghy.png', true, 4),
+(8, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528369/ac-computers/medias/q8kkifemnoagxku8heh3.avif', true, 5),
+(9, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528410/ac-computers/medias/p3pjucgnh9otmu7jqtj4.avif', true, 6),
+(10, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528481/ac-computers/medias/vy9uccgk9bue5dhulm6o.webp', true, 7),
+(11, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528520/ac-computers/medias/hg3bewzf609d1exrmnzh.png', true, 8),
+(12, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528617/ac-computers/medias/cjlas23nuuqsw60yil73.png', true, 9),
+(13, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528641/ac-computers/medias/v69gjclvwvn7jyj94pbi.png', true, 10),
+(14, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528691/ac-computers/medias/utevj7wztkb3frrhwvqr.png', true, 11),
+(15, 'https://res.cloudinary.com/dyuh7jesr/image/upload/v1775528714/ac-computers/medias/f6cxvdoqxjem7uo7x082.png', true, 12);
 
 -- PRODUCT SPECIFICATIONS FOR LAPTOPS
 -- HP Pavilion 15 (Product 1)
