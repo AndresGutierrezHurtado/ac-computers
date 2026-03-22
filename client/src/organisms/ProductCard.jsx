@@ -9,11 +9,11 @@ export default function ProductCard({ product }) {
 
     return (
         <div className="card rounded-none [&_p]:grow-0 relative">
-            <Link href={`/products/${product.id}`} className="w-full aspect-square">
+            <Link href={`/products/${product.id}`} className="w-full aspect-square group bg-base-content/10 overflow-hidden rounded-lg">
                 <img
                     src={imageUrl || "/placeholder-image.png"}
                     alt={product.name}
-                    className="w-full h-full object-contain p-4 bg-base-content/10 rounded"
+                    className="w-full h-full object-contain p-4 group-hover:scale-105 transition-all duration-300"
                 />
             </Link>
 
