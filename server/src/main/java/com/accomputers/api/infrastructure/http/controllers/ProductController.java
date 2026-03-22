@@ -129,12 +129,24 @@ public class ProductController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDTO<ProductResponseDTO>> updateProduct(
             @PathVariable Integer id,
-            @ModelAttribute createProductDTO productDTO) {
+            @ModelAttribute createProductDTO productDTO,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
 
-        ProductResponseDTO product = productServiceInterface.updateProduct(id, productDTO);
+        createProductDTO productDTOWithImage = new createProductDTO(
+                productDTO.name(),
+                productDTO.description(),
+                productDTO.price(),
+                productDTO.condition(),
+                productDTO.discount(),
+                productDTO.brandId(),
+                productDTO.subCategoryId(),
+                image,
+                productDTO.specifications());
+
+        ProductResponseDTO product = productServiceInterface.updateProduct(id, productDTOWithImage);
 
         ResponseDTO<ProductResponseDTO> responseDTO = new ResponseDTO<>(
                 "Product updated successfully",

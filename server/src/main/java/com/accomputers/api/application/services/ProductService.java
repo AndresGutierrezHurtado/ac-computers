@@ -304,6 +304,20 @@ public class ProductService implements ProductServiceInterface {
             product.setProductSpecifications(productSpecifications);
         }
 
+        if (productDTO.image() != null && !productDTO.image().isEmpty()) {
+            List<Image> existingImages = imageRepository.findByProductId(product.getId());
+            for (Image img : existingImages) {
+                if (img.getUrl() != null && img.getUrl().getValue() != null) {
+                    fileManagerInterface.deleteFile(img.getUrl().getValue());
+                }
+            }
+            imageRepository.deleteByProductId(product.getId());
+            String url = fileManagerInterface.uploadFile(productDTO.image(), "/medias");
+            Image savedImage = imageRepository.save(
+                    new Image(null, new Url(url), true, product.getId()));
+            product.setImages(List.of(savedImage));
+        }
+
         productRepository.save(product);
 
         loggerPort.info(String.format("Product updated successfully - ID: %d, Name: %s, Price: %.2f",
