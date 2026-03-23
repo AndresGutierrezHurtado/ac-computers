@@ -83,6 +83,14 @@ export default function ProductsMarketplace() {
         }));
     };
 
+    const handleReset = () => {
+        setFilters(DEFAULT_FILTERS);
+    };
+
+    const handleSearchChange = useCallback((value) => {
+        updateFilters({ search: value });
+    }, []);
+
     const handleLimitChange = useCallback((next) => {
         setFilters((prev) => ({
             ...prev,
@@ -90,10 +98,6 @@ export default function ProductsMarketplace() {
             page: 1,
         }));
     }, []);
-
-    const handleReset = () => {
-        setFilters(DEFAULT_FILTERS);
-    };
 
     useEffect(() => {
         setFilters({
@@ -108,7 +112,7 @@ export default function ProductsMarketplace() {
         <ProductMarketplaceTemplate
             title="Productos"
             searchValue={filters.search}
-            onSearchChange={(value) => updateFilters({ search: value })}
+            onSearchChange={handleSearchChange}
             filters={
                 <ProductFiltersPanel
                     filters={filters}
