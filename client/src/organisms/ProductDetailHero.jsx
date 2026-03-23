@@ -70,6 +70,12 @@ export default function ProductDetailHero({
                             </p>
                         )}
                         <p className="text-lg grow">{product.description}</p>
+                        <div className="flex items-center gap-3">
+                            <ProductPrice price={product.price} discount={product.discount} size={2.25} />
+                            {product.discount > 0 && (
+                                <Badge>{product.discount}% OFF</Badge>
+                            )}
+                        </div>
                         {(aiOverviewLoading || aiOverviewError || (aiOverview && aiOverview.trim())) && (
                             <div className="rounded-xl border border-primary/25 bg-gradient-to-br from-primary/8 to-base-200/40 p-4 shadow-sm">
                                 <p className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">
@@ -94,12 +100,6 @@ export default function ProductDetailHero({
                                 ) : null}
                             </div>
                         )}
-                        <div className="flex items-center gap-3">
-                            <ProductPrice price={product.price} discount={product.discount} size={2} />
-                            {product.discount > 0 && (
-                                <Badge>{product.discount}% OFF</Badge>
-                            )}
-                        </div>
                     </div>
                 </div>
             </div>
