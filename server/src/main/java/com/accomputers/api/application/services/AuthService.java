@@ -15,6 +15,7 @@ import com.accomputers.api.domain.valueobjects.Password;
 
 // Ports
 import com.accomputers.api.application.ports.input.AuthServiceInterface;
+import com.accomputers.api.application.ports.output.GoogleServicePort;
 import com.accomputers.api.application.ports.output.LoggerPort;
 import com.accomputers.api.application.ports.output.MessagingService;
 import com.accomputers.api.application.ports.output.PasswordHasherInterface;
@@ -25,6 +26,7 @@ import com.accomputers.api.application.ports.output.repositories.UserRepositoryI
 
 // DTOs
 import com.accomputers.api.application.dtos.auth.ForgotPasswordDTO;
+import com.accomputers.api.application.dtos.auth.GoogleLoginDTO;
 import com.accomputers.api.application.dtos.auth.LoginDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.auth.SetPasswordDTO;
@@ -39,6 +41,8 @@ import java.util.UUID;
 
 @Service
 public class AuthService implements AuthServiceInterface {
+    private static final int DEFAULT_GOOGLE_ROLE_ID = 3; // viewer
+
     private final UserRepositoryInterface userRepository;
     private final PasswordHasherInterface passwordHasher;
     private final RoleRepositoryInterface roleRepository;
@@ -46,6 +50,7 @@ public class AuthService implements AuthServiceInterface {
     private final PasswordResetTokenRepositoryInterface passwordResetTokenRepository;
     private final MessagingService messagingService;
     private final LoggerPort loggerPort;
+    private final GoogleServicePort googleServicePort;
 
     @Value("${app.frontend-url:http://localhost:3000}")
     private String frontendUrl;
@@ -54,7 +59,8 @@ public class AuthService implements AuthServiceInterface {
     public AuthService(UserRepositoryInterface userRepository, PasswordHasherInterface passwordHasher,
             RoleRepositoryInterface roleRepository, UserAuthServiceInterface userAuthService,
             PasswordResetTokenRepositoryInterface passwordResetTokenRepository,
-            MessagingService messagingService, LoggerPort loggerPort) {
+            MessagingService messagingService, LoggerPort loggerPort,
+            GoogleServicePort googleServicePort) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
         this.roleRepository = roleRepository;
@@ -62,6 +68,7 @@ public class AuthService implements AuthServiceInterface {
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.messagingService = messagingService;
         this.loggerPort = loggerPort;
+        this.googleServicePort = googleServicePort;
     }
 
     @Override
@@ -76,6 +83,42 @@ public class AuthService implements AuthServiceInterface {
         userAuthService.authenticateUser(user);
 
         loggerPort.info(String.format("User logged in successfully - ID: %d, Email: %s",
+                user.getId(), user.getEmail().getValue()));
+
+        return UserResponseDTO.fromUser(user);
+    }
+
+    @Override
+    @Transactional
+    public UserResponseDTO googleLogin(GoogleLoginDTO googleLoginDTO) {
+        GoogleServicePort.GoogleVerifiedProfile profile = googleServicePort
+                .verify(googleLoginDTO.credential());
+
+        if (profile == null || profile.email() == null || profile.email().trim().isEmpty()) {
+            throw new InvalidValueObjectException("Google credential", null, "is invalid");
+        }
+
+        Email email = new Email(profile.email());
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            Role role = roleRepository.findById(DEFAULT_GOOGLE_ROLE_ID);
+            if (role == null) {
+                throw new InvalidValueObjectException("Role", DEFAULT_GOOGLE_ROLE_ID, "does not exist");
+            }
+
+            Password randomPassword = passwordHasher.hashPassword(new Password(generateToken().substring(0, 12)));
+
+            String firstName = profile.firstName() != null ? profile.firstName() : "";
+            String lastName = profile.lastName() != null ? profile.lastName() : "";
+
+            User newUser = new User(null, firstName, lastName, email, randomPassword, role.getId());
+            user = userRepository.save(newUser);
+        }
+
+        userAuthService.authenticateUser(user);
+
+        loggerPort.info(String.format("User logged in with Google - ID: %d, Email: %s",
                 user.getId(), user.getEmail().getValue()));
 
         return UserResponseDTO.fromUser(user);
