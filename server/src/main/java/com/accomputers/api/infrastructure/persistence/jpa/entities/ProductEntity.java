@@ -61,7 +61,7 @@ public class ProductEntity {
     private BrandEntity brand;
 
     @BatchSize(size = 32)
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product")
     private List<ImageEntity> images = new ArrayList<>();
 
     @BatchSize(size = 32)
