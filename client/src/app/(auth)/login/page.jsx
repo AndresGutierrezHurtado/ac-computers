@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Swal from "sweetalert2";
+import { GoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
 
 import TextField from "@/molecules/TextField";
 import AuthCard from "@/organisms/AuthCard";
@@ -37,26 +39,50 @@ export default function Login() {
             password: data.user_password,
         });
 
-        if (response?.success) {
-            // get the token from the response headers
-            const rawToken = response.authToken || "";
-            const token = rawToken.startsWith("Bearer ") ? rawToken.slice(7) : rawToken;
+        if (!response?.success) return;
 
-            if (!token) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "No se recibió el token de autenticación",
-                    timer: 8000,
-                });
-            } else {
-                setAuthSession({ token, user: response.data });
-                router.push("/profile");
-            }
+        // get the token from the response headers
+        const rawToken = response.authToken || "";
+        const token = rawToken.startsWith("Bearer ") ? rawToken.slice(7) : rawToken;
+
+        if (!token) {
+            return Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "No se recibió el token de autenticación",
+                timer: 8000,
+            });
         }
+
+        setAuthSession({ token, user: response.data });
+        router.push("/profile");
 
         setSubmitting(false);
     };
+
+    const handleGoogleLogin = useCallback(async ({ credential }) => {
+        const response = await usePostData("/auth/google", {
+            credential,
+        });
+
+        if (!response?.success) return;
+
+        // get the token from the response headers
+        const rawToken = response.authToken || "";
+        const token = rawToken.startsWith("Bearer ") ? rawToken.slice(7) : rawToken;
+
+        if (!token) {
+            return Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Error al iniciar sesión con Google",
+                timer: 8000,
+            });
+        }
+
+        setAuthSession({ token, user: response.data });
+        router.push("/");
+    }, []);
 
     return (
         <AuthSplitTemplate
@@ -99,9 +125,17 @@ export default function Login() {
                                     Olvidaste tu contraseña?
                                 </Link>
                             </div>
-                            <button className="btn btn-primary font-medium mt-4" disabled={submitting}>
+                            <button
+                                className="btn btn-primary font-medium mt-4"
+                                disabled={submitting}
+                            >
                                 {submitting ? "Ingresando..." : "Iniciar Sesión"}
                             </button>
+                            <div className="divider">O inicia con</div>
+                            <GoogleLogin
+                                onSuccess={handleGoogleLogin}
+                                onError={(error) => toast.error(error.message)}
+                            />
                         </div>
                     </form>
                 </AuthCard>
