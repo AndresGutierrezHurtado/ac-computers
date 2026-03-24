@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 
 // Application
 import com.accomputers.api.application.dtos.auth.ForgotPasswordDTO;
+import com.accomputers.api.application.dtos.auth.GoogleLoginDTO;
 import com.accomputers.api.application.dtos.auth.LoginDTO;
 import com.accomputers.api.application.dtos.auth.RegisterDTO;
 import com.accomputers.api.application.dtos.auth.SetPasswordDTO;
@@ -50,6 +51,13 @@ public class AuthController {
         ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("User registered successfully",
                 true, user);
 
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> googleLogin(@RequestBody @Valid GoogleLoginDTO googleLoginDTO) {
+        UserResponseDTO user = authServiceInterface.googleLogin(googleLoginDTO);
+        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<>("Login successful", true, user);
         return ResponseEntity.ok(responseDTO);
     }
 
