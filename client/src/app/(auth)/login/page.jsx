@@ -135,6 +135,7 @@ export default function Login() {
                             <GoogleLogin
                                 onSuccess={handleGoogleLogin}
                                 onError={(error) => toast.error(error.message)}
+                                useOneTap
                             />
                         </div>
                     </form>
