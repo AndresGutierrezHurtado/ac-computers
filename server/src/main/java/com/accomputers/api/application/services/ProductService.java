@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -112,14 +113,32 @@ public class ProductService implements ProductServiceInterface {
         Product savedProduct = productRepository.save(product);
 
         // upload images
-        if (productDTO.image() != null) {
-            if (!productDTO.image().isEmpty()) {
-                String url = fileManagerInterface.uploadFile(productDTO.image(), "/medias");
-                Image image = new Image(null, new Url(url), true, savedProduct.getId());
-                imageRepository.save(image);
-                savedProduct.setImages(List.of(image));
-            }
+        List<MultipartFile> images = productDTO.images();
+        List<MultipartFile> cleanedImages = images == null
+                ? List.of()
+                : images.stream()
+                        .filter(file -> file != null && !file.isEmpty())
+                        .collect(Collectors.toList());
+
+        if (cleanedImages.isEmpty()) {
+            throw new IllegalArgumentException("At least one image is required");
         }
+
+        int mainIndex = productDTO.mainImageIndex() != null ? productDTO.mainImageIndex() : 0;
+        if (mainIndex < 0 || mainIndex >= cleanedImages.size()) {
+            mainIndex = 0;
+        }
+
+        List<Image> savedImages = new ArrayList<>();
+        for (int i = 0; i < cleanedImages.size(); i++) {
+            MultipartFile file = cleanedImages.get(i);
+            String url = fileManagerInterface.uploadFile(file, "/medias");
+            boolean isMain = i == mainIndex;
+            Image image = new Image(null, new Url(url), isMain, savedProduct.getId());
+            Image savedImage = imageRepository.save(image);
+            savedImages.add(savedImage);
+        }
+        savedProduct.setImages(savedImages);
 
         // save product specifications
         List<ProductSpecification> productSpecifications = new ArrayList<>();
@@ -304,21 +323,91 @@ public class ProductService implements ProductServiceInterface {
             product.setProductSpecifications(productSpecifications);
         }
 
-        if (productDTO.image() != null && !productDTO.image().isEmpty()) {
-            List<Image> existingImages = imageRepository.findByProductId(product.getId());
-            for (Image img : existingImages) {
+        productRepository.save(product);
+
+        List<Image> existingImages = imageRepository.findByProductId(product.getId());
+        Map<Integer, Image> existingById = existingImages.stream()
+                .filter(img -> img.getId() != null)
+                .collect(Collectors.toMap(Image::getId, img -> img, (a, b) -> a));
+
+        // Remove selected images
+        List<Integer> removeImageIds = productDTO.removeImageIds();
+        if (removeImageIds != null && !removeImageIds.isEmpty()) {
+            for (Integer imageId : removeImageIds) {
+                Image img = existingById.get(imageId);
+                if (img == null) {
+                    continue;
+                }
                 if (img.getUrl() != null && img.getUrl().getValue() != null) {
                     fileManagerInterface.deleteFile(img.getUrl().getValue());
                 }
+                imageRepository.delete(imageId);
+                existingImages.remove(img);
+                existingById.remove(imageId);
             }
-            imageRepository.deleteByProductId(product.getId());
-            String url = fileManagerInterface.uploadFile(productDTO.image(), "/medias");
-            Image savedImage = imageRepository.save(
-                    new Image(null, new Url(url), true, product.getId()));
-            product.setImages(List.of(savedImage));
         }
 
-        productRepository.save(product);
+        boolean mainSelectionProvided = productDTO.mainImageId() != null || productDTO.mainImageIndex() != null;
+        if (mainSelectionProvided) {
+            imageRepository.setAllImagesAsNotMainByProductId(product.getId());
+            for (Image img : existingImages) {
+                img.setIsMain(false);
+            }
+        }
+
+        // Upload new images
+        List<MultipartFile> incomingImages = productDTO.images();
+        List<MultipartFile> cleanedImages = incomingImages == null
+                ? List.of()
+                : incomingImages.stream()
+                        .filter(file -> file != null && !file.isEmpty())
+                        .collect(Collectors.toList());
+
+        List<Image> savedNewImages = new ArrayList<>();
+        Integer mainImageIndex = productDTO.mainImageIndex();
+        for (int i = 0; i < cleanedImages.size(); i++) {
+            MultipartFile file = cleanedImages.get(i);
+            boolean isMain = mainImageIndex != null && mainImageIndex == i;
+            String url = fileManagerInterface.uploadFile(file, "/medias");
+            Image image = new Image(null, new Url(url), isMain, product.getId());
+            Image savedImage = imageRepository.save(image);
+            savedNewImages.add(savedImage);
+        }
+
+        // Mark an existing image as main if requested
+        Integer mainImageId = productDTO.mainImageId();
+        if (mainImageId != null) {
+            Image mainImage = imageRepository.findById(mainImageId);
+            if (mainImage == null) {
+                throw new EntityNotFoundException("Image", mainImageId);
+            }
+            if (!Objects.equals(mainImage.getProductId(), product.getId())) {
+                throw new IllegalArgumentException("Image does not belong to the product");
+            }
+            mainImage.setIsMain(true);
+            imageRepository.save(mainImage);
+            for (Image img : existingImages) {
+                if (Objects.equals(img.getId(), mainImageId)) {
+                    img.setIsMain(true);
+                } else if (mainSelectionProvided) {
+                    img.setIsMain(false);
+                }
+            }
+        }
+
+        // Ensure at least one main image exists when there are images
+        List<Image> finalImages = new ArrayList<>();
+        finalImages.addAll(existingImages);
+        finalImages.addAll(savedNewImages);
+        boolean hasMain = finalImages.stream().anyMatch(img -> Boolean.TRUE.equals(img.getIsMain()));
+        if (!hasMain && !finalImages.isEmpty()) {
+            imageRepository.setAllImagesAsNotMainByProductId(product.getId());
+            Image fallback = finalImages.get(0);
+            fallback.setIsMain(true);
+            imageRepository.save(fallback);
+        }
+
+        product.setImages(finalImages);
 
         loggerPort.info(String.format("Product updated successfully - ID: %d, Name: %s, Price: %.2f",
                 product.getId(), product.getName(), product.getPrice().getValue()));

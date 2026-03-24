@@ -38,8 +38,15 @@ public record createProductDTO(
                 @Positive(message = "SubCategory ID must be positive")
                 Integer subCategoryId,
                 
-                @NotNull(message = "Image is required")
-                MultipartFile image,
+                @NotNull(message = "Images are required")
+                @Size(min = 1, message = "At least one image is required")
+                List<MultipartFile> images,
+
+                List<Integer> removeImageIds,
+
+                Integer mainImageId,
+
+                Integer mainImageIndex,
                 
                 List<ProductSpecificationDTO> specifications) {
 
