@@ -50,53 +50,92 @@ A continuación se detallan los controladores disponibles y sus respectivas func
 
 Gestiona el acceso y la identidad de los usuarios en el sistema.
 
-| Método | Endpoint         | Descripción                                                  |
-| :----- | :--------------- | :----------------------------------------------------------- |
-| `POST` | `/auth/login`    | Inicia sesión y devuelve las credenciales del usuario (JWT). |
-| `POST` | `/auth/register` | Registra un nuevo usuario en la plataforma.                  |
-| `GET`  | `/auth/session`  | Recupera la información del usuario en la sesión actual.     |
-| `POST` | `/auth/logout`   | Finaliza la sesión activa de forma segura.                   |
+| Método | Endpoint                | Descripción                                                                    |
+| :----- | :---------------------- | :----------------------------------------------------------------------------- |
+| `POST` | `/auth/login`           | Inicia sesión y devuelve las credenciales del usuario (JWT).                   |
+| `POST` | `/auth/register`        | Registra un nuevo usuario en la plataforma.                                    |
+| `POST` | `/auth/google`          | Inicia sesión con Google y retorna la sesión creada.                           |
+| `GET`  | `/auth/session`         | Recupera la información del usuario en la sesión actual.                       |
+| `POST` | `/auth/logout`          | Finaliza la sesión activa de forma segura.                                     |
+| `POST` | `/auth/set-password`    | Define o actualiza la contraseña de un usuario.                                |
+| `POST` | `/auth/forgot-password` | Solicita el restablecimiento de contraseña y dispara el flujo de recuperación. |
 
 ### Productos (`/products`)
 
 El corazón del inventario, gestionando el catálogo y recomendaciones inteligentes.
 
-| Método   | Endpoint                    | Descripción                                                                              |
-| :------- | :-------------------------- | :--------------------------------------------------------------------------------------- |
-| `GET`    | `/products`                 | Lista productos con filtrado avanzado (categoría, marca, precio, descuento, etc.).       |
-| `GET`    | `/products/{id}`            | Obtiene el detalle completo de un producto específico.                                   |
-| `POST`   | `/products`                 | Crea un nuevo producto (incluye carga de imagen principal).                              |
-| `PUT`    | `/products/{id}`            | Actualiza la información técnica y comercial de un producto.                             |
-| `DELETE` | `/products/{id}`            | Elimina un producto del inventario.                                                      |
-| `POST`   | `/products/recommendations` | **IA Agent:** Genera recomendaciones basadas en el lenguaje del usuario y el stock real. |
+| Método   | Endpoint                  | Descripción                                                                                |
+| :------- | :------------------------ | :----------------------------------------------------------------------------------------- |
+| `GET`    | `/products`               | Lista productos con filtrado y paginación (categoría, marca, precio, descuento, etc.).     |
+| `GET`    | `/products/{id}`          | Obtiene el detalle completo de un producto específico.                                     |
+| `GET`    | `/products/{id}/overview` | Genera un resumen con IA del producto para vista rápida.                                   |
+| `POST`   | `/products`               | Crea un nuevo producto (incluye carga de imágenes y selección de principal).               |
+| `PUT`    | `/products/{id}`          | Actualiza la información técnica y comercial de un producto (incluye gestión de imágenes). |
+| `DELETE` | `/products/{id}`          | Elimina un producto del inventario.                                                        |
+| `POST`   | `/products/sales-chat`    | Devuelve una respuesta del asistente IA basada en el inventario y el contexto del cliente. |
 
 ### Usuarios (`/users`)
 
 Administración de perfiles y roles para el equipo interno.
 
-| Método   | Endpoint      | Descripción                                                            |
-| :------- | :------------ | :--------------------------------------------------------------------- |
-| `GET`    | `/users`      | Lista todos los usuarios con soporte para búsqueda y filtrado por rol. |
-| `GET`    | `/users/{id}` | Obtiene el perfil detallado de un usuario por su ID.                   |
-| `PUT`    | `/users/{id}` | Actualiza los datos de un usuario existente.                           |
-| `DELETE` | `/users/{id}` | Elimina un usuario del sistema (solo administradores).                 |
+| Método   | Endpoint        | Descripción                                                            |
+| :------- | :-------------- | :--------------------------------------------------------------------- |
+| `GET`    | `/users`        | Lista todos los usuarios con soporte para búsqueda y filtrado por rol. |
+| `GET`    | `/users/{id}`   | Obtiene el perfil detallado de un usuario por su ID.                   |
+| `POST`   | `/users/invite` | Invita un usuario y crea el registro inicial con su rol.               |
+| `PUT`    | `/users/{id}`   | Actualiza los datos de un usuario existente.                           |
+| `DELETE` | `/users/{id}`   | Elimina un usuario del sistema (solo administradores).                 |
+
+### Marcas (`/brands`)
+
+Catálogo de marcas asociadas a los productos.
+
+| Método | Endpoint  | Descripción                         |
+| :----- | :-------- | :---------------------------------- |
+| `GET`  | `/brands` | Lista todas las marcas registradas. |
+
+### Categorías (`/categories`)
+
+Listado de categorías principales del catálogo.
+
+| Método | Endpoint      | Descripción                             |
+| :----- | :------------ | :-------------------------------------- |
+| `GET`  | `/categories` | Lista todas las categorías registradas. |
+
+### Subcategorías (`/subcategories`)
+
+Subdivisiones de categorías usadas para clasificar productos.
+
+| Método | Endpoint                         | Descripción                                                 |
+| :----- | :------------------------------- | :---------------------------------------------------------- |
+| `GET`  | `/subcategories`                 | Lista todas las subcategorías disponibles.                  |
+| `GET`  | `/subcategories?categoryId={id}` | Lista subcategorías filtrando por una categoría específica. |
+
+### Especificaciones (`/specifications`)
+
+Metadatos técnicos y sus posibles valores, usados para describir productos.
+
+| Método | Endpoint                                     | Descripción                                                       |
+| :----- | :------------------------------------------- | :---------------------------------------------------------------- |
+| `GET`  | `/specifications`                            | Lista especificaciones, opcionalmente filtradas por subcategoría. |
+| `GET`  | `/specification-values?specificationId={id}` | Lista valores para una especificación específica.                 |
 
 ### Gestión de Imágenes (`/images`)
 
 Control persistente de los recursos visuales alojados en la nube.
 
-| Método   | Endpoint       | Descripción                                            |
-| :------- | :------------- | :----------------------------------------------------- |
-| `POST`   | `/images`      | Carga una nueva imagen asociada a un producto.         |
-| `DELETE` | `/images/{id}` | Elimina permanentemente una imagen del almacenamiento. |
+| Método   | Endpoint       | Descripción                                                                    |
+| :------- | :------------- | :----------------------------------------------------------------------------- |
+| `POST`   | `/images`      | Carga una nueva imagen asociada a un producto (incluye `productId` e `image`). |
+| `DELETE` | `/images/{id}` | Elimina permanentemente una imagen del almacenamiento.                         |
 
 ### Catálogos PDF (`/pdf`)
 
 Generación dinámica de documentos listos para su distribución.
 
-| Método | Endpoint        | Descripción                                                                    |
-| :----- | :-------------- | :----------------------------------------------------------------------------- |
-| `POST` | `/pdf/generate` | Genera y retorna un flujo de bytes con el catálogo de productos actual en PDF. |
+| Método | Endpoint        | Descripción                                                                       |
+| :----- | :-------------- | :-------------------------------------------------------------------------------- |
+| `POST` | `/pdf/generate` | Genera y retorna un catálogo en PDF (acepta filtros por `type` y/o `categoryId`). |
 
 ### Contacto (`/contact`)
 

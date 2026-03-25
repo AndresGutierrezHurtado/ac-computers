@@ -35,10 +35,6 @@ import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-
-    private static final String RECOMMENDATIONS_PLACEHOLDER =
-            "El asistente de recomendaciones no está disponible en este momento. Vuelve a intentarlo más tarde.";
-
     private final ProductServiceInterface productServiceInterface;
 
     @Autowired
@@ -181,7 +177,7 @@ public class ProductController {
         ProductResponseDTO product = productServiceInterface.updateProduct(id, productDTOWithImage);
 
         ResponseDTO<ProductResponseDTO> responseDTO = new ResponseDTO<>(
-                "Product updated successfully",
+                "Producto actualizado exitosamente",
                 true,
                 product);
 
@@ -211,7 +207,7 @@ public class ProductController {
         productServiceInterface.deleteProduct(id);
 
         ResponseDTO<Void> responseDTO = new ResponseDTO<>(
-                "Product deleted successfully",
+                "Producto eliminado exitosamente",
                 true);
 
         return ResponseEntity.ok(responseDTO);
@@ -221,23 +217,8 @@ public class ProductController {
     public ResponseEntity<ResponseDTO<SalesChatResponse>> salesChat(@Valid @RequestBody SalesChatRequest request) {
         SalesChatResponse response = productServiceInterface.chat(request);
         return ResponseEntity.ok(new ResponseDTO<>(
-                "Assistant reply",
+                "Respuesta del asistente",
                 true,
                 response));
-    }
-
-    @PostMapping("/recommendations")
-    public ResponseEntity<ResponseDTO<String>> getProductRecommendations(@RequestBody String request) {
-        if (!StringUtils.hasText(request != null ? request.trim() : null)) {
-            return ResponseEntity.badRequest()
-                    .body(new ResponseDTO<>("La petición no puede estar vacía", false, null));
-        }
-
-        ResponseDTO<String> responseDTO = new ResponseDTO<>(
-                "Product recommendations placeholder",
-                true,
-                RECOMMENDATIONS_PLACEHOLDER);
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 }
