@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.util.MultiValueMap;
 
 // Application
 import com.accomputers.api.application.dtos.response.ProductAiOverviewResponse;
@@ -46,8 +49,14 @@ public class ProductController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDTO<ProductResponseDTO>> createProduct(
         @ModelAttribute @Valid createProductDTO productDTO,
-        @RequestParam("image") MultipartFile image
+        @RequestParam("images") List<MultipartFile> images,
+        @RequestParam(value = "mainImageId", required = false) Integer mainImageId,
+        @RequestParam(value = "mainImageIndex", required = false) Integer mainImageIndex
     ) {
+        List<MultipartFile> resolvedImages = images != null ? images : productDTO.images();
+        Integer resolvedMainImageId = mainImageId != null ? mainImageId : productDTO.mainImageId();
+        Integer resolvedMainImageIndex = mainImageIndex != null ? mainImageIndex : productDTO.mainImageIndex();
+
         createProductDTO productDTOWithImage = new createProductDTO(
             productDTO.name(),
             productDTO.description(),
@@ -56,7 +65,10 @@ public class ProductController {
             productDTO.discount(),
             productDTO.brandId(),
             productDTO.subCategoryId(),
-            image,
+            resolvedImages,
+            null,
+            resolvedMainImageId,
+            resolvedMainImageIndex,
             productDTO.specifications()
         );
         
@@ -133,7 +145,24 @@ public class ProductController {
     public ResponseEntity<ResponseDTO<ProductResponseDTO>> updateProduct(
             @PathVariable Integer id,
             @ModelAttribute createProductDTO productDTO,
-            @RequestParam(value = "image", required = false) MultipartFile image) {
+            @RequestParam(value = "images", required = false) List<MultipartFile> images,
+            @RequestParam(value = "removeImageIds", required = false) List<Integer> removeImageIds,
+            @RequestParam(value = "mainImageId", required = false) Integer mainImageId,
+            @RequestParam(value = "mainImageIndex", required = false) Integer mainImageIndex,
+            @RequestParam MultiValueMap<String, String> params) {
+        List<MultipartFile> resolvedImages = images != null ? images : productDTO.images();
+        List<Integer> resolvedRemoveImageIds = removeImageIds != null
+                ? removeImageIds
+                : productDTO.removeImageIds();
+        Integer resolvedMainImageId = mainImageId != null ? mainImageId : productDTO.mainImageId();
+        Integer resolvedMainImageIndex = mainImageIndex != null ? mainImageIndex : productDTO.mainImageIndex();
+
+        if (resolvedRemoveImageIds == null || resolvedRemoveImageIds.isEmpty()) {
+            resolvedRemoveImageIds = parseIntegerList(params.get("removeImageIds"));
+            if (resolvedRemoveImageIds.isEmpty()) {
+                resolvedRemoveImageIds = parseIntegerList(params.get("removeImageIds[]"));
+            }
+        }
 
         createProductDTO productDTOWithImage = new createProductDTO(
                 productDTO.name(),
@@ -143,7 +172,10 @@ public class ProductController {
                 productDTO.discount(),
                 productDTO.brandId(),
                 productDTO.subCategoryId(),
-                image,
+                resolvedImages,
+                resolvedRemoveImageIds,
+                resolvedMainImageId,
+                resolvedMainImageIndex,
                 productDTO.specifications());
 
         ProductResponseDTO product = productServiceInterface.updateProduct(id, productDTOWithImage);
@@ -154,6 +186,24 @@ public class ProductController {
                 product);
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+    private static List<Integer> parseIntegerList(List<String> values) {
+        if (values == null || values.isEmpty()) {
+            return List.of();
+        }
+        return values.stream()
+                .filter(StringUtils::hasText)
+                .map(String::trim)
+                .map(value -> {
+                    try {
+                        return Integer.valueOf(value);
+                    } catch (NumberFormatException ex) {
+                        return null;
+                    }
+                })
+                .filter(java.util.Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
