@@ -40,7 +40,10 @@ export default function AdminProductModal({
     onDelete,
 }) {
     const [form, setForm] = useState(emptyForm);
-    const [imageFile, setImageFile] = useState(null);
+    const [existingImages, setExistingImages] = useState([]);
+    const [newImages, setNewImages] = useState([]);
+    const [removedImageIds, setRemovedImageIds] = useState([]);
+    const [mainSelection, setMainSelection] = useState(null);
     const [specs, setSpecs] = useState([]);
     const [submitting, setSubmitting] = useState(false);
 
@@ -69,8 +72,14 @@ export default function AdminProductModal({
         if (!open) return;
         if (!product) {
             setForm(emptyForm);
-            setImageFile(null);
             setSpecs([{ id: "", specificationId: "", value: "", specificationValueId: "" }]);
+            setExistingImages([]);
+            setRemovedImageIds([]);
+            setNewImages((prev) => {
+                prev.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+                return [];
+            });
+            setMainSelection(null);
             return;
         }
 
@@ -92,9 +101,31 @@ export default function AdminProductModal({
             specificationValueId: "",
         }));
 
-        setSpecs(mappedSpecs.length > 0 ? mappedSpecs : [{ id: "", specificationId: "", value: "", specificationValueId: "" }]);
-        setImageFile(null);
+        setSpecs(
+            mappedSpecs.length > 0
+                ? mappedSpecs
+                : [{ id: "", specificationId: "", value: "", specificationValueId: "" }],
+        );
+        const images = product.images || [];
+        setExistingImages(images);
+        setRemovedImageIds([]);
+        setNewImages((prev) => {
+            prev.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+            return [];
+        });
+        const mainImage = images.find((img) => img.isMain) || images[0];
+        setMainSelection(mainImage ? { kind: "existing", id: mainImage.id } : null);
     }, [open, product]);
+
+    useEffect(() => {
+        if (open) return;
+        setNewImages((prev) => {
+            prev.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+            return [];
+        });
+        setRemovedImageIds([]);
+        setMainSelection(null);
+    }, [open]);
 
     useEffect(() => {
         if (!form.categoryId) return;
@@ -109,6 +140,86 @@ export default function AdminProductModal({
 
     const handleChange = (field) => (event) => {
         setForm((prev) => ({ ...prev, [field]: event.target.value }));
+    };
+
+    const handleAddImages = (event) => {
+        const files = Array.from(event.target.files || []);
+        if (files.length === 0) return;
+        const mapped = files
+            .filter((file) => file && file.size > 0)
+            .map((file) => ({
+                file,
+                previewUrl: URL.createObjectURL(file),
+            }));
+        if (mapped.length === 0) return;
+
+        setNewImages((prev) => {
+            const next = [...prev, ...mapped];
+            if (!mainSelection && existingImages.length === 0) {
+                setMainSelection({ kind: "new", index: prev.length });
+            }
+            return next;
+        });
+
+        event.target.value = "";
+    };
+
+    const handleRemoveExistingImage = (imageId) => {
+        setExistingImages((prev) => {
+            const next = prev.filter((img) => img.id !== imageId);
+            setRemovedImageIds((prevIds) => [...prevIds, imageId]);
+            setMainSelection((current) => {
+                if (!current) return current;
+                if (current.kind === "existing" && current.id === imageId) {
+                    if (next.length > 0) {
+                        return { kind: "existing", id: next[0].id };
+                    }
+                    if (newImages.length > 0) {
+                        return { kind: "new", index: 0 };
+                    }
+                    return null;
+                }
+                return current;
+            });
+            return next;
+        });
+    };
+
+    const handleRemoveNewImage = (index) => {
+        setNewImages((prev) => {
+            const target = prev[index];
+            if (target?.previewUrl) {
+                URL.revokeObjectURL(target.previewUrl);
+            }
+            const next = prev.filter((_, i) => i !== index);
+            setMainSelection((current) => {
+                if (!current) return current;
+                if (current.kind === "new") {
+                    if (current.index === index) {
+                        if (existingImages.length > 0) {
+                            return { kind: "existing", id: existingImages[0].id };
+                        }
+                        if (next.length > 0) {
+                            return { kind: "new", index: 0 };
+                        }
+                        return null;
+                    }
+                    if (current.index > index) {
+                        return { ...current, index: current.index - 1 };
+                    }
+                }
+                return current;
+            });
+            return next;
+        });
+    };
+
+    const handleSelectExistingMain = (id) => {
+        setMainSelection({ kind: "existing", id });
+    };
+
+    const handleSelectNewMain = (index) => {
+        setMainSelection({ kind: "new", index });
     };
 
     const handleSpecChange = (index, nextSpec) => {
@@ -169,8 +280,19 @@ export default function AdminProductModal({
         formData.append("brandId", form.brandId);
         formData.append("subCategoryId", form.subCategoryId);
 
-        if (imageFile) {
-            formData.append("image", imageFile);
+        newImages.forEach((image) => {
+            formData.append("images", image.file);
+        });
+
+        Array.from(new Set(removedImageIds)).forEach((id) => {
+            formData.append("removeImageIds", id);
+        });
+
+        if (mainSelection?.kind === "existing" && mainSelection.id) {
+            formData.append("mainImageId", mainSelection.id);
+        }
+        if (mainSelection?.kind === "new" && Number.isInteger(mainSelection.index)) {
+            formData.append("mainImageIndex", mainSelection.index);
         }
 
         specList.forEach((spec, index) => {
@@ -180,7 +302,10 @@ export default function AdminProductModal({
             formData.append(`specifications[${index}].specificationId`, spec.specificationId);
             formData.append(`specifications[${index}].value`, spec.value);
             if (spec.specificationValueId) {
-                formData.append(`specifications[${index}].specificationValueId`, spec.specificationValueId);
+                formData.append(
+                    `specifications[${index}].specificationValueId`,
+                    spec.specificationValueId,
+                );
             }
         });
 
@@ -210,11 +335,11 @@ export default function AdminProductModal({
             return;
         }
 
-        if (mode === "create" && !imageFile) {
+        if (mode === "create" && newImages.length === 0) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "Debes cargar una imagen principal",
+                text: "Debes cargar al menos una imagen",
                 timer: 8000,
             });
             setSubmitting(false);
@@ -390,20 +515,109 @@ export default function AdminProductModal({
                     disabled={readOnly}
                     className="select-sm select-bordered"
                 />
-                <fieldset className="fieldset">
-                    <label className="label">
-                        <span className="label-text font-semibold">
-                            Imagen principal{mode === "create" ? " *" : ""}
-                        </span>
-                    </label>
-                    <input
-                        type="file"
-                        className="file-input file-input-bordered file-input-sm w-full"
-                        onChange={(event) => setImageFile(event.target.files?.[0] || null)}
-                        disabled={readOnly}
-                        accept="image/*"
-                    />
-                </fieldset>
+                <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                        <h4 className="text-lg font-semibold">
+                            Imágenes{mode === "create" ? " *" : ""}
+                        </h4>
+                    </div>
+                    {!readOnly ? (
+                        <input
+                            type="file"
+                            className="file-input file-input-bordered file-input-sm w-full"
+                            onChange={handleAddImages}
+                            accept="image/*"
+                            multiple
+                        />
+                    ) : null}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {existingImages.map((img) => {
+                            const isMain =
+                                mainSelection?.kind === "existing" && mainSelection.id === img.id;
+                            return (
+                                <div key={`existing-${img.id}`} className="border rounded-lg p-2">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md bg-base-200">
+                                        <img
+                                            src={img.url || "/placeholder-image.png"}
+                                            alt={img.id ? `Imagen ${img.id}` : "Imagen"}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="mt-2 flex items-center justify-between gap-2 text-sm">
+                                        <label className="flex items-center gap-2">
+                                            <input
+                                                type="radio"
+                                                name="mainImage"
+                                                checked={isMain}
+                                                onChange={() => handleSelectExistingMain(img.id)}
+                                                disabled={readOnly}
+                                            />
+                                            Principal
+                                        </label>
+                                        {!readOnly ? (
+                                            <button
+                                                type="button"
+                                                className="btn btn-ghost btn-xs text-red-400"
+                                                onClick={() => handleRemoveExistingImage(img.id)}
+                                            >
+                                                Eliminar
+                                            </button>
+                                        ) : isMain ? (
+                                            <span className="text-xs font-semibold text-primary">
+                                                Principal
+                                            </span>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                        {newImages.map((img, index) => {
+                            const isMain =
+                                mainSelection?.kind === "new" && mainSelection.index === index;
+                            return (
+                                <div key={`new-${index}`} className="border rounded-lg p-2">
+                                    <div className="aspect-video w-full overflow-hidden rounded-md bg-base-200">
+                                        <img
+                                            src={img.previewUrl}
+                                            alt={`Imagen nueva ${index + 1}`}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="mt-2 flex items-center justify-between gap-2 text-sm">
+                                        <label className="flex items-center gap-2">
+                                            <input
+                                                type="radio"
+                                                name="mainImage"
+                                                checked={isMain}
+                                                onChange={() => handleSelectNewMain(index)}
+                                                disabled={readOnly}
+                                            />
+                                            Principal
+                                        </label>
+                                        {!readOnly ? (
+                                            <button
+                                                type="button"
+                                                className="btn btn-ghost btn-xs text-red-400"
+                                                onClick={() => handleRemoveNewImage(index)}
+                                            >
+                                                Eliminar
+                                            </button>
+                                        ) : isMain ? (
+                                            <span className="text-xs font-semibold text-primary">
+                                                Principal
+                                            </span>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                        {existingImages.length === 0 && newImages.length === 0 ? (
+                            <div className="col-span-full text-sm text-center text-base-content/70">
+                                No hay imágenes cargadas.
+                            </div>
+                        ) : null}
+                    </div>
+                </div>
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
                         <h4 className="text-lg font-semibold">Especificaciones</h4>
