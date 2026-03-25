@@ -25,9 +25,6 @@ import com.accomputers.api.infrastructure.http.responses.ResponseDTO;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private static final String FORGOT_PASSWORD_MESSAGE =
-            "Si el correo está registrado, recibirás instrucciones en breve.";
-
     private final AuthServiceInterface authServiceInterface;
 
     @Autowired
@@ -39,7 +36,7 @@ public class AuthController {
     public ResponseEntity<ResponseDTO<UserResponseDTO>> login(@RequestBody @Valid LoginDTO loginDTO) {
         UserResponseDTO user = authServiceInterface.login(loginDTO);
 
-        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("Login successful", true, user);
+        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("Inicio de sesión exitoso", true, user);
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -48,7 +45,7 @@ public class AuthController {
     public ResponseEntity<ResponseDTO<UserResponseDTO>> register(@RequestBody @Valid RegisterDTO registerDTO) {
         UserResponseDTO user = authServiceInterface.register(registerDTO);
 
-        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("User registered successfully",
+        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("Usuario registrado exitosamente",
                 true, user);
 
         return ResponseEntity.ok(responseDTO);
@@ -57,7 +54,7 @@ public class AuthController {
     @PostMapping("/google")
     public ResponseEntity<ResponseDTO<UserResponseDTO>> googleLogin(@RequestBody @Valid GoogleLoginDTO googleLoginDTO) {
         UserResponseDTO user = authServiceInterface.googleLogin(googleLoginDTO);
-        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<>("Login successful", true, user);
+        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<>("Inicio de sesión exitoso", true, user);
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -65,7 +62,7 @@ public class AuthController {
     public ResponseEntity<ResponseDTO<UserResponseDTO>> getSession() {
         UserResponseDTO user = authServiceInterface.getSession();
 
-        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("Session retrieved successfully",
+        ResponseDTO<UserResponseDTO> responseDTO = new ResponseDTO<UserResponseDTO>("Sesión obtenida exitosamente",
                 true, user);
 
         return ResponseEntity.ok(responseDTO);
@@ -75,7 +72,7 @@ public class AuthController {
     public ResponseEntity<ResponseDTO<Void>> logout() {
         authServiceInterface.logout();
 
-        ResponseDTO<Void> responseDTO = new ResponseDTO<Void>("Logout successful", true);
+        ResponseDTO<Void> responseDTO = new ResponseDTO<Void>("Cierre de sesión exitoso", true);
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -84,7 +81,7 @@ public class AuthController {
     public ResponseEntity<ResponseDTO<Void>> setPassword(@RequestBody @Valid SetPasswordDTO setPasswordDTO) {
         authServiceInterface.setPassword(setPasswordDTO);
 
-        ResponseDTO<Void> responseDTO = new ResponseDTO<Void>("Password updated successfully", true);
+        ResponseDTO<Void> responseDTO = new ResponseDTO<Void>("Contraseña actualizada exitosamente", true);
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -93,7 +90,7 @@ public class AuthController {
     public ResponseEntity<ResponseDTO<Void>> forgotPassword(@RequestBody @Valid ForgotPasswordDTO forgotPasswordDTO) {
         authServiceInterface.requestPasswordReset(forgotPasswordDTO);
 
-        ResponseDTO<Void> responseDTO = new ResponseDTO<Void>(FORGOT_PASSWORD_MESSAGE, true);
+        ResponseDTO<Void> responseDTO = new ResponseDTO<Void>("Solicitud de restablecimiento de contraseña exitosa", true);
 
         return ResponseEntity.ok(responseDTO);
     }

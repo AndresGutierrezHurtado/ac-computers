@@ -79,7 +79,6 @@ public class SecurityConfig {
 
                         // Products (public catalog)
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/products/recommendations").permitAll()
                         .requestMatchers(HttpMethod.POST, "/products/sales-chat").permitAll()
                         .requestMatchers(HttpMethod.GET, "/brands/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()

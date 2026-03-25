@@ -30,7 +30,7 @@ public class SpecificationController {
         List<SpecificationResponseDTO> specs = specificationServiceInterface.getSpecifications(subCategoryId);
 
         ResponseDTO<List<SpecificationResponseDTO>> responseDTO = new ResponseDTO<>(
-                "Specifications retrieved successfully",
+                "Especificaciones obtenidas exitosamente",
                 true,
                 specs);
 
@@ -43,7 +43,7 @@ public class SpecificationController {
         List<SpecificationValueResponseDTO> values = specificationServiceInterface.getSpecificationValues(specificationId);
 
         ResponseDTO<List<SpecificationValueResponseDTO>> responseDTO = new ResponseDTO<>(
-                "Specification values retrieved successfully",
+                "Valores de especificación obtenidos exitosamente",
                 true,
                 values);
 

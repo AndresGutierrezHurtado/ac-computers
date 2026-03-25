@@ -27,7 +27,7 @@ public class CategoryController {
         List<CategoryResponseDTO> categories = categoryServiceInterface.getAllCategories();
 
         ResponseDTO<List<CategoryResponseDTO>> responseDTO = new ResponseDTO<>(
-                "Categories retrieved successfully",
+                "Categorías obtenidas exitosamente",
                 true,
                 categories);
 

@@ -29,7 +29,7 @@ public class SubCategoryController {
         List<SubCategoryDTO> subCategories = subCategoryServiceInterface.getAllSubCategories(categoryId);
 
         ResponseDTO<List<SubCategoryDTO>> responseDTO = new ResponseDTO<>(
-                "SubCategories retrieved successfully",
+                "Subcategorías obtenidas exitosamente",
                 true,
                 subCategories);
 

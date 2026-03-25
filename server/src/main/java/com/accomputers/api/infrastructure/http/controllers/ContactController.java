@@ -31,7 +31,7 @@ public class ContactController {
         contactServiceInterface.sendContactFeedback(contactDTO);
 
         ResponseDTO<Void> responseDTO = new ResponseDTO<>(
-                "Contact feedback sent successfully",
+                "Feedback de contacto enviado exitosamente",
                 true);
 
         return ResponseEntity.ok(responseDTO);

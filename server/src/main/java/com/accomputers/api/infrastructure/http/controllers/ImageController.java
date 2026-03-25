@@ -39,7 +39,7 @@ public class ImageController {
         ImageResponseDTO createdImage = imageServiceInterface.createImage(imageDTO);
 
         ResponseDTO<ImageResponseDTO> responseDTO = new ResponseDTO<>(
-                "Image created successfully",
+                "Imagen creada exitosamente",
                 true,
                 createdImage);
 
@@ -51,7 +51,7 @@ public class ImageController {
         imageServiceInterface.deleteImage(id);
 
         ResponseDTO<Void> responseDTO = new ResponseDTO<>(
-                "Image deleted successfully",
+                "Imagen eliminada exitosamente",
                 true);
 
         return ResponseEntity.ok(responseDTO);

@@ -27,7 +27,7 @@ public class BrandController {
         List<BrandResponseDTO> brands = brandServiceInterface.getAllBrands();
 
         ResponseDTO<List<BrandResponseDTO>> responseDTO = new ResponseDTO<>(
-                "Brands retrieved successfully",
+                "Marcas obtenidas exitosamente",
                 true,
                 brands);
 
