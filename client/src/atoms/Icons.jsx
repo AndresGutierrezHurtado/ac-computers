@@ -13,6 +13,9 @@ import {
     FaUsers as UsersIcon,
     FaUser as UserIcon,
     FaRobot as RobotIcon,
+    FaSignInAlt as LoginIcon,
+    FaLink as LinkIcon,
+    FaUserPlus as UserPlusIcon,
 } from "react-icons/fa";
 import {
     MdFileUpload as UploadIcon,
@@ -64,4 +67,7 @@ export {
     ChevronLeftIcon,
     ChevronRightIcon,
     PlusIcon,
+    LoginIcon,
+    LinkIcon,
+    UserPlusIcon,
 };

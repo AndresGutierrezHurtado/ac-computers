@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
 
+import Button from "@/atoms/Button";
 import TextField from "@/molecules/TextField";
 import AuthCard from "@/organisms/AuthCard";
 import AuthPromo from "@/organisms/AuthPromo";
@@ -15,6 +16,8 @@ import AuthSplitTemplate from "@/templates/AuthSplitTemplate";
 import { usePostData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
 import { setAuthSession } from "@/hooks/useAuthSession";
+import { LoginIcon } from "@/atoms/Icons";
+import Divider from "@/atoms/Divider";
 
 export default function Login() {
     const router = useRouter();
@@ -106,7 +109,6 @@ export default function Login() {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="input-bordered w-full"
                             />
                             <TextField
                                 label="Contraseña:"
@@ -115,7 +117,7 @@ export default function Login() {
                                 type="password"
                                 autoComplete="current-password"
                                 required
-                                className="input-bordered w-full"
+                                togglePassword
                             />
                             <div>
                                 <Link
@@ -125,13 +127,15 @@ export default function Login() {
                                     Olvidaste tu contraseña?
                                 </Link>
                             </div>
-                            <button
-                                className="btn btn-primary font-medium mt-4"
+                            <Button
+                                type="submit"
+                                className="btn-primary font-medium mt-4 w-full"
                                 disabled={submitting}
+                                leftIcon={<LoginIcon size={16} />}
                             >
                                 {submitting ? "Ingresando..." : "Iniciar Sesión"}
-                            </button>
-                            <div className="divider">O inicia con</div>
+                            </Button>
+                            <Divider text="O inicia con" />
                             <GoogleLogin
                                 onSuccess={handleGoogleLogin}
                                 onError={(error) => toast.error(error.message)}

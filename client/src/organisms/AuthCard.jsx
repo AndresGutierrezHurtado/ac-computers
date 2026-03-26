@@ -8,9 +8,9 @@ export default function AuthCard({ title, subtitle, brandHref, children }) {
     return (
         <div className="card bg-base-100 w-full max-w-[500px] shrink-0 shadow-2xl">
             <div className="card-body flex flex-col gap-2 p-10 px-7">
-                <div>
+                <div className="space-y-2 mb-4">
                     {brandHref ? (
-                        <Link href={brandHref} aria-label="Ir al inicio">
+                        <Link href={brandHref} aria-label="Ir al inicio" className="block">
                             {brand}
                         </Link>
                     ) : (
