@@ -21,6 +21,8 @@ import {
     MdFileUpload as UploadIcon,
     MdModeEditOutline as EditIcon,
     MdFileDownload as DownloadIcon,
+    MdOutlineEmail as EnvelopeIcon,
+    MdLock as LockIcon,
 } from "react-icons/md";
 import {
     IoSearch as SearchIcon,
@@ -70,4 +72,6 @@ export {
     LoginIcon,
     LinkIcon,
     UserPlusIcon,
+    EnvelopeIcon,
+    LockIcon,
 };

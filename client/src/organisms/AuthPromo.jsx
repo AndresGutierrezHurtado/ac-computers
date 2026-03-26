@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { UserPlusIcon } from "@/atoms/Icons";
+import { LoginIcon, UserPlusIcon } from "@/atoms/Icons";
 import Button from "@/atoms/Button";
 
 export default function AuthPromo({ title, description, linkHref, linkLabel, align = "left" }) {
@@ -16,7 +16,13 @@ export default function AuthPromo({ title, description, linkHref, linkLabel, ali
             <Link href={linkHref}>
                 <Button
                     className="btn-primary btn-outline btn-wide font-medium"
-                    leftIcon={<UserPlusIcon size={16} />}
+                    leftIcon={
+                        linkHref === "/register" ? (
+                            <UserPlusIcon size={16} />
+                        ) : (
+                            <LoginIcon size={16} />
+                        )
+                    }
                 >
                     {linkLabel}
                 </Button>
