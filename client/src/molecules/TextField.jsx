@@ -2,17 +2,19 @@ import React from "react";
 import Input from "@/atoms/Input";
 
 export default function TextField({
-    label,
-    placeholder,
+    id,
     name,
     value,
     defaultValue,
     onChange,
-    disabled = false,
-    type = "text",
+    label,
+    placeholder,
     autoComplete,
-    required = false,
-    className = "",
+    type,
+    className,
+    disabled,
+    required,
+    togglePassword,
 }) {
     return (
         <div className="fieldset">
@@ -25,6 +27,7 @@ export default function TextField({
                 ) : null}
             </label>
             <Input
+                id={id}
                 type={type}
                 name={name}
                 autoComplete={autoComplete}
@@ -33,6 +36,7 @@ export default function TextField({
                 {...(value !== undefined ? { value } : { defaultValue })}
                 onChange={onChange}
                 disabled={disabled}
+                togglePassword={togglePassword}
                 className={className}
             />
         </div>
