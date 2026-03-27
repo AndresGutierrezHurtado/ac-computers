@@ -4,6 +4,7 @@ import com.accomputers.api.application.dtos.ChatMessageDto;
 import com.accomputers.api.application.dtos.SalesChatResponse;
 
 import java.util.List;
+import reactor.core.publisher.Flux;
 
 /**
  * Output port for AI: embeddings and sales chat (see infrastructure for models/tools).
@@ -29,5 +30,5 @@ public interface AIPort {
      *
      * @param productContextText facts about one product; must not be null
      */
-    String generateProductOverview(String productContextText);
+    Flux<String> generateProductOverview(String productContextText);
 }

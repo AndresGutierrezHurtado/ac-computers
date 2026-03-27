@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import reactor.core.publisher.Flux;
 
 @Component
 public class AIPortImpl implements AIPort {
@@ -67,10 +68,10 @@ public class AIPortImpl implements AIPort {
     }
 
     @Override
-    public String generateProductOverview(String productContextText) {
+    public Flux<String> generateProductOverview(String productContextText) {
         return productOverviewChatClient.prompt()
                 .user(productContextText)
-                .call()
+                .stream()
                 .content();
     }
 }
