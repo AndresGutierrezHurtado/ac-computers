@@ -7,6 +7,8 @@ import Swal from "sweetalert2";
 import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
 
+import { LoginIcon } from "@/atoms/Icons";
+import Divider from "@/atoms/Divider";
 import Button from "@/atoms/Button";
 import TextField from "@/molecules/TextField";
 import AuthCard from "@/organisms/AuthCard";
@@ -16,12 +18,13 @@ import AuthSplitTemplate from "@/templates/AuthSplitTemplate";
 import { usePostData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
 import { setAuthSession } from "@/hooks/useAuthSession";
-import { LoginIcon } from "@/atoms/Icons";
-import Divider from "@/atoms/Divider";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Login() {
     const router = useRouter();
     const [submitting, setSubmitting] = useState(false);
+
+    usePageTitle("Iniciar sesión");
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -101,7 +104,7 @@ export default function Login() {
             right={
                 <AuthCard title="AC COMPUTERS" subtitle="Iniciar Sesión" brandHref="/">
                     <form onSubmit={handleSubmit}>
-                        <div className="space-y-4">
+                        <div className="space-y-2">
                             <TextField
                                 label="Correo electrónico:"
                                 name="user_email"
@@ -127,20 +130,22 @@ export default function Login() {
                                     Olvidaste tu contraseña?
                                 </Link>
                             </div>
-                            <Button
-                                type="submit"
-                                className="btn-primary font-medium mt-4 w-full"
-                                disabled={submitting}
-                                leftIcon={<LoginIcon size={16} />}
-                            >
-                                {submitting ? "Ingresando..." : "Iniciar Sesión"}
-                            </Button>
-                            <Divider text="O inicia con" />
-                            <GoogleLogin
-                                onSuccess={handleGoogleLogin}
-                                onError={(error) => toast.error(error.message)}
-                                useOneTap
-                            />
+                            <div className="space-y-4">
+                                <Button
+                                    type="submit"
+                                    className="btn-primary font-medium mt-4 w-full"
+                                    disabled={submitting}
+                                    leftIcon={<LoginIcon size={16} />}
+                                >
+                                    {submitting ? "Ingresando..." : "Iniciar Sesión"}
+                                </Button>
+                                <Divider text="O inicia con" />
+                                <GoogleLogin
+                                    onSuccess={handleGoogleLogin}
+                                    onError={(error) => toast.error(error.message)}
+                                    useOneTap
+                                />
+                            </div>
                         </div>
                     </form>
                 </AuthCard>

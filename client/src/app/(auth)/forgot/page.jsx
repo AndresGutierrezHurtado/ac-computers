@@ -2,12 +2,18 @@
 
 import { useState } from "react";
 
+import { EnvelopeIcon } from "@/atoms/Icons";
+import Button from "@/atoms/Button";
 import TextField from "@/molecules/TextField";
+
 import { usePostData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function ForgotPage() {
     const [submitting, setSubmitting] = useState(false);
+
+    usePageTitle("Recuperar contraseña");
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -49,13 +55,15 @@ export default function ForgotPage() {
                                 className="input-bordered w-full"
                             />
                             <div className="w-full">
-                                <button
+                                <Button
                                     type="submit"
                                     className="btn btn-primary btn-wide font-medium"
                                     disabled={submitting}
+                                    loading={submitting}
+                                    leftIcon={<EnvelopeIcon size={16} />}
                                 >
-                                    {submitting ? "Enviando..." : "Recuperar contraseña"}
-                                </button>
+                                    Recuperar cuenta
+                                </Button>
                             </div>
                         </form>
                     </div>

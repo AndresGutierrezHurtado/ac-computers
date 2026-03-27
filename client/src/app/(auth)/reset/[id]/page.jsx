@@ -1,6 +1,12 @@
+"use client";
+
 import TextField from "@/molecules/TextField";
 
+import { usePageTitle } from "@/hooks/usePageTitle";
+
 export default function ResetPage() {
+    usePageTitle("Cambiar contraseña");
+
     return (
         <>
             <section className="w-full px-4 mt-[100px]">

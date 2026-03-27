@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { UserPlusIcon } from "@/atoms/Icons";
+import Button from "@/atoms/Button";
 import TextField from "@/molecules/TextField";
 import AuthCard from "@/organisms/AuthCard";
 import AuthPromo from "@/organisms/AuthPromo";
@@ -10,10 +12,13 @@ import AuthSplitTemplate from "@/templates/AuthSplitTemplate";
 
 import { usePostData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Register() {
     const router = useRouter();
     const [submitting, setSubmitting] = useState(false);
+
+    usePageTitle("Regístrate");
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -58,7 +63,7 @@ export default function Register() {
             right={
                 <AuthCard title="AC COMPUTERS" subtitle="Regístrate">
                     <form onSubmit={handleSubmit}>
-                        <div className="space-y-4">
+                        <div className="space-y-2">
                             <TextField
                                 label="Nombre:"
                                 name="user_name"
@@ -93,9 +98,15 @@ export default function Register() {
                                 required
                                 className="input-bordered w-full"
                             />
-                            <button className="btn btn-primary font-medium mt-4" disabled={submitting}>
-                                {submitting ? "Creando cuenta..." : "Crear cuenta"}
-                            </button>
+                            <Button
+                                type="submit"
+                                className="btn-primary font-medium mt-4 w-full"
+                                loading={submitting}
+                                disabled={submitting}
+                                leftIcon={<UserPlusIcon size={16} />}
+                            >
+                                Crear cuenta
+                            </Button>
                         </div>
                     </form>
                 </AuthCard>
