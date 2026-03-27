@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 import { getAuthToken } from "@/hooks/useAuthSession";
 
@@ -62,6 +62,61 @@ export const useGetData = (endpoint) => {
     const reload = () => setTrigger((prev) => prev + 1);
 
     return { data, loading, reload };
+};
+
+export const useStreamData = (endpoint) => {
+    const [text, setText] = useState("");
+    const [status, setStatus] = useState("idle");
+    const hasTextRef = useRef(false);
+
+    useEffect(() => {
+        if (!endpoint) return;
+        setText("");
+        setStatus("loading");
+        hasTextRef.current = false;
+
+        const eventSource = new EventSource(`${API_URL}${endpoint}`);
+
+        eventSource.onopen = () => {
+            setStatus("streaming");
+        };
+        eventSource.onmessage = (event) => {
+            if (!event?.data) return;
+            try {
+                const parsed = JSON.parse(event.data);
+                const chunk = parsed?.data?.overview;
+                if (typeof chunk === "string" && chunk.length > 0) {
+                    hasTextRef.current = true;
+                    setText((prev) => prev + chunk);
+                    return;
+                }
+            } catch (error) {
+                // Fallback: append raw data if it's not JSON.
+            }
+            hasTextRef.current = true;
+            setText((prev) => prev + event.data);
+        };
+
+        eventSource.onerror = () => {
+            eventSource.close();
+            setStatus((current) => {
+                if (current === "streaming" && hasTextRef.current) {
+                    return "streaming";
+                }
+                return "error";
+            });
+            setText((current) => {
+                if (current?.trim()) return current;
+                return "Hubo un error al generar el resumen del producto.";
+            });
+        };
+
+        return () => {
+            eventSource.close();
+        };
+    }, [endpoint]);
+
+    return { text, status };
 };
 
 export const usePaginateData = (endpoint) => {
