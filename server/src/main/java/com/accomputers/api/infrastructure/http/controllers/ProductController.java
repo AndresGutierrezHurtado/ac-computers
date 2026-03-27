@@ -22,6 +22,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.util.MultiValueMap;
+import reactor.core.publisher.Flux;
 
 // Application
 import com.accomputers.api.application.dtos.response.ProductAiOverviewResponse;
@@ -90,13 +91,13 @@ public class ProductController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @GetMapping("/{id}/overview")
-    public ResponseEntity<ResponseDTO<ProductAiOverviewResponse>> getProductAiOverview(@PathVariable Integer id) {
-        ProductAiOverviewResponse overview = productServiceInterface.getProductAiOverview(id);
-        return ResponseEntity.ok(new ResponseDTO<>(
-                "Product overview generated",
-                true,
-                overview));
+    @GetMapping(value = "/{id}/overview", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ResponseDTO<ProductAiOverviewResponse>> getProductAiOverview(@PathVariable Integer id) {
+        return productServiceInterface.getProductAiOverview(id)
+                .map(chunk -> new ResponseDTO<>(
+                        "Product overview generated",
+                        true,
+                        chunk));
     }
 
     @GetMapping
