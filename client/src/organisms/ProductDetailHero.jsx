@@ -10,8 +10,7 @@ import Badge from "@/atoms/Badge";
 export default function ProductDetailHero({
     product,
     aiOverview = null,
-    aiOverviewLoading = false,
-    aiOverviewError = false,
+    aiOverviewStatus = "idle",
 }) {
     const images = product?.images || [];
     const defaultImage = useMemo(() => {
@@ -76,22 +75,22 @@ export default function ProductDetailHero({
                                 <Badge>{product.discount}% OFF</Badge>
                             )}
                         </div>
-                        {(aiOverviewLoading || aiOverviewError || (aiOverview && aiOverview.trim())) && (
+                        {(aiOverviewStatus === "loading" || aiOverviewStatus === "streaming" || (aiOverview && aiOverview.trim())) && (
                             <div className="rounded-xl border border-primary/25 bg-gradient-to-br from-primary/8 to-base-200/40 p-4 shadow-sm">
                                 <p className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">
                                     Vista general (IA)
                                 </p>
-                                {aiOverviewLoading ? (
+                                {aiOverviewStatus === "loading" ? (
                                     <div className="flex items-center gap-2 text-sm text-base-content/70">
                                         Generando resumen del producto…
                                     </div>
                                 ) : null}
-                                {aiOverviewError ? (
+                                {aiOverviewStatus === "error" ? (
                                     <p className="text-sm text-base-content/60">
-                                        No se pudo generar el resumen en este momento.
+                                        {aiOverview}
                                     </p>
                                 ) : null}
-                                {!aiOverviewLoading && !aiOverviewError && aiOverview?.trim() ? (
+                                {aiOverviewStatus === "streaming" && aiOverview?.trim() ? (
                                     <div className="prose text-sm max-w-none text-base-content prose-p:mb-2 prose-ul:mb-1 prose-li:marker:text-primary">
                                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                             {aiOverview}

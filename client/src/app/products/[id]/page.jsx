@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import ProductDetailHero from "@/organisms/ProductDetailHero";
@@ -8,7 +7,7 @@ import ProductSpecificationsSection from "@/organisms/ProductSpecificationsSecti
 import AIChatWidget from "@/organisms/AIChatWidget";
 import ProductDetailTemplate from "@/templates/ProductDetailTemplate";
 
-import { FetchData, useGetData } from "@/hooks/useClientData";
+import { useGetData, useStreamData } from "@/hooks/useClientData";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function ProductDetailPage() {
@@ -16,35 +15,7 @@ export default function ProductDetailPage() {
     const productId = Array.isArray(params?.id) ? params.id[0] : params?.id;
     const { data: product, loading } = useGetData(`/products/${productId}`);
 
-    const [aiOverview, setAiOverview] = useState(null);
-    const [aiOverviewLoading, setAiOverviewLoading] = useState(false);
-    const [aiOverviewError, setAiOverviewError] = useState(false);
-
-    useEffect(() => {
-        if (!productId) return undefined;
-        let cancelled = false;
-        setAiOverview(null);
-        setAiOverviewError(false);
-        setAiOverviewLoading(true);
-        FetchData(`/products/${productId}/overview`)
-            .then((res) => {
-                if (cancelled) return;
-                if (res?.success && typeof res?.data?.overview === "string") {
-                    setAiOverview(res.data.overview);
-                } else {
-                    setAiOverviewError(true);
-                }
-            })
-            .catch(() => {
-                if (!cancelled) setAiOverviewError(true);
-            })
-            .finally(() => {
-                if (!cancelled) setAiOverviewLoading(false);
-            });
-        return () => {
-            cancelled = true;
-        };
-    }, [productId]);
+    const { text: aiOverview, status: aiOverviewStatus } = useStreamData(`/products/${productId}/overview`);
 
     usePageTitle(product?.name || "Producto");
 
@@ -78,8 +49,7 @@ export default function ProductDetailPage() {
                 <ProductDetailHero
                     product={product}
                     aiOverview={aiOverview}
-                    aiOverviewLoading={aiOverviewLoading}
-                    aiOverviewError={aiOverviewError}
+                    aiOverviewStatus={aiOverviewStatus}
                 />
                 <ProductSpecificationsSection
                     specifications={product.productSpecifications || []}
