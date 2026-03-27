@@ -3,16 +3,19 @@
 import { useCallback, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
+import { PlusIcon } from "@/atoms/Icons";
+import Pagination from "@/molecules/Pagination";
 import AdminPageHeader from "@/organisms/AdminPageHeader";
 import AdminTableCard from "@/organisms/AdminTableCard";
-import AdminPageTemplate from "@/templates/AdminPageTemplate";
 import AdminUserModal from "@/organisms/AdminUserModal";
+import AdminPageTemplate from "@/templates/AdminPageTemplate";
 
-import Pagination from "@/molecules/Pagination";
 import { FetchData, useDeleteData, usePaginateData } from "@/hooks/useClientData";
-import { PlusIcon } from "@/atoms/Icons";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function AdminUsersPage() {
+    usePageTitle("Administrar usuarios");
+
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);

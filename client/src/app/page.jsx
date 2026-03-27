@@ -1,11 +1,16 @@
 "use client";
+
 import HomeTemplate from "@/templates/HomeTemplate";
 import HeroSection from "@/organisms/HeroSection";
 import ProductSection from "@/organisms/ProductSection";
 import AboutSection from "@/organisms/AboutSection";
 import AIChatWidget from "@/organisms/AIChatWidget";
 
+import { usePageTitle } from "@/hooks/usePageTitle";
+
 export default function Home() {
+    usePageTitle("Inicio");
+
     return (
         <>
             <HomeTemplate>

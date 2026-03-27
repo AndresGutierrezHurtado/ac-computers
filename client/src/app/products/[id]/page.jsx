@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { FetchData, useGetData } from "@/hooks/useClientData";
-import ProductDetailTemplate from "@/templates/ProductDetailTemplate";
+
 import ProductDetailHero from "@/organisms/ProductDetailHero";
 import ProductSpecificationsSection from "@/organisms/ProductSpecificationsSection";
 import AIChatWidget from "@/organisms/AIChatWidget";
+import ProductDetailTemplate from "@/templates/ProductDetailTemplate";
+
+import { FetchData, useGetData } from "@/hooks/useClientData";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function ProductDetailPage() {
     const params = useParams();
@@ -43,10 +46,7 @@ export default function ProductDetailPage() {
         };
     }, [productId]);
 
-    useEffect(() => {
-        if (!product || !product.name) return;
-        document.title = `${product.name} - AC Computers`;
-    }, [product]);
+    usePageTitle(product?.name || "Producto");
 
     if (loading) {
         return (

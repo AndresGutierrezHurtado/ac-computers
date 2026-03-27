@@ -7,9 +7,12 @@ import ProfileTemplate from "@/templates/ProfileTemplate";
 
 import { useGetData } from "@/hooks/useClientData";
 import { getAuthToken, setAuthSession } from "@/hooks/useAuthSession";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function ProfilePage() {
     const { data: user, loading } = useGetData("/auth/session");
+
+    usePageTitle("Perfil");
 
     useEffect(() => {
         if (user) {

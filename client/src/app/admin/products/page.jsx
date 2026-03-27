@@ -3,15 +3,18 @@
 import { useCallback, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
+import Pagination from "@/molecules/Pagination";
 import AdminPageHeader from "@/organisms/AdminPageHeader";
 import AdminTableCard from "@/organisms/AdminTableCard";
 import AdminPageTemplate from "@/templates/AdminPageTemplate";
 import AdminProductModal from "@/organisms/AdminProductModal";
 
-import Pagination from "@/molecules/Pagination";
 import { FetchData, useDeleteData, usePaginateData } from "@/hooks/useClientData";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function AdminProductsPage() {
+    usePageTitle("Administrar productos");
+
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
