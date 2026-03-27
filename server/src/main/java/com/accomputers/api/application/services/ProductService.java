@@ -6,7 +6,6 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import reactor.core.publisher.Flux;
 
 // Domain
 import com.accomputers.api.domain.entities.*;
@@ -199,12 +199,12 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
-    @Cacheable(cacheNames = "productAiOverviews", key = "#id")
-    public ProductAiOverviewResponse getProductAiOverview(Integer id) {
+    public Flux<ProductAiOverviewResponse> getProductAiOverview(Integer id) {
         ProductResponseDTO product = getProductById(id);
         String context = buildProductOverviewContext(product);
-        String overview = aiPort.generateProductOverview(context);
-        return new ProductAiOverviewResponse(overview != null ? overview.trim() : "");
+        return aiPort.generateProductOverview(context)
+                .filter(StringUtils::hasText)
+                .map(text -> new ProductAiOverviewResponse(text));
     }
 
     private static String buildProductOverviewContext(ProductResponseDTO p) {
