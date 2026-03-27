@@ -4,11 +4,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Swal from "sweetalert2";
 
+import { LockIcon } from "@/atoms/Icons";
+import Button from "@/atoms/Button";
 import AuthCard from "@/organisms/AuthCard";
 import TextField from "@/molecules/TextField";
 
 import { usePostData } from "@/hooks/useClientData";
 import { useValidateform } from "@/hooks/useValidateForm";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function SetPasswordPage() {
     const router = useRouter();
@@ -17,6 +20,8 @@ export default function SetPasswordPage() {
 
     const [form, setForm] = useState({ password: "", confirmPassword: "" });
     const [submitting, setSubmitting] = useState(false);
+
+    usePageTitle("Configurar contraseña");
 
     const handleChange = (field) => (event) => {
         setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -95,9 +100,13 @@ export default function SetPasswordPage() {
                         required
                         className="input-bordered w-full"
                     />
-                    <button className="btn btn-primary w-full" disabled={submitting || !token}>
-                        {submitting ? "Guardando..." : "Guardar contraseña"}
-                    </button>
+                    <Button
+                        className="btn-primary w-full"
+                        disabled={submitting || !token}
+                        leftIcon={<LockIcon size={16} />}
+                    >
+                        Guardar contraseña
+                    </Button>
                 </form>
                 {!token ? (
                     <p className="text-sm text-red-400 mt-3">
