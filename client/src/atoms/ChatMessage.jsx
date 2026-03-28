@@ -19,6 +19,46 @@ function formatCop(value) {
 
 /** Tablas GFM: líneas visibles + scroll horizontal si sobrepasan el bubble del chat */
 const markdownComponents = {
+    h1: ({ children }) => <h1 className="text-lg font-bold mt-3 mb-2">{children}</h1>,
+    h2: ({ children }) => <h2 className="text-base font-semibold mt-3 mb-2">{children}</h2>,
+    h3: ({ children }) => <h3 className="text-sm font-semibold mt-2 mb-1">{children}</h3>,
+
+    p: ({ children }) => <p className="mb-2 leading-relaxed">{children}</p>,
+
+    ul: ({ children }) => <ul className="list-disc pl-5 mb-2 space-y-1">{children}</ul>,
+    ol: ({ children }) => <ol className="list-decimal pl-5 mb-2 space-y-1">{children}</ol>,
+    li: ({ children }) => <li className="leading-snug">{children}</li>,
+
+    strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+    em: ({ children }) => <em className="italic">{children}</em>,
+
+    blockquote: ({ children }) => (
+        <blockquote className="border-l-4 border-base-300 pl-3 italic opacity-80 my-2">
+            {children}
+        </blockquote>
+    ),
+
+    code({ inline, children }) {
+        return inline ? (
+            <code className="px-1 py-0.5 rounded bg-base-300/40 text-xs">
+                {children}
+            </code>
+        ) : (
+            <pre className="bg-base-300/40 rounded p-2 overflow-x-auto text-xs my-2">
+                <code>{children}</code>
+            </pre>
+        );
+    },
+
+    a: ({ href, children }) => (
+        <a href={href} target="_blank" className="text-primary underline">
+            {children}
+        </a>
+    ),
+
+    hr: () => <hr className="my-3 border-base-300" />,
+
+    // TABLAS (lo que ya tenías mejorado)
     table({ children }) {
         return (
             <div className="my-3 w-full max-w-full overflow-x-auto overscroll-x-contain rounded border border-base-200/10">
@@ -63,7 +103,7 @@ export default function ChatMessage({ role, content, consultedProducts }) {
                     {isUser ? (
                         <span>{content}</span>
                     ) : (
-                        <div className="prose prose-sm max-w-none min-w-0 prose-headings:mb-2 prose-p:mb-1 prose-ul:mb-1 prose-ol:mb-1 prose-li:marker:text-current">
+                            <div className="max-w-none min-w-0 text-sm leading-relaxed">
                             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                                 {typeof content === "string" ? content : ""}
                             </ReactMarkdown>
