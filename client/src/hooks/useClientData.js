@@ -37,6 +37,81 @@ export const FetchData = async (endpoint, options) => {
     return data;
 };
 
+export function createStreamer(endpoint) {
+    let controller = null;
+
+    async function stream(method, endpoint, body, handlers) {
+        if (controller) controller.abort();
+
+        controller = new AbortController();
+
+        try {
+            const token = getAuthToken();
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                method,
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json",
+                    accept: "text/event-stream",
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+                signal: controller.signal,
+            });
+
+            if (!response.body) {
+                throw new Error("No stream body");
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+
+            const emit = (data) => {
+                if (!data) return;
+                let payload = data;
+                try {
+                    payload = JSON.parse(data);
+                } catch (error) {
+                    // Keep raw data when parsing fails.
+                }
+                handlers.onChunk?.(payload);
+            };
+
+            while (true) {
+                const { done, value } = await reader.read();
+
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split(/\r?\n/);
+                buffer = lines.pop() ?? "";
+                for (const line of lines) {
+                    if (!line.startsWith("data:")) continue;
+                    const data = line.slice(5).trimStart();
+                    if (!data || data === "[DONE]") continue;
+                    emit(data);
+                }
+            }
+
+            handlers.onComplete?.();
+        } catch (error) {
+            if (error.name === "AbortError") return;
+            handlers.onError?.(error);
+        }
+    }
+
+    function cancel() {
+        if (!controller) return;
+        controller.abort();
+        controller = null;
+    }
+
+    return {
+        stream,
+        cancel,
+    };
+}
+
 export const useGetData = (endpoint) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
