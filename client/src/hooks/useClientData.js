@@ -58,8 +58,9 @@ export function createStreamer(endpoint) {
                 signal: controller.signal,
             });
 
-            if (!response.body) {
-                throw new Error("No stream body");
+            if (!response.ok || !response.body) {
+                const errorMessage = await response.json().then(data => data.message);
+                throw new Error(errorMessage || "Error al conectar con el servidor");
             }
 
             const reader = response.body.getReader();
@@ -95,7 +96,6 @@ export function createStreamer(endpoint) {
 
             handlers.onComplete?.();
         } catch (error) {
-            if (error.name === "AbortError") return;
             handlers.onError?.(error);
         }
     }

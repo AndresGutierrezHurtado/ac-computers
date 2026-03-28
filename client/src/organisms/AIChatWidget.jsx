@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import ChatMessage from "@/atoms/ChatMessage";
 import ChatComposer from "@/molecules/ChatComposer";
 import { CloseIcon, RobotIcon } from "@/atoms/Icons";
+import { createStreamer } from "@/hooks/useClientData";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const STORAGE_KEY_MESSAGES = "ac_ai_chat_messages_v2";
 
 const DEFAULT_MESSAGES = [
@@ -24,16 +24,16 @@ function toApiMessages(list) {
 }
 
 export default function AIChatWidget() {
+    const streamer = createStreamer();
+
     // Refs
     const endRef = useRef(null);
-    const phaseTimerRef = useRef(null);
     const messagesContainerRef = useRef(null);
 
     // States
     const [messages, setMessages] = useState(DEFAULT_MESSAGES);
     const [input, setInput] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [loadingPhase, setLoadingPhase] = useState("thinking");
+    const [status, setStatus] = useState("idle");
     const [hydrated, setHydrated] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -45,27 +45,7 @@ export default function AIChatWidget() {
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages, loading]);
-
-    useEffect(() => {
-        if (!loading) {
-            if (phaseTimerRef.current) {
-                clearInterval(phaseTimerRef.current);
-                phaseTimerRef.current = null;
-            }
-            return;
-        }
-        setLoadingPhase("thinking");
-        phaseTimerRef.current = setInterval(() => {
-            setLoadingPhase((p) => (p === "thinking" ? "catalog" : "thinking"));
-        }, 2200);
-        return () => {
-            if (phaseTimerRef.current) {
-                clearInterval(phaseTimerRef.current);
-                phaseTimerRef.current = null;
-            }
-        };
-    }, [loading]);
+    }, [messages, status]);
 
     useEffect(() => {
         try {
@@ -93,82 +73,89 @@ export default function AIChatWidget() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (!input.trim() || loading) return;
+        if (!input.trim() || status !== "idle") return;
 
         const userMessage = input.trim();
         setInput("");
 
         const historyForApi = [...messages, { role: "user", content: userMessage }];
-        setMessages(historyForApi);
+        setMessages([
+            ...historyForApi,
+            { role: "assistant", content: "", consultedProducts: undefined },
+        ]);
 
-        if (!API_URL) {
-            setMessages((prev) => [
-                ...prev,
-                {
-                    role: "assistant",
-                    content: "La API no está configurada en este entorno.",
-                    consultedProducts: undefined,
+        setStatus("loading");
+        streamer.stream(
+            "POST",
+            "/products/sales-chat",
+            {
+                messages: toApiMessages(historyForApi),
+            },
+            {
+                onChunk: (payload) => {
+                    const chunk = typeof payload === "string" ? payload : payload?.data?.message;
+                    if (!chunk) return;
+                    setMessages((prev) => {
+                        if (!prev.length) return prev;
+                        const next = [...prev];
+                        const lastIndex = next.length - 1;
+                        const last = next[lastIndex];
+                        if (last?.role !== "assistant") {
+                            next.push({ role: "assistant", content: chunk });
+                            return next;
+                        }
+                        next[lastIndex] = {
+                            ...last,
+                            content: `${last.content || ""}${chunk}`,
+                        };
+                        return next;
+                    });
                 },
-            ]);
-            return;
-        }
+                onComplete: () => {
+                    setStatus("idle");
+                },
+                onError: (error) => {
+                    const message = error?.message;
 
-        setLoading(true);
-        try {
-            const response = await fetch(`${API_URL}/products/sales-chat`, {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json",
-                    accept: "application/json",
-                },
-                body: JSON.stringify({
-                    messages: toApiMessages(historyForApi),
-                }),
-            });
-            const json = await response.json();
-            const data = json?.data;
-            const reply =
-                (typeof data?.message === "string" && data.message) ||
-                json?.message ||
-                "No pude generar una respuesta en este momento.";
-            const consultedProducts = Array.isArray(data?.consultedProducts)
-                ? data.consultedProducts
-                : [];
+                    setStatus("idle");
 
-            setMessages((prev) => [
-                ...prev,
-                {
-                    role: "assistant",
-                    content: reply,
-                    consultedProducts: consultedProducts.length > 0 ? consultedProducts : undefined,
+                    setMessages((prev) => {
+                        if (!prev.length) {
+                            return [{ role: "assistant", content: message }];
+                        }
+                        const next = [...prev];
+                        const lastIndex = next.length - 1;
+                        const last = next[lastIndex];
+                        if (last?.role === "assistant") {
+                            next[lastIndex] = { ...last, content: message };
+                        } else {
+                            next.push({ role: "assistant", content: message });
+                        }
+                        return next;
+                    });
                 },
-            ]);
-        } catch (error) {
-            setMessages((prev) => [
-                ...prev,
-                {
-                    role: "assistant",
-                    content: "Ocurrió un error al consultar la IA. Intenta de nuevo.",
-                    consultedProducts: undefined,
-                },
-            ]);
-        } finally {
-            setLoading(false);
-        }
+            },
+        );
     };
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
-            if (!loading && input.trim()) {
+            if (status === "idle" && input.trim()) {
                 handleSubmit(event);
             }
         }
     };
 
     return (
-        <details open={dropdownOpen} className="dropdown dropdown-top dropdown-end fixed bottom-12 right-12 z-[999]">
-            <summary className="btn btn-primary btn-circle shadow-lg mt-5" onClick={() => setDropdownOpen(true)}>
+        <details
+            open={dropdownOpen}
+            className="dropdown dropdown-top dropdown-end fixed bottom-12 right-12 z-[999]"
+        >
+            <summary
+                className="btn btn-primary btn-circle shadow-lg mt-5"
+                onClick={() => setDropdownOpen(true)}
+            >
                 <RobotIcon size={20} />
             </summary>
             <ul className="dropdown-content bg-base-100/95 border border-base-200 shadow-xl backdrop-blur w-[min(92vw,380px)] h-[min(70vh,520px)] rounded-lg p-0 flex flex-col">
@@ -199,22 +186,10 @@ export default function AIChatWidget() {
                                 consultedProducts={message.consultedProducts}
                             />
                         ))}
-                        {loading && (
+                        {status === "loading" && (
                             <div className="chat chat-start">
                                 <div className="chat-bubble chat-bubble-secondary text-sm">
-                                    <div className="flex flex-col gap-0.5">
-                                        <span className="inline-flex items-center gap-2">
-                                            <span className="loading loading-dots loading-xs" />
-                                            {loadingPhase === "thinking"
-                                                ? "Pensando…"
-                                                : "Buscando en el catálogo…"}
-                                        </span>
-                                        <span className="text-[0.7rem] text-base-content/60">
-                                            {loadingPhase === "thinking"
-                                                ? "Preparando la mejor respuesta."
-                                                : "Consultando productos por similitud (embeddings)."}
-                                        </span>
-                                    </div>
+                                    <span className="animate-pulse">Pensando ...</span>
                                 </div>
                             </div>
                         )}
@@ -226,7 +201,7 @@ export default function AIChatWidget() {
                         onChange={(event) => setInput(event.target.value)}
                         onSubmit={handleSubmit}
                         onKeyDown={handleKeyDown}
-                        loading={loading}
+                        loading={status === "loading"}
                     />
                 </li>
             </ul>
