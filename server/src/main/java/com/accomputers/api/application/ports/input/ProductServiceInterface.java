@@ -15,5 +15,5 @@ public interface ProductServiceInterface {
     PageDTO<ProductResponseDTO> getAllProducts(ProductFiltersDTO queryParams);
     ProductResponseDTO updateProduct(Integer id, createProductDTO productDTO);
     void deleteProduct(Integer id);
-    SalesChatResponse chat(SalesChatRequest request);
+    Flux<SalesChatResponse> chat(SalesChatRequest request);
 }

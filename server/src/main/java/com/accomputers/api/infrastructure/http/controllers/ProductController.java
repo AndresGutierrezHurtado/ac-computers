@@ -1,6 +1,7 @@
 package com.accomputers.api.infrastructure.http.controllers;
 
 // Spring
+
 import com.accomputers.api.application.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 
@@ -43,32 +46,50 @@ public class ProductController {
         this.productServiceInterface = productServiceInterface;
     }
 
+    private static List<Integer> parseIntegerList(List<String> values) {
+        if (values == null || values.isEmpty()) {
+            return List.of();
+        }
+        return values.stream()
+                .filter(StringUtils::hasText)
+                .map(String::trim)
+                .map(value -> {
+                    try {
+                        return Integer.valueOf(value);
+                    } catch (NumberFormatException ex) {
+                        return null;
+                    }
+                })
+                .filter(java.util.Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDTO<ProductResponseDTO>> createProduct(
-        @ModelAttribute @Valid createProductDTO productDTO,
-        @RequestParam("images") List<MultipartFile> images,
-        @RequestParam(value = "mainImageId", required = false) Integer mainImageId,
-        @RequestParam(value = "mainImageIndex", required = false) Integer mainImageIndex
+            @ModelAttribute @Valid createProductDTO productDTO,
+            @RequestParam("images") List<MultipartFile> images,
+            @RequestParam(value = "mainImageId", required = false) Integer mainImageId,
+            @RequestParam(value = "mainImageIndex", required = false) Integer mainImageIndex
     ) {
         List<MultipartFile> resolvedImages = images != null ? images : productDTO.images();
         Integer resolvedMainImageId = mainImageId != null ? mainImageId : productDTO.mainImageId();
         Integer resolvedMainImageIndex = mainImageIndex != null ? mainImageIndex : productDTO.mainImageIndex();
 
         createProductDTO productDTOWithImage = new createProductDTO(
-            productDTO.name(),
-            productDTO.description(),
-            productDTO.price(),
-            productDTO.condition(),
-            productDTO.discount(),
-            productDTO.brandId(),
-            productDTO.subCategoryId(),
-            resolvedImages,
-            null,
-            resolvedMainImageId,
-            resolvedMainImageIndex,
-            productDTO.specifications()
+                productDTO.name(),
+                productDTO.description(),
+                productDTO.price(),
+                productDTO.condition(),
+                productDTO.discount(),
+                productDTO.brandId(),
+                productDTO.subCategoryId(),
+                resolvedImages,
+                null,
+                resolvedMainImageId,
+                resolvedMainImageIndex,
+                productDTO.specifications()
         );
-        
+
         ProductResponseDTO product = productServiceInterface.createProduct(productDTOWithImage);
 
         ResponseDTO<ProductResponseDTO> responseDTO = new ResponseDTO<>(
@@ -185,24 +206,6 @@ public class ProductController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    private static List<Integer> parseIntegerList(List<String> values) {
-        if (values == null || values.isEmpty()) {
-            return List.of();
-        }
-        return values.stream()
-                .filter(StringUtils::hasText)
-                .map(String::trim)
-                .map(value -> {
-                    try {
-                        return Integer.valueOf(value);
-                    } catch (NumberFormatException ex) {
-                        return null;
-                    }
-                })
-                .filter(java.util.Objects::nonNull)
-                .collect(Collectors.toList());
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO<Void>> deleteProduct(@PathVariable Integer id) {
         productServiceInterface.deleteProduct(id);
@@ -214,12 +217,12 @@ public class ProductController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PostMapping("/sales-chat")
-    public ResponseEntity<ResponseDTO<SalesChatResponse>> salesChat(@Valid @RequestBody SalesChatRequest request) {
-        SalesChatResponse response = productServiceInterface.chat(request);
-        return ResponseEntity.ok(new ResponseDTO<>(
-                "Respuesta del asistente",
-                true,
-                response));
+    @PostMapping(value = "/sales-chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ResponseDTO<SalesChatResponse>> salesChat(@Valid @RequestBody SalesChatRequest request) {
+        return productServiceInterface.chat(request)
+                .map(chunk -> new ResponseDTO<>(
+                        "Respuesta del asistente",
+                        true,
+                        chunk));
     }
 }
