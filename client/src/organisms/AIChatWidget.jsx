@@ -35,6 +35,7 @@ export default function AIChatWidget() {
     const [loading, setLoading] = useState(false);
     const [loadingPhase, setLoadingPhase] = useState("thinking");
     const [hydrated, setHydrated] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const scrollToBottom = () => {
         if (messagesContainerRef.current) {
@@ -165,15 +166,9 @@ export default function AIChatWidget() {
         }
     };
 
-    const closeDropdown = () => {
-        if (document.activeElement instanceof HTMLElement) {
-            document.activeElement.blur();
-        }
-    };
-
     return (
-        <details className="dropdown dropdown-top dropdown-end fixed bottom-12 right-12 z-[999]">
-            <summary className="btn btn-primary btn-circle shadow-lg mt-5">
+        <details open={dropdownOpen} className="dropdown dropdown-top dropdown-end fixed bottom-12 right-12 z-[999]">
+            <summary className="btn btn-primary btn-circle shadow-lg mt-5" onClick={() => setDropdownOpen(true)}>
                 <RobotIcon size={20} />
             </summary>
             <ul className="dropdown-content bg-base-100/95 border border-base-200 shadow-xl backdrop-blur w-[min(92vw,380px)] h-[min(70vh,520px)] rounded-lg p-0 flex flex-col">
@@ -186,7 +181,7 @@ export default function AIChatWidget() {
                         <button
                             type="button"
                             className="btn btn-ghost btn-sm btn-circle"
-                            onClick={closeDropdown}
+                            onClick={() => setDropdownOpen(false)}
                         >
                             <CloseIcon size={18} />
                         </button>
