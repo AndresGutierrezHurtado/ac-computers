@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Collects catalog rows from {@link ProductVectorSearchTool} during a single {@link com.accomputers.api.infrastructure.ai.AIPortImpl#chat} call (same request thread).
+ * Collects catalog rows from {@link ProductVectorSearchTool} during a single {@link Ollama#chat} call (same request thread).
  */
 @Component
 public class SalesChatToolTraceHolder {
