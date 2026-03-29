@@ -434,7 +434,6 @@ public class ProductService implements ProductServiceInterface {
     @Override
     public Flux<SalesChatResponse> chat(SalesChatRequest request) {
         return aiPort.chat(request.messages())
-                .filter(StringUtils::hasText)
-                .map(chunk -> new SalesChatResponse(chunk, List.of()));
+                .filter(r -> StringUtils.hasText(r.message()));
     }
 }
