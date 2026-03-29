@@ -1,6 +1,7 @@
 package com.accomputers.api.application.ports.output;
 
 import com.accomputers.api.application.dtos.ChatMessageDto;
+import com.accomputers.api.application.dtos.SalesChatResponse;
 import java.util.List;
 import reactor.core.publisher.Flux;
 
@@ -16,12 +17,12 @@ public interface AIPort {
     List<Float> embed(String text);
 
     /**
-     * Multi-turn chat with the sales assistant (model + tools configured in infrastructure).
+     * Sales chat: a tool-capable pass builds inventory context (RAG), then a streaming model answers using only that context.
      *
      * @param messages conversation history and current user turn; must not be null or empty
-     * @return assistant reply chunks (streaming)
+     * @return one streamed chunk per {@link SalesChatResponse#message()}; {@link SalesChatResponse#consultedProducts()} repeats the same list
      */
-    Flux<String> chat(List<ChatMessageDto> messages);
+    Flux<SalesChatResponse> chat(List<ChatMessageDto> messages);
 
     /**
      * One-shot summary from structured product facts (no tools). Used for product page overview.
