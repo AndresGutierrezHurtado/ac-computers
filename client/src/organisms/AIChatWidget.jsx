@@ -79,10 +79,7 @@ export default function AIChatWidget() {
         setInput("");
 
         const historyForApi = [...messages, { role: "user", content: userMessage }];
-        setMessages([
-            ...historyForApi,
-            { role: "assistant", content: "", consultedProducts: undefined },
-        ]);
+        setMessages(historyForApi);
 
         setStatus("loading");
         streamer.stream(
@@ -93,11 +90,14 @@ export default function AIChatWidget() {
             },
             {
                 onChunk: (payload) => {
-                    const parsedPayload = typeof payload === "string" ? JSON.parse(payload) : payload;
+                    const parsedPayload =
+                        typeof payload === "string" ? JSON.parse(payload) : payload;
                     const chunk = parsedPayload?.data?.message;
                     const consultedProducts = parsedPayload?.data?.consultedProducts;
 
                     if (!chunk) return;
+
+                    setStatus("streaming");
                     setMessages((prev) => {
                         if (!prev.length) return prev;
                         const next = [...prev];
@@ -123,7 +123,6 @@ export default function AIChatWidget() {
                 },
                 onError: (error) => {
                     const message = error?.message;
-
                     setStatus("idle");
 
                     setMessages((prev) => {
