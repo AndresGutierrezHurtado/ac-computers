@@ -93,21 +93,28 @@ export default function AIChatWidget() {
             },
             {
                 onChunk: (payload) => {
-                    const chunk = typeof payload === "string" ? payload : payload?.data?.message;
+                    const parsedPayload = typeof payload === "string" ? JSON.parse(payload) : payload;
+                    const chunk = parsedPayload?.data?.message;
+                    const consultedProducts = parsedPayload?.data?.consultedProducts;
+
                     if (!chunk) return;
                     setMessages((prev) => {
                         if (!prev.length) return prev;
                         const next = [...prev];
                         const lastIndex = next.length - 1;
                         const last = next[lastIndex];
+
                         if (last?.role !== "assistant") {
-                            next.push({ role: "assistant", content: chunk });
+                            next.push({ role: "assistant", content: chunk, consultedProducts });
                             return next;
                         }
+
                         next[lastIndex] = {
                             ...last,
                             content: `${last.content || ""}${chunk}`,
+                            consultedProducts,
                         };
+
                         return next;
                     });
                 },
@@ -121,16 +128,25 @@ export default function AIChatWidget() {
 
                     setMessages((prev) => {
                         if (!prev.length) {
-                            return [{ role: "assistant", content: message }];
+                            return [
+                                {
+                                    role: "assistant",
+                                    content: message,
+                                    consultedProducts: undefined,
+                                },
+                            ];
                         }
+
                         const next = [...prev];
                         const lastIndex = next.length - 1;
                         const last = next[lastIndex];
-                        if (last?.role === "assistant") {
-                            next[lastIndex] = { ...last, content: message };
-                        } else {
-                            next.push({ role: "assistant", content: message });
-                        }
+
+                        next[lastIndex] = {
+                            ...last,
+                            content: message,
+                            consultedProducts: undefined,
+                        };
+
                         return next;
                     });
                 },
