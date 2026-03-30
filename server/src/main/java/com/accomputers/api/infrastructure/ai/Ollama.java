@@ -11,7 +11,6 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
@@ -70,18 +69,9 @@ public class Ollama implements AIPort {
                 .content();
         List<ProductSearchHitDto> consulted = new ArrayList<>(traceHolder.drain());
 
-        System.out.println("context: " + context);
-        System.out.println("consulted: " + consulted);
-
-        String block = StringUtils.hasText(context)
-                ? context
-                : "(Sin texto de contexto del inventario para esta consulta.)";
-
-        List<Message> salesMessages = new ArrayList<>(springMessages.size() + 1);
-
         // ADD CONTEXT TO MESSAGES
-        salesMessages.add(new SystemMessage("Usa únicamente esta información del inventario como fuente:\n\n" + block));
-        salesMessages.addAll(springMessages);
+        List<Message> salesMessages = new ArrayList<>();
+        salesMessages.add(new SystemMessage("DATOS DE INVENTARIO Y LA COMPRA:\n\n" + context));
 
         // STREAM RESPONSE
         return salesStreamingChatClient
@@ -91,9 +81,7 @@ public class Ollama implements AIPort {
                 .chatResponse()
                 .map(response -> {
                     String answer = response.getResult().getOutput().getText();
-                    if (answer == null) {
-                        answer = "";
-                    }
+                    if (answer == null) answer = "";
 
                     return new SalesChatResponse(answer, List.copyOf(consulted));
                 });
