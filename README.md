@@ -82,3 +82,19 @@ El uso de patrones como Mapper permite desacoplar el dominio de los modelos de p
 El frontend sigue Atomic Design, organizando la interfaz en átomos, moléculas, organismos y vistas. Esta estructura permite construir interfaces complejas a partir de componentes pequeños y reutilizables.
 
 La comunicación con el backend se realiza mediante APIs, manteniendo el frontend desacoplado de la lógica de negocio. Esto facilita la evolución independiente de ambas capas.
+
+---
+
+## Flujo de Uso
+
+El usuario accede a la plataforma y primero ve un modelo 3d con animaciones de scroll donde ve lo importante que es la opcion de descargar el catalogo en pdf.
+
+Arriba hay un menu donde puede ir a la visual de contacto y productos. En la seccion de producto puede explora el catálogo de productos utilizando filtros por precio, categoría o características.
+
+Al seleccionar un producto, accede a una vista detallada con información completa y un resumen generado automáticamente que facilita la comprensión rápida.
+
+Si el usuario tiene dudas, puede interactuar con el chat de inteligencia artificial, que utiliza búsqueda vectorial para recomendar productos relevantes según su intención.
+
+El usuario puede contactar directamente al proveedor mediante correo o acceder a enlaces externos como redes sociales o ubicación.
+
+Desde el lado administrativo, se gestionan productos y usuarios dinámicamente, permitiendo actualizar el catálogo en tiempo real.
