@@ -29,3 +29,56 @@ El problema que aborda es la fragmentación entre catálogos estáticos, sistema
 - **Vista detallada de productos:** Página completa con imágenes, descripción, categoría, subcategoría, marca y especificaciones técnicas.
 
 - **Generación automática de overview:** Resumen contextual generado al abrir un producto, facilitando una comprensión rápida de sus características clave.
+
+---
+
+## Tecnologías y Metodologías Utilizadas
+
+**Frontend:**
+
+- TypeScript
+- React
+- TailwindCSS v4
+- DaisyUI
+- GSAP
+- Leaflet
+- Valibot
+
+**Backend:**
+
+- Java 21
+- Spring Boot
+- iTextPDF
+- Cloudinary SDK
+- Ollama (integración IA)
+- Caffeine
+
+---
+
+## Arquitectura
+
+El sistema adopta arquitectura hexagonal, lo que implica que el núcleo del negocio permanece aislado de detalles técnicos como frameworks, bases de datos o servicios externos. Esto permite escalar, reemplazar componentes o cambiar proveedores sin afectar la lógica central.
+
+### Capa de Dominio
+
+Aquí reside el núcleo del sistema. Contiene entidades y reglas de negocio. No depende de librerías externas. Las validaciones críticas se definen en esta capa para garantizar consistencia de datos sin importar el origen.
+
+### Capa de Aplicación
+
+Orquesta los casos de uso y define cómo interactúan las distintas partes del sistema. Coordina operaciones como búsqueda de productos, generación de PDFs o ejecución de flujos del chat de IA. No contiene lógica de negocio compleja, sino que delega al dominio.
+
+### Capa de Infraestructura
+
+Implementa los detalles técnicos como acceso a base de datos, almacenamiento en la nube, envío de correos y motores de embeddings. Aquí también se integran mecanismos de caché mediante Caffeine para optimizar el rendimiento en consultas frecuentes.
+
+El monitoreo y trazabilidad se gestionan mediante logging estructurado, permitiendo auditar el comportamiento del sistema y detectar fallos con precisión.
+
+La seguridad se implementa mediante control de acceso basado en roles (RBAC), restringiendo operaciones según permisos definidos y protegiendo recursos críticos.
+
+El uso de patrones como Mapper permite desacoplar el dominio de los modelos de persistencia, evitando dependencias innecesarias.
+
+### Frontend
+
+El frontend sigue Atomic Design, organizando la interfaz en átomos, moléculas, organismos y vistas. Esta estructura permite construir interfaces complejas a partir de componentes pequeños y reutilizables.
+
+La comunicación con el backend se realiza mediante APIs, manteniendo el frontend desacoplado de la lógica de negocio. Esto facilita la evolución independiente de ambas capas.
