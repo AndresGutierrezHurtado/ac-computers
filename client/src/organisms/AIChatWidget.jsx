@@ -35,7 +35,6 @@ export default function AIChatWidget() {
     const [input, setInput] = useState("");
     const [status, setStatus] = useState("idle");
     const [hydrated, setHydrated] = useState(false);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const scrollToBottom = () => {
         if (messagesContainerRef.current) {
@@ -163,15 +162,10 @@ export default function AIChatWidget() {
     };
 
     return (
-        <details
-            open={dropdownOpen}
-            className="dropdown dropdown-top dropdown-end fixed bottom-12 right-12 z-[999]"
-        >
-            <summary
-                className="btn btn-primary btn-circle shadow-lg mt-5"
-                onClick={() => setDropdownOpen(true)}
-            >
-                <RobotIcon size={20} />
+        <details className="dropdown dropdown-top dropdown-end fixed bottom-20 right-20 z-[999]">
+            <summary className="btn btn-primary btn-circle shadow-lg mt-5 w-13 h-13 p-0 flex items-center justify-center">
+                <span className="absolute inline-flex h-13 w-13 animate-ping rounded-full bg-sky-400 opacity-20"></span>
+                <RobotIcon size={24} />
             </summary>
             <ul className="dropdown-content bg-base-100/95 border border-base-200 shadow-xl backdrop-blur w-[min(92vw,380px)] h-[min(70vh,520px)] rounded-lg p-0 flex flex-col">
                 <li className="list-none flex min-h-0 flex-1 flex-col gap-3 p-5">
@@ -183,7 +177,9 @@ export default function AIChatWidget() {
                         <button
                             type="button"
                             className="btn btn-ghost btn-sm btn-circle"
-                            onClick={() => setDropdownOpen(false)}
+                            onClick={(e) => {
+                                e.currentTarget.closest("details").removeAttribute("open");
+                            }}
                         >
                             <CloseIcon size={18} />
                         </button>
