@@ -19,27 +19,17 @@ El problema que aborda es la fragmentación entre catálogos estáticos, sistema
 
 ## Características Principales
 
-- **Visualización 3D de productos:** Renderizado interactivo de modelos mediante Three.js, permitiendo explorar componentes y detalles complejos desde múltiples ángulos.
+- **Gestión dinámica de usuarios y productos:** Administración integral de las entidades del sistema, permitiendo crear, actualizar y eliminar información de forma controlada y consistente.
 
-- **Generación de catálogos en PDF:** Creación automática de documentos PDF con información de productos, útil para compartir o consultar offline.
+- **Contacto y presencia digital:** Integración de envío de correos, enlaces a redes sociales y visualización de ubicación en mapas. La interfaz se complementa con animaciones por scroll y elementos 3D que mejoran la experiencia y percepción visual.
 
-- **Contacto y presencia digital:** Integración de envío de correos, enlaces a redes sociales y ubicación en mapas para facilitar la comunicación y acceso al negocio.
+- **Vista detallada de productos:** Página completa con imágenes, descripción, categoría, subcategoría, marca y especificaciones técnicas. Incluye un resumen generado por IA que traduce la información técnica en beneficios claros para el usuario.
 
-- **Catálogo estructurado de productos:** Listado de computadores, periféricos y componentes organizado por categorías y subcategorías, con navegación clara.
+- **Catálogo estructurado de productos:** Listado organizado de computadores, periféricos y componentes con categorización jerárquica. Incorpora búsqueda semántica basada en embeddings para interpretar la intención del usuario, junto con filtros por precio y características que optimizan la exploración.
 
-- **Filtrado avanzado:** Búsqueda por rangos de precio y características técnicas específicas, optimizando la exploración del usuario.
+- **Generación de catálogos en PDF:** Creación automatizada de documentos PDF con información de productos, facilitando su distribución y consulta offline.
 
-- **Búsqueda semántica con embeddings:** Sistema de búsqueda vectorial que interpreta la intención del usuario, mejorando la relevancia de los resultados.
-
-- **Chat de inteligencia artificial para ventas:** Asistente conversacional que recomienda productos y responde preguntas utilizando el sistema de búsqueda interna.
-
-- **Gestión dinámica de usuarios y productos:** Administración completa de entidades del sistema, incluyendo creación, actualización y eliminación.
-
-- **Almacenamiento y persistencia de productos:** Manejo eficiente de datos e imágenes asociadas a cada producto dentro del sistema.
-
-- **Vista detallada de productos:** Página completa con imágenes, descripción, categoría, subcategoría, marca y especificaciones técnicas.
-
-- **Generación automática de overview:** Resumen contextual generado al abrir un producto, facilitando una comprensión rápida de sus características clave.
+- **Chat de inteligencia artificial para ventas:** Asistente conversacional que responde preguntas y recomienda productos apoyándose en el sistema de búsqueda interna, mejorando la toma de decisiones del usuario.
 
 ---
 
