@@ -136,3 +136,15 @@ qwen3:1.7b
 ```
 
 Una vez configurado todo lo anterior, el backend puede ejecutarse directamente desde el IDE o mediante los comandos estándar de Spring Boot.
+
+---
+
+## Contacto
+
+Para preguntas, soporte o colaboración, por favor contacta:
+
+- Andrés Gutiérrez Hurtado
+- Correo: [andres52885241@gmail.com](mailto:andres52885241@gmail.com)
+- LinkedIn: [https://www.linkedin.com/in/andresgh-dev](https://www.linkedin.com/in/andresgh-dev)
+- GitHub: [https://github.com/AndresGutierrezHurtado](https://github.com/AndresGutierrezHurtado)
+- Portafolio: [https://andres-portfolio-b4dv.onrender.com](https://andres-portfolio-b4dv.onrender.com)
