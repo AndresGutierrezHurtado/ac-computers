@@ -6,6 +6,17 @@ El problema que aborda es la fragmentación entre catálogos estáticos, sistema
 
 ---
 
+## Tabla de contenidos
+
+- [Características Principales](#características-principales)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Arquitectura](#arquitectura)
+- [Flujo de Uso](#flujo-de-uso)
+- [Instalación](#instalación)
+- [Contacto](#contacto)
+
+---
+
 ## Características Principales
 
 - **Visualización 3D de productos:** Renderizado interactivo de modelos mediante Three.js, permitiendo explorar componentes y detalles complejos desde múltiples ángulos.
@@ -32,7 +43,7 @@ El problema que aborda es la fragmentación entre catálogos estáticos, sistema
 
 ---
 
-## Tecnologías y Metodologías Utilizadas
+## Tecnologías Utilizadas
 
 **Frontend:**
 
