@@ -98,3 +98,41 @@ Si el usuario tiene dudas, puede interactuar con el chat de inteligencia artific
 El usuario puede contactar directamente al proveedor mediante correo o acceder a enlaces externos como redes sociales o ubicación.
 
 Desde el lado administrativo, se gestionan productos y usuarios dinámicamente, permitiendo actualizar el catálogo en tiempo real.
+
+---
+
+## Instalación
+
+El proyecto está dividido en frontend y backend, por lo que la configuración debe realizarse en ambos entornos de forma independiente.
+
+**Frontend**
+
+Primero, instala las dependencias del proyecto utilizando el gestor de paquetes:
+
+```bash
+npm install
+```
+
+Luego, crea un archivo `.env` tomando como base el archivo `.env.example` ubicado en la raíz del frontend. Aquí se definen variables como endpoints de API, claves públicas o configuraciones específicas del entorno.
+
+Una vez configurado, puedes iniciar el entorno de desarrollo:
+
+```bash
+npm run dev
+```
+
+**Backend**
+
+Para el backend es necesario contar con Java 21 e IntelliJ IDEA (u otro IDE compatible) para ejecutar el proyecto basado en Spring Boot.
+
+Las variables de entorno se encuentran definidas en el archivo `.env.example` dentro del directorio `server`. Debes replicarlas en tu entorno antes de ejecutar la aplicación.
+
+Adicionalmente, el sistema depende de un servicio de inteligencia artificial local mediante Ollama. Es obligatorio tenerlo corriendo previamente con los siguientes modelos:
+
+```bash
+qwen3-embedding:4b
+qwen3.5:4b
+qwen3:1.7b
+```
+
+Una vez configurado todo lo anterior, el backend puede ejecutarse directamente desde el IDE o mediante los comandos estándar de Spring Boot.
