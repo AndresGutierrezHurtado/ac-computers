@@ -1,202 +1,167 @@
-# 🖥️ AC Computers - Sistema de Catálogo de Productos
+# 💻 AC Computers
 
 [English Version](./README.md)
 
-Bienvenido al repositorio del **AC Computers**, una plataforma desarrollada para optimizar la gestión de productos tecnológicos, incluyendo computadores y componentes, y mejorar la interacción con los clientes mediante herramientas modernas y accesibles.
+<div align="center">
 
-Este sistema está diseñado para:
+![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black&style=for-the-badge)
+![Spring Boot](https://img.shields.io/badge/SpringBoot-6DB33F?logo=spring&logoColor=white&style=for-the-badge)
+![Ollama](https://img.shields.io/badge/-OLLAMA-fff?logo=ollama&logoColor=000&style=for-the-badge)
+![Hexagonal Architecture](https://img.shields.io/badge/Architecture-Hexagonal-blue?style=for-the-badge)
 
--   Mostrar un catálogo interactivo de productos de manera clara y ordenada.
--   Permitir a los clientes descargar un catálogo en formato PDF.
--   Ofrecer un formulario de contacto para atención directa por correo electrónico.
--   Visualizar ubicaciones importantes mediante mapas interactivos.
+</div>
 
-Está orientado a mejorar la experiencia del usuario final y facilitar la administración de productos por parte del equipo de **AC Computers**.
+AC Computers es una aplicación web orientada a la gestión, visualización y comercialización de productos tecnológicos, incluyendo computadores, periféricos y componentes. El sistema integra un catálogo dinámico con capacidades avanzadas de búsqueda, interacción mediante inteligencia artificial y generación automatizada de contenido como fichas técnicas y documentos PDF.
 
-![Imagen del Catálogo de Productos](./docs/screenshots/ac-computers.png)
+El problema que aborda es la fragmentación entre catálogos estáticos, sistemas de gestión de inventario y experiencias de usuario poco interactivas. Esta solución centraliza la gestión de productos, mejora la exploración mediante filtros y búsqueda semántica, y optimiza la conversión mediante asistentes inteligentes.
 
----
-
-## 📚 Tabla de Contenidos
-
--   [Características Principales](#-características-principales)
--   [Tecnologías Utilizadas](#️-tecnologías-utilizadas)
--   [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
--   [Flujos de Uso](#️-flujos-de-uso)
--   [Estructura de Carpetas](#-estructura-de-carpetas)
--   [Instalación](#-instalación)
--   [Contacto](#-contacto)
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/home.png"></img>
 
 ---
 
-## 🚀 Características Principales
+## 📑 Tabla de contenidos
 
-1. **Catálogo de Productos y PDF Personalizado**
+- [Características Principales](#características-principales)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Arquitectura](#arquitectura)
+- [Flujo de Uso](#flujo-de-uso)
+- [Instalación](#instalación)
+- [Contacto](#contacto)
 
--   Visualización de productos con detalles como nombre, precio, descuento y disponibilidad en tiempo real.
--   Acceso directo a las páginas individuales de cada producto para una descripción más detallada.
--   Descarga de un catálogo en formato PDF con diseño atractivo y adaptado a la identidad de la marca.
+---
 
-![Vista del catálogo de productos](./docs/screenshots/products.png)
-![Vista del catálogo en PDF](./docs/screenshots/pdf.png)
+## ✨ Características Principales
 
-2. **Gestión de Inventario**
+- **Gestión dinámica de usuarios y productos:** Administración integral de las entidades del sistema, permitiendo crear, actualizar y eliminar información de forma controlada y consistente. Incluye autenticación con Google mediante One Tap Login, simplificando el acceso y reduciendo fricción en el registro e inicio de sesión.
 
--   CRUD completo de productos: Crear, Leer, Actualizar y Eliminar.
--   Panel administrativo protegido para la gestión eficiente del inventario.
--   Almacenamiento de imágenes optimizado mediante integración con **Cloudinary**.
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/management.png"></img>
 
-![Panel de gestión de inventario](./docs/screenshots/admin.png)
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/login.png"></img>
 
-3. **Gestión de Usuarios**
+- **Contacto y presencia digital:** Integración de envío de correos, enlaces a redes sociales y visualización de ubicación en mapas. La interfaz se complementa con animaciones por scroll y elementos 3D que mejoran la experiencia y percepción visual.
 
--   Sistema de autenticación seguro para registro e inicio de sesión.
--   Perfiles de usuario totalmente editables.
--   Panel de control para gestionar usuarios, asignar roles y administrar permisos.
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/contact.png"></img>
 
-![Gestión de usuarios en el panel administrativo](./docs/screenshots/auth.png)
+- **Catálogo estructurado de productos:** Listado organizado de computadores, periféricos y componentes con categorización jerárquica. Incorpora búsqueda semántica basada en embeddings para interpretar la intención del usuario, junto con filtros por precio y características que optimizan la exploración.
 
-4. **Contacto y Atención al Cliente**
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/products-es.png"></img>
 
--   Formulario de contacto conectado vía correo electrónico para consultas rápidas.
--   Notificaciones automáticas al administrador al recibir un nuevo mensaje.
--   Mapa interactivo utilizando **Leaflet** para mostrar la ubicación de la empresa o puntos de venta.
+- **Vista detallada de productos:** Página completa con imágenes, descripción, categoría, subcategoría, marca y especificaciones técnicas. Incluye un resumen generado por IA que traduce la información técnica en beneficios claros para el usuario.
 
-![Formulario de contacto y mapa de ubicación](./docs/screenshots/contact.png)
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/product.png"></img>
 
-5. **Diseño Moderno y Experiencia Interactiva**
+- **Generación de catálogos en PDF:** Creación automatizada de documentos PDF con información de productos, facilitando su distribución y consulta offline.
 
--   Interfaz responsiva construida con **Tailwind CSS** y **Next.js** para una navegación ágil y profesional.
--   Integración de **Three.js** para incorporar gráficos y animaciones 3D que elevan la experiencia del usuario.
--   Diseño adaptado para ofrecer una excelente experiencia tanto en dispositivos móviles como en desktop.
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/pdf.png"></img>
 
-![Ejemplo de diseño responsivo con gráficos 3D](./docs/screenshots/model.png)
+- **Chat de inteligencia artificial para ventas:** Asistente conversacional que responde preguntas y recomienda productos apoyándose en el sistema de búsqueda interna, mejorando la toma de decisiones del usuario.
+
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/ai.png"></img>
 
 ---
 
 ## 🛠️ Tecnologías Utilizadas
 
+**Frontend:**
+
+- TypeScript
+- React
+- TailwindCSS v4
+- DaisyUI
+- GSAP
+- Leaflet
+- Valibot
+
+**Backend:**
+
+- Java 21
+- Spring Boot
+- iTextPDF
+- Cloudinary SDK
+- Ollama (integración IA)
+- Caffeine
+
+---
+
+## 🏗️ Arquitectura
+
+El sistema adopta arquitectura hexagonal, lo que implica que el núcleo del negocio permanece aislado de detalles técnicos como frameworks, bases de datos o servicios externos. Esto permite escalar, reemplazar componentes o cambiar proveedores sin afectar la lógica central.
+
+### Capa de Dominio
+
+Aquí reside el núcleo del sistema. Contiene entidades y reglas de negocio. No depende de librerías externas. Las validaciones críticas se definen en esta capa para garantizar consistencia de datos sin importar el origen.
+
+### Capa de Aplicación
+
+Orquesta los casos de uso y define cómo interactúan las distintas partes del sistema. Coordina operaciones como búsqueda de productos, generación de PDFs o ejecución de flujos del chat de IA. No contiene lógica de negocio compleja, sino que delega al dominio.
+
+### Capa de Infraestructura
+
+Implementa los detalles técnicos como acceso a base de datos, almacenamiento en la nube, envío de correos y motores de embeddings. Aquí también se integran mecanismos de caché mediante Caffeine para optimizar el rendimiento en consultas frecuentes.
+
+El monitoreo y trazabilidad se gestionan mediante logging estructurado, permitiendo auditar el comportamiento del sistema y detectar fallos con precisión.
+
+La seguridad se implementa mediante control de acceso basado en roles (RBAC), restringiendo operaciones según permisos definidos y protegiendo recursos críticos.
+
+El uso de patrones como Mapper permite desacoplar el dominio de los modelos de persistencia, evitando dependencias innecesarias.
+
+### Frontend
+
+El frontend sigue Atomic Design, organizando la interfaz en átomos, moléculas, organismos y vistas. Esta estructura permite construir interfaces complejas a partir de componentes pequeños y reutilizables.
+
+La comunicación con el backend se realiza mediante APIs, manteniendo el frontend desacoplado de la lógica de negocio. Esto facilita la evolución independiente de ambas capas.
+
+---
+
+## 🔁 Flujo de Uso
+
+El usuario accede a la plataforma y primero ve un modelo 3d con animaciones de scroll donde ve lo importante que es la opcion de descargar el catalogo en pdf.
+
+Arriba hay un menu donde puede ir a la visual de contacto y productos. En la seccion de producto puede explora el catálogo de productos utilizando filtros por precio, categoría o características.
+
+Al seleccionar un producto, accede a una vista detallada con información completa y un resumen generado automáticamente que facilita la comprensión rápida.
+
+Si el usuario tiene dudas, puede interactuar con el chat de inteligencia artificial, que utiliza búsqueda vectorial para recomendar productos relevantes según su intención.
+
+El usuario puede contactar directamente al proveedor mediante correo o acceder a enlaces externos como redes sociales o ubicación.
+
+Desde el lado administrativo, se gestionan productos y usuarios dinámicamente, permitiendo actualizar el catálogo en tiempo real.
+
+---
+
+## ⚙️ Instalación
+
+El proyecto está dividido en frontend y backend, por lo que la configuración debe realizarse en ambos entornos de forma independiente.
+
 **Frontend**
 
--   React.js
--   Tailwind CSS
--   Three.js
--   DaisyUI
--   Leaflet.js
-
-**Backend**
-
--   Node.js
--   Express.js
--   Sequelize ORM
--   PostgreSQL
--   Puppeteer / Chromium
-
-**Despliegue**
-
--   Vercel
--   Docker
-
----
-
-## 🧱 Arquitectura del Proyecto
-
-El proyecto sigue una estructura basada en el patrón **Cliente-Servidor**, separando claramente la lógica del negocio, la presentación y el manejo de rutas.
-
-![Arquitectura del Proyecto](https://www.seobility.net/es/wiki/images/b/b3/API-Rest.png)
-
----
-
-## 🔄️ Flujos de Uso
-
-### Usuario
-
--   **Navegación Pública:** Accede sin necesidad de registrarse o iniciar sesión.
--   **Visualización del Catálogo:** Consulta el catálogo de productos organizado en categorías, con filtros por nombre, precio o disponibilidad.
--   **Detalle del Producto:** Accede a una página individual de cada producto donde podrá ver descripciones detalladas, imágenes en alta calidad y precios con descuentos aplicados.
--   **Descarga del Catálogo en PDF:** Genera y descarga un catálogo actualizado en formato PDF con toda la información de los productos disponibles.
--   **Formulario de Contacto:** Envía consultas, cotizaciones o solicitudes de información directamente al equipo de soporte, recibiendo confirmaciones automáticas.
--   **Mapa Interactivo:** Visualiza la ubicación exacta de la tienda o puntos de distribución mediante Leaflet, permitiendo obtener rutas o referencias.
-
-### Administrador
-
--   **Inicio de Sesión Seguro:** Accede al panel administrativo mediante autenticación protegida.
--   **Gestión Completa de Productos:**
-    -   Crear nuevos productos con imágenes almacenadas en **Cloudinary**.
-    -   Editar información de productos existentes como nombre, precio, stock y características técnicas.
-    -   Eliminar productos obsoletos del catálogo de manera segura.
-    -   Ver un listado general y detallado de todos los productos registrados.
--   **Gestión de Imágenes:**
-    -   Carga de imágenes optimizadas y almacenamiento externo en **Cloudinary** para un rendimiento óptimo.
--   **Gestión de Usuarios:**
-    -   Visualizar lista de usuarios registrados.
-    -   Editar datos de perfil de usuarios.
-    -   Asignar o cambiar roles de acceso (usuario o administrador).
--   **Recepción de Mensajes de Contacto:**
-    -   Visualizar en el panel administrativo los mensajes recibidos a través del formulario de contacto.
-    -   Gestionar solicitudes de los clientes de forma rápida y ordenada.
--   **Supervisión General:**
-    -   Monitorear el estado general de la plataforma.
-    -   Asegurar el correcto funcionamiento del catálogo, formularios y almacenamiento de datos.
-
----
-
-## 📂 Estructura de carpetas
-
-```
-src/
-├── app/                        # Directorio principal que contiene el enrutador y la API
-|   ├── api/                    # Aquí se encuentran las rutas de la API
-├── database/                   # Contiene todo lo relacionado con la base de datos, como modelos, seeders, migraciones y configuración
-|   ├── models/                 # Modelos de la base de datos que definen la estructura de las tablas
-|   ├── seeders/                # Seeders para poblar la base de datos con datos de prueba
-|   ├── migrations/             # Migraciones para actualizar la estructura de la base de datos
-|   └── config.cjs              # Archivo de configuración de la base de datos
-├── components/                 # Componentes reutilizables de la interfaz de usuario
-├── hooks/                      # Hooks personalizados para manejar lógica de negocio
-|   └── useGetClientData.js     # Hook para obtener datos desde componentes para cielnte
-├── layouts/                    # Estructuras de disposición de la aplicación, como páginas o plantillas
-```
-
----
-
-## 💾 Instalación
-
-### Requisitos Previos
-
--   Node.js >= 18
--   PostgreSQL
--   Git
-
-### Pasos
-
-1. Clonar el repositorio:
-
-```bash
-git clone https://github.com/AndresGutierrezHurtado/ac-computers.git
-```
-
-2. Instalar dependencias:
+Primero, instala las dependencias del proyecto utilizando el gestor de paquetes:
 
 ```bash
 npm install
 ```
 
-3. Configurar variables de entorno:
-   Crear un archivo `.env` basado en `.env.example`.
+Luego, crea un archivo `.env` tomando como base el archivo `.env.example` ubicado en la raíz del frontend. Aquí se definen variables como endpoints de API, claves públicas o configuraciones específicas del entorno.
 
-4. Ejecutar migraciones y sembrado de datos:
-
-```bash
-npm run db:migrate
-npm run db:seed
-```
-
-5. Iniciar el servidor:
+Una vez configurado, puedes iniciar el entorno de desarrollo:
 
 ```bash
 npm run dev
 ```
+
+**Backend**
+
+Para el backend es necesario contar con Java 21 e IntelliJ IDEA (u otro IDE compatible) para ejecutar el proyecto basado en Spring Boot.
+
+Las variables de entorno se encuentran definidas en el archivo `.env.example` dentro del directorio `server`. Debes replicarlas en tu entorno antes de ejecutar la aplicación.
+
+Adicionalmente, el sistema depende de un servicio de inteligencia artificial local mediante Ollama. Es obligatorio tenerlo corriendo previamente con los siguientes modelos:
+
+- **Modelo para embeddings:** `qwen3-embedding:4b`
+- **Modelo para generar el overview de un producto:** `qwen3.5:4b`
+- **Modelo para chat con el cliente:** `qwen3:1.7b`
+
+Una vez configurado todo lo anterior, el backend puede ejecutarse directamente desde el IDE o mediante los comandos estándar de Spring Boot.
 
 ---
 
@@ -204,8 +169,8 @@ npm run dev
 
 Para preguntas, soporte o colaboración, por favor contacta:
 
--   Andrés Gutiérrez Hurtado
--   Correo: [andres52885241@gmail.com](mailto:andres52885241@gmail.com)
--   LinkedIn: [Andrés Gutiérrez](https://www.linkedin.com/in/andr%C3%A9s-guti%C3%A9rrez-hurtado-25946728b/)
--   GitHub: [@AndresGutierrezHurtado](https://github.com/AndresGutierrezHurtado)
--   Portafolio: [Link portafolio](https://andres-portfolio-b4dv.onrender.com)
+- Andrés Gutiérrez Hurtado
+- Correo: [andres52885241@gmail.com](mailto:andres52885241@gmail.com)
+- LinkedIn: [https://www.linkedin.com/in/andresgh-dev](https://www.linkedin.com/in/andresgh-dev)
+- GitHub: [https://github.com/AndresGutierrezHurtado](https://github.com/AndresGutierrezHurtado)
+- Portafolio: [https://andres-portfolio-b4dv.onrender.com](https://andres-portfolio-b4dv.onrender.com)
