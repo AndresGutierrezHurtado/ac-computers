@@ -4,6 +4,8 @@ AC Computers es una aplicación web orientada a la gestión, visualización y co
 
 El problema que aborda es la fragmentación entre catálogos estáticos, sistemas de gestión de inventario y experiencias de usuario poco interactivas. Esta solución centraliza la gestión de productos, mejora la exploración mediante filtros y búsqueda semántica, y optimiza la conversión mediante asistentes inteligentes.
 
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/home.png"></img>
+
 ---
 
 ## Tabla de contenidos
@@ -19,17 +21,31 @@ El problema que aborda es la fragmentación entre catálogos estáticos, sistema
 
 ## Características Principales
 
-- **Gestión dinámica de usuarios y productos:** Administración integral de las entidades del sistema, permitiendo crear, actualizar y eliminar información de forma controlada y consistente.
+- **Gestión dinámica de usuarios y productos:** Administración integral de las entidades del sistema, permitiendo crear, actualizar y eliminar información de forma controlada y consistente. Incluye autenticación con Google mediante One Tap Login, simplificando el acceso y reduciendo fricción en el registro e inicio de sesión.
+
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/management.png"></img>
+
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/login.png"></img>
 
 - **Contacto y presencia digital:** Integración de envío de correos, enlaces a redes sociales y visualización de ubicación en mapas. La interfaz se complementa con animaciones por scroll y elementos 3D que mejoran la experiencia y percepción visual.
 
-- **Vista detallada de productos:** Página completa con imágenes, descripción, categoría, subcategoría, marca y especificaciones técnicas. Incluye un resumen generado por IA que traduce la información técnica en beneficios claros para el usuario.
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/contact.png"></img>
 
 - **Catálogo estructurado de productos:** Listado organizado de computadores, periféricos y componentes con categorización jerárquica. Incorpora búsqueda semántica basada en embeddings para interpretar la intención del usuario, junto con filtros por precio y características que optimizan la exploración.
 
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/products-es.png"></img>
+
+- **Vista detallada de productos:** Página completa con imágenes, descripción, categoría, subcategoría, marca y especificaciones técnicas. Incluye un resumen generado por IA que traduce la información técnica en beneficios claros para el usuario.
+
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/product.png"></img>
+
 - **Generación de catálogos en PDF:** Creación automatizada de documentos PDF con información de productos, facilitando su distribución y consulta offline.
 
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/pdf.png"></img>
+
 - **Chat de inteligencia artificial para ventas:** Asistente conversacional que responde preguntas y recomienda productos apoyándose en el sistema de búsqueda interna, mejorando la toma de decisiones del usuario.
+
+<img style="max-width: 850px; margin: auto;" src="./docs/screenshots/ai.png"></img>
 
 ---
 
@@ -130,11 +146,9 @@ Las variables de entorno se encuentran definidas en el archivo `.env.example` de
 
 Adicionalmente, el sistema depende de un servicio de inteligencia artificial local mediante Ollama. Es obligatorio tenerlo corriendo previamente con los siguientes modelos:
 
-```bash
-qwen3-embedding:4b
-qwen3.5:4b
-qwen3:1.7b
-```
+- **Modelo para embeddings:** `qwen3-embedding:4b`
+- **Modelo para generar el overview de un producto:** `qwen3.5:4b`
+- **Modelo para chat con el cliente:** `qwen3:1.7b`
 
 Una vez configurado todo lo anterior, el backend puede ejecutarse directamente desde el IDE o mediante los comandos estándar de Spring Boot.
 
