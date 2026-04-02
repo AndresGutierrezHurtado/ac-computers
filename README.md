@@ -1,4 +1,4 @@
-# AC Computers
+# 💻 AC Computers
 
 AC Computers es una aplicación web orientada a la gestión, visualización y comercialización de productos tecnológicos, incluyendo computadores, periféricos y componentes. El sistema integra un catálogo dinámico con capacidades avanzadas de búsqueda, interacción mediante inteligencia artificial y generación automatizada de contenido como fichas técnicas y documentos PDF.
 
@@ -8,7 +8,7 @@ El problema que aborda es la fragmentación entre catálogos estáticos, sistema
 
 ---
 
-## Tabla de contenidos
+## 📑 Tabla de contenidos
 
 - [Características Principales](#características-principales)
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
@@ -19,7 +19,7 @@ El problema que aborda es la fragmentación entre catálogos estáticos, sistema
 
 ---
 
-## Características Principales
+## ✨ Características Principales
 
 - **Gestión dinámica de usuarios y productos:** Administración integral de las entidades del sistema, permitiendo crear, actualizar y eliminar información de forma controlada y consistente. Incluye autenticación con Google mediante One Tap Login, simplificando el acceso y reduciendo fricción en el registro e inicio de sesión.
 
@@ -49,7 +49,7 @@ El problema que aborda es la fragmentación entre catálogos estáticos, sistema
 
 ---
 
-## Tecnologías Utilizadas
+## 🛠️ Tecnologías Utilizadas
 
 **Frontend:**
 
@@ -72,7 +72,7 @@ El problema que aborda es la fragmentación entre catálogos estáticos, sistema
 
 ---
 
-## Arquitectura
+## 🏗️ Arquitectura
 
 El sistema adopta arquitectura hexagonal, lo que implica que el núcleo del negocio permanece aislado de detalles técnicos como frameworks, bases de datos o servicios externos. Esto permite escalar, reemplazar componentes o cambiar proveedores sin afectar la lógica central.
 
@@ -102,7 +102,7 @@ La comunicación con el backend se realiza mediante APIs, manteniendo el fronten
 
 ---
 
-## Flujo de Uso
+## 🔁 Flujo de Uso
 
 El usuario accede a la plataforma y primero ve un modelo 3d con animaciones de scroll donde ve lo importante que es la opcion de descargar el catalogo en pdf.
 
@@ -118,7 +118,7 @@ Desde el lado administrativo, se gestionan productos y usuarios dinámicamente, 
 
 ---
 
-## Instalación
+## ⚙️ Instalación
 
 El proyecto está dividido en frontend y backend, por lo que la configuración debe realizarse en ambos entornos de forma independiente.
 
@@ -154,7 +154,7 @@ Una vez configurado todo lo anterior, el backend puede ejecutarse directamente d
 
 ---
 
-## Contacto
+## 📬 Contacto
 
 Para preguntas, soporte o colaboración, por favor contacta:
 
