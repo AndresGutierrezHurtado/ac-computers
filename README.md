@@ -1,5 +1,16 @@
 # 💻 AC Computers
 
+[English Version](./README.md)
+
+<div align="center">
+
+![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black&style=for-the-badge)
+![Spring Boot](https://img.shields.io/badge/SpringBoot-6DB33F?logo=spring&logoColor=white&style=for-the-badge)
+![Ollama](https://img.shields.io/badge/-OLLAMA-fff?logo=ollama&logoColor=000&style=for-the-badge)
+![Hexagonal Architecture](https://img.shields.io/badge/Architecture-Hexagonal-blue?style=for-the-badge)
+
+</div>
+
 AC Computers es una aplicación web orientada a la gestión, visualización y comercialización de productos tecnológicos, incluyendo computadores, periféricos y componentes. El sistema integra un catálogo dinámico con capacidades avanzadas de búsqueda, interacción mediante inteligencia artificial y generación automatizada de contenido como fichas técnicas y documentos PDF.
 
 El problema que aborda es la fragmentación entre catálogos estáticos, sistemas de gestión de inventario y experiencias de usuario poco interactivas. Esta solución centraliza la gestión de productos, mejora la exploración mediante filtros y búsqueda semántica, y optimiza la conversión mediante asistentes inteligentes.
