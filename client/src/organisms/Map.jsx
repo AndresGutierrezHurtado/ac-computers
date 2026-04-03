@@ -22,7 +22,7 @@ function MyComponent() {
 }
 
 export default () => {
-    const position = [4.6642, -74.0589];
+    const position = [4.6408737,-74.1765643];
 
     return (
         <MapContainer

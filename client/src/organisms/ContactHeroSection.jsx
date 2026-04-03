@@ -1,11 +1,5 @@
 import ContactInfoItem from "@/atoms/ContactInfoItem";
-import {
-    AtIcon,
-    FacebookIcon,
-    InstagramIcon,
-    LocationIcon,
-    WhatsappIcon,
-} from "@/atoms/Icons";
+import { AtIcon, FacebookIcon, InstagramIcon, LocationIcon, WhatsappIcon } from "@/atoms/Icons";
 
 const SOCIAL_MEDIAS = [
     {
@@ -42,17 +36,17 @@ export default function ContactHeroSection({ children }) {
                 <div className="flex flex-col lg:flex-row gap-10 w-full">
                     <div className="w-full lg:w-1/2 space-y-6">
                         <div className="space-y-3">
-                            <h1 className="text-4xl font-extrabold tracking-tight">
-                                Contactanos
-                            </h1>
+                            <h1 className="text-4xl font-extrabold tracking-tight">Contactanos</h1>
                             <p className="text-base-content/80">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                Suscipit corrupti qui adipisci eius dignissimos sunt quo libero,
-                                quae voluptates magnam temporibus in reprehenderit voluptatum
-                                porro animi dolor. Minima, repudiandae at reiciendis obcaecati,
-                                necessitatibus ducimus odio fugit iure quaerat natus amet modi!
-                                Ipsam, tempore! Odit ducimus molestias dolor neque doloribus
-                                qui.
+                                AC Computers es una tienda especializada en mantenimiento y
+                                reparación de computadores, así como en servicio técnico para
+                                dispositivos móviles en Bogotá. Ofrece soluciones orientadas a
+                                diagnosticar, optimizar y prolongar la vida útil de equipos,
+                                abarcando desde problemas de hardware hasta configuraciones de
+                                software. Su enfoque se centra en brindar atención confiable,
+                                tiempos de respuesta eficientes y soporte técnico adaptado a las
+                                necesidades tanto de usuarios individuales como de pequeñas
+                                empresas.
                             </p>
                         </div>
                         <ol className="space-y-2.5">
